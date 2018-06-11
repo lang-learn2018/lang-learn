@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <% include headers/header %>
+  <% include headers/styles %>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title><%= config.appName %></title>
+</head>
+<body>
+  <%- include('parts/main-menu') %>
+  <div class="row" style="margin-top:25px;">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4 card">
+          <form class="card-body">
+              <h5 class="card-title">Авторизация</h5>
+              <div class="form-group">
+                  <label for="login">Логин</label>
+                  <input type="text" class="form-control" id="login" placeholder="Логин">
+              </div>
+              <div class="form-group">
+                  <label for="password">Пароль</label>
+                  <input type="password" class="form-control" id="password" placeholder="Пароль">
+              </div>
+
+              <div>
+                  <a href="registration">Регистрация</a>
+                  <a href="registration" style="float:right;">Восстановить пароль</a>
+              </div>
+              <br>
+              <button type="submit" style="float:right;" class="btn btn-primary" >Войти</button>
+
+          </form>
+      </div>
+      <div class="col-sm-4"></div>
+  </div>
+  <%- include headers/scripts %>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "langlearn",
+  "version": "1.0.0",
+  "description": "app to learn foreign words",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "JSON": "^1.0.0",
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "mysql": "^2.15.0",
+    "nodemailer": "^4.6.5",
+    "url": "^0.11.0"
+  }
+}

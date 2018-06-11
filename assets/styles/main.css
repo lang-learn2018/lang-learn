@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+#sbmt {
+	float:right;
+}
+.form-control {
+	border-width: 2px;
+}
+.btn-outline-dark {
+	border-width: 2px;
+}
+
+.active {
+	text-decoration: underline;
+}
+.bg-dark {
+	font-size: 15px;
+	background-color: #fff;
+}

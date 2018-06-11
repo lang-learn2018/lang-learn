@@ -1,0 +1,9 @@
+{
+  "root" : "",
+  "appName" : "Language Learning",
+  "port" : 3000,
+  "dbName" : "learn_hebrew",
+  "dbPswd" : "111",
+  "email" : "learnhebrew1234@gmail.com",
+  "emailPass" : "TelRan2018`"
+}

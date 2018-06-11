@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include headers/header %>
+  <% include headers/styles %>
+  <% include headers/scripts %>
+  <title><%= config.appName %></title>
+</head>
+<body>
+  <%- include('parts/main-menu') %>
+  <% if(page == "/auth") {%> <%- include('parts/auth')%> <% }  %>
+  <% if(page == "/registration") {%> <%- include('parts/registration')%> <% }  %>
+  <% if(page == "404") {%> <%- include('parts/404')%> <% }  %>
+</body>
+</html>
