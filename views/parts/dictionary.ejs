@@ -24,18 +24,18 @@
           <div class="form-group">
             <label for="wordType">Word type</label>
             <select class="form-control" id="wordType">
-              <option></option>
-              <option>Verbs</option>
-              <option>Nouns</option>
-              <option>Adjectives</option>
-              <option>Frases</option>
+              <option value=""></option>
+              <option value="verb">Verbs</option>
+              <option value="noun">Nouns</option>
+              <option value="adj">Adjectives</option>
+              <option value="frss">Frases</option>
             </select>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" oncklick="saveWord()" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" onclick="saveWord()" >Save</button>
       </div>
     </div>
   </div>
@@ -100,3 +100,6 @@
     </div>
     <div class="col-sm-0  col-lg-2"> </div>
 </div>
+
+<script defer src="assets/js/dictionary.js"></script>
+
