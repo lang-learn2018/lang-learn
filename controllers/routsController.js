@@ -65,6 +65,10 @@ module.exports = function(app) {
   app.get('/registration', function(req, res) {
     res.render('main-page.ejs', {"config" : config, "page" : req.path});
   });
+    
+  app.get('/dictionary', function(req, res) {
+    res.render('main-page.ejs', {"config" : config, "page" : req.path});
+  });
 
   app.delete('/' + config.root, function(req, res) {
     
