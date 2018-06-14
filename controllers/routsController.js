@@ -3,6 +3,7 @@ var url = require('url');
 var mysql = require('mysql');
 var email = require('nodemailer');
 var path = require('path');
+//var request = require('ajax-request');
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -50,7 +51,6 @@ module.exports = function(app) {
       }
     });
   });    
-
     
   app.get('/login', function(req, res) {
     if(typeof req.session.login !== "undefined" && typeof req.session.password !== "undefined"){
@@ -84,6 +84,35 @@ module.exports = function(app) {
     });
     res.end();
   });
+
+  app.post('/saveword', function(req, res){
+    if(!req.body) return res.sendStatus(400);
+    var word_he = req.body.word_he.replace(/^\s+|\s+$/gm,'');
+    var word_en = req.body.word_en.replace(/^\s+|\s+$/gm,'');
+    var word_tr = req.body.word_tr.replace(/^\s+|\s+$/gm,'');
+    var word_type = req.body.word_type.replace(/^\s+|\s+$/gm,'');
+    var sql = "SELECT COUNT(*) AS n FROM dictionary WHERE dictionary_word_he = " + mysql.escape(word_he);
+    console.log(sql);
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log(result[0].n);
+      if (result[0].n > 0) {
+        res.write("This word already exist!");
+      } else {
+        if (word_he != "" && word_en != "" && word_type != "") {
+          console.log("sql");
+          sql = "INSERT INTO dictionary (dictionary_word_he, dictionary_word_en, dictionary_word_tr, dictionary_word_type) VALUES (" + mysql.escape(word_he) + ", " + mysql.escape(word_en) + ", " + mysql.escape(word_tr) + ", " + mysql.escape(word_type) + ")";
+          con.query(sql, function (err, result) {
+            if (err) throw err;
+            res.write("Word is saved!");
+          });
+        }
+      }
+      res.end();
+    });
+  });
+
+
   app.get('*', function(req, res) {
     res.status(404).render('main-page.ejs', {"config" : config, "page" : "404"});
   });

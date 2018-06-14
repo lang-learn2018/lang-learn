@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "JSON": "^1.0.0",
+    "ajax-request": "^1.2.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
