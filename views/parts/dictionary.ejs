@@ -59,9 +59,10 @@
           </div>
           
           <button type="button" class="btn btn-primary mb-2" id="addbtn" data-toggle="modal" data-target="#addWordModal">Добавить</button>
-          
+          <%= login %>
           <div class="form-group mb-2 mx-sm-3">
               <div class="btn-group" role="group">
+                  <% if (login != "") {%>
                   <div class="btn-group" role="group">
                     <button id="wordtype" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Rating
@@ -72,13 +73,17 @@
                       <a class="dropdown-item" href="#">Learned, descending</a>
                     </div>
                   </div>
+
                   <button type="button" class="btn btn-secondary">Checked</button>
+                  
+                  <% } %>
 
                   <div class="btn-group" role="group">
                     <button id="wordtype" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Types
                     </button>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                      <a class="dropdown-item" href="#">All</a>
                       <a class="dropdown-item" href="#">Verbs</a>
                       <a class="dropdown-item" href="#">Nouns</a>
                       <a class="dropdown-item" href="#">Adjective</a>
@@ -88,6 +93,10 @@
               </div>
             </div>
         </form>
+
+        <div id="dictionary-table">
+
+        </div>
     </div>
     <div class="col-sm-0  col-lg-2"> </div>
 </div>

@@ -67,6 +67,12 @@ function infinitiveToggle() {
 
 }
 
+function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
+	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordtypes: wordtypes, rowsCount: rowsCount}, function(data) {
+		$("#dictionary-table").val(data);
+	});
+}
+
 
 
 
