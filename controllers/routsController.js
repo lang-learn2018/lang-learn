@@ -35,7 +35,7 @@ module.exports = function(app) {
     
   app.post('/auth', function(req, res) {
     var sql = "SELECT * FROM users WHERE users_name = '"+ req.body.login +"' AND users_password = '"+ req.body.password +"' ";
-    con.query(sql, function (err, rows, result) {
+    con.query(sql, function (err, rows) {
       if (err) throw err;
       if (rows == 0) {
         res.writeHead(200, {'Content-Type' : 'text/html'});
@@ -45,7 +45,6 @@ module.exports = function(app) {
       } else {
         req.session.login = req.body.login;
         req.session.password = req.body.password;
-        req.session.username = result[0].users_name;
         req.session.expires = new Date(Date.now() + 3600000*5);
         res.redirect("/login");
       }
@@ -54,6 +53,7 @@ module.exports = function(app) {
     
   app.get('/login', function(req, res) {
     if(typeof req.session.login !== "undefined" && typeof req.session.password !== "undefined"){
+      console.log("Logit: "+req.session.login+" Password: "+req.session.password+" Username: "+req.session.usernames);
       res.render('main-page.ejs', {"config" : config, "page" : req.path});
     } else {
       res.writeHead(200, {'Content-Type' : 'text/html'});
@@ -67,7 +67,12 @@ module.exports = function(app) {
   });
     
   app.get('/dictionary', function(req, res) {
-    res.render('main-page.ejs', {"config" : config, "page" : req.path});
+    if(typeof req.session.login != undefined && typeof req.session.password != undefined){
+      var login = req.session.login;
+    } else {
+      var username = "";
+    }
+    res.render('main-page.ejs', {"config" : config, "page" : req.path, "login": login});
   });
 
   app.delete('/' + config.root, function(req, res) {
@@ -120,6 +125,28 @@ module.exports = function(app) {
       // res.writeHead(200, {'Content-Type' : 'text/html'});
       // res.send(answer);
     });
+  });
+
+  app.post('/getdictionarytable', function(req, res){
+      var rating = req.body.rating;
+      var checked = req.body.checked;
+      var wordtypes = req.body.wordtypes;
+      var rowsCount = req.body.rowsCount;
+      if(rating == "not learned" || rating == "ascending" || rating == "descending") {
+        req.session.rating = rating;
+      }
+      if(checked == "true" || checked == "false") {
+        req.session.checked = checked;
+      }
+      if(wordtypes == "all" || wordtypes == "verbs" || wordtypes == "nouns" || wordtypes == "adjective" || wordtypes == "frases") {
+        req.session.wordtypes = wordtypes;
+      }
+      if(parseInt(rowsCount)) {
+        req.session.rowsCount = rowsCount;
+      } else {
+        req.session.rowsCount = 100;
+      }
+      var sql = "SE";
   });
 
 
