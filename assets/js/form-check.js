@@ -113,7 +113,7 @@ function enableSubmit() {
   }
 }
 
-export function isFieldEmpty(value) {
+function isFieldEmpty(value) {
   value = value.replace(/\s/g,'');
   if (value == "") return true;
   return false;
