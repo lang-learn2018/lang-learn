@@ -88,28 +88,37 @@ module.exports = function(app) {
   app.post('/saveword', function(req, res){
     if(!req.body) return res.sendStatus(400);
     var word_he = req.body.word_he.replace(/^\s+|\s+$/gm,'');
+    var word_inf = req.body.word_inf.replace(/^\s+|\s+$/gm,'');
     var word_en = req.body.word_en.replace(/^\s+|\s+$/gm,'');
     var word_tr = req.body.word_tr.replace(/^\s+|\s+$/gm,'');
     var word_type = req.body.word_type.replace(/^\s+|\s+$/gm,'');
+    if (word_type != "verb") {
+      word_inf = "";
+    }
     var answer = "";
     var sql = "SELECT COUNT(*) AS n FROM dictionary WHERE dictionary_word_he = " + mysql.escape(word_he);
     con.query(sql, function (err, result) {
       if (err) throw err;
-      console.log(result[0].n);
       if (result[0].n > 0) {
-        answer = "This word already exist!";
+        answer = "exists";
+        // console.log(answer);
+        res.send(answer);
+        // res.write(answer);
+        res.end();
       } else {
         if (word_he != "" && word_en != "" && word_type != "") {
-          console.log("sql");
-          sql = "INSERT INTO dictionary (dictionary_word_he, dictionary_word_en, dictionary_word_tr, dictionary_word_type) VALUES (" + mysql.escape(word_he) + ", " + mysql.escape(word_en) + ", " + mysql.escape(word_tr) + ", " + mysql.escape(word_type) + ")";
+          sql = "INSERT INTO dictionary (dictionary_word_he, dictionary_word_inf, dictionary_word_en, dictionary_word_tr, dictionary_word_type) VALUES (" + mysql.escape(word_he) + ", " + mysql.escape(word_inf) + ", " + mysql.escape(word_en) + ", " + mysql.escape(word_tr) + ", " + mysql.escape(word_type) + ")";
           con.query(sql, function (err, result) {
             if (err) throw err;
-            answer = "Word is saved!";
+            answer = "success";
+            res.send(answer);
+            res.end();
           });
         }
       }
-      res.write(answer);
-      res.end();
+      console.log("answer: " + answer);
+      // res.writeHead(200, {'Content-Type' : 'text/html'});
+      // res.send(answer);
     });
   });
 

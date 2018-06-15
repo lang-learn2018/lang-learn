@@ -3,16 +3,31 @@ function saveWord() {
 	var wordEn = $("#wordEn").val();
 	var wordTr = $("#wordTr").val();
 	var wordType = $("#wordType option:selected").val();
+	var wordInf = $("#wordInf").val();
+	fieldCheck("wordInf", wordInf);
 	
-	if(fieldCheck("wordHb", wordHb) & fieldCheck("wordEn", wordEn) & fieldCheck("wordType", wordType)){
-		var parameters = {word_he: wordHb, word_en: wordEn, word_tr: wordTr, word_type: wordType};
-		console.log(parameters.word_he);
+	if(fieldCheck("wordHb", wordHb) & fieldCheck("wordEn", wordEn) & fieldCheck("wordType", wordType) & (wordType == "verb" ^ wordInf == "")){
+		var parameters = {word_he: wordHb, word_inf: wordInf, word_en: wordEn, word_tr: wordTr, word_type: wordType};
 		$.post( '/saveword', parameters, function(data) {
+			console.log(data);
 		    $("#wordHb").val("");
 		    $("#wordEn").val("");
-		    $("#wordTr").val("");
+	    	$("#wordTr").val("");
+	    	$("#wordInf").val("");
 		    $("#wordType option:first").attr('selected','selected');
+			
+		    if (data == 'success') {
+				$('#modal-alert').val("");
+				$('#addWordModal').hide();
+				$('.modal-backdrop').remove();
+				// $('body').removeClass("modal-open");
+
+		    }
+			if (data == 'exists') {
+				$('#modal-alert').html("Word already exists!");
+			}
 		});
+
 	}
 }
 
@@ -40,3 +55,30 @@ function isFieldEmpty(value) {
 function fillModalHb(value) {
 	$("#wordHb").val(value);
 }
+
+function infinitiveToggle() {
+	var wordType = $("#wordType option:selected").val();
+	if (wordType == "verb") {
+		$("#div-inf").css("display", "block");
+	} else {
+		$("#div-inf").css("display", "none");
+		$("#div-inf").val("");
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
