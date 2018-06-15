@@ -40,7 +40,7 @@ module.exports = function(app) {
   });
     
   app.post('/auth', function(req, res) {
-    var sql = "SELECT * FROM users WHERE users_name = '"+ req.body.login +"' AND users_password = '"+ req.body.password +"' ";
+    var sql = "SELECT * FROM users WHERE users_login = '"+ req.body.login +"' AND users_password = '"+ req.body.password +"'";
     con.query(sql, function (err, rows) {
       if (err) throw err;
       if (rows == 0) {
@@ -51,6 +51,8 @@ module.exports = function(app) {
       } else {
         req.session.login = req.body.login;
         req.session.password = req.body.password;
+        req.session.userid = rows[0].users_id;
+        req.session.usersname = rows[0].users_name;
         req.session.expires = new Date(Date.now() + 3600000*5);
         res.redirect("/login");
       }
@@ -59,7 +61,6 @@ module.exports = function(app) {
     
   app.get('/login', function(req, res) {
     if(typeof req.session.login !== "undefined" && typeof req.session.password !== "undefined"){
-      console.log("Logit: "+req.session.login+" Password: "+req.session.password+" Username: "+req.session.usernames);
       res.render('main-page.ejs', {"config" : config, "page" : req.path});
     } else {
       res.writeHead(200, {'Content-Type' : 'text/html'});
@@ -88,7 +89,7 @@ module.exports = function(app) {
   app.post('/registration' + config.root, function(req, res) {
     res.writeHead(200, {'Content-Type' : 'text/html'});
     res.write(req.path);
-    var sql = "INSERT INTO users (users_name, users_email, users_password, users_status) VALUES (" + mysql.escape(req.body.name) + "," + mysql.escape(req.body.email) + "," + mysql.escape(req.body.pass) + ", 'CREATED')";
+    var sql = "INSERT INTO users (users_name, users_login, users_email, users_password, users_status) VALUES (" + mysql.escape(req.body.name) + "," + mysql.escape(req.body.login) + "," + mysql.escape(req.body.email) + "," + mysql.escape(req.body.pass) + ", 'CREATED')";
     con.query(sql, function (err, result) {
       if (err) throw err;
       sendEmail(req.body.email, 'success registration', 'to activate account go to the link');
@@ -154,18 +155,23 @@ module.exports = function(app) {
       if(parseInt(rowsCount)) {
         req.session.rowsCount = rowsCount;
       }
-      var sql = "SELECT dictionary_id, \
-                        dictionary_word_he, \
-                        dictionary_word_inf, \
-                        dictionary_word_en, \
-                        dictionary_word_tr, \
-                        dictionary_word_type \
-                FROM  dictionary \
-                  LEFT JOIN 
-
-
-
-                raiting ON dictionary.dictionary_id 
+      var sql = " SELECT  dictionary.dictionary_id, \
+                          dictionary.dictionary_word_he, \
+                          dictionary.dictionary_word_inf, \
+                          dictionary.dictionary_word_en, \
+                          dictionary.dictionary_word_tr, \
+                          dictionary.dictionary_word_type, \
+                          tRating.raiting_id, \
+                          IFNULL(tRating.raiting_word_id, '0') AS raiting_word_id, \
+                          IFNULL(tRating.raiting_user_id, '"+req.session.userid+"')  AS raiting_user_id, \
+                          IFNULL(tRating.raiting_user_check, 'false') AS raiting_user_check, \
+                          IFNULL(tRating.raiting_sum, '0') AS raiting_sum \
+                  FROM  dictionary \
+                  LEFT JOIN ( SELECT * \
+                              FROM  raiting \
+                              WHERE raiting_user_id = '" + req.session.userid + "' ) AS tRating \
+                    ON dictionary.dictionary_id = tRating.raiting_word_id \
+                  WHERE 1=1 \
                 ";
       con.query(sql, function (err, result) {
         if (err) throw err;

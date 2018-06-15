@@ -81,20 +81,27 @@ function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
 					      <th scope="col">Hebrew</th> \
 					      <th scope="col">Engligh</th> \
 					      <th scope="col">Type</th> \
+					      <th scope="col"  class="text-center">Rating</th> \
 					    </tr> \
 					  </thead>\
-					  <tbody>';
+					<tbody>';
 		for(var i = 0; i < JSdata.length; i++) {
 			if (JSdata[i].dictionary_word_inf != "") {
 				var heb = JSdata[i].dictionary_word_inf + ") " + JSdata[i].dictionary_word_he+")";
 			} else {
 				var heb = JSdata[i].dictionary_word_he;
 			}
+			if (JSdata[i].raiting_user_check == "true") {
+				var checked = "checked";
+			} else {
+				var checked = "";
+			}
 			html+='<tr> \
-					<td></td> \
+					<td><input type="checkbox" ' + checked + '></td> \
 					<td>' + heb + '</td> \
 					<td>' + JSdata[i].dictionary_word_en + '</td> \
 					<td>' + JSdata[i].dictionary_word_type + '</td> \
+					<td class="text-center">' + JSdata[i].raiting_sum + '</td> \
 				   </tr>';
 		}
 		html+='</tbody></table>';
