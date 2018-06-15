@@ -69,10 +69,40 @@ function infinitiveToggle() {
 
 function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
 	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordtypes: wordtypes, rowsCount: rowsCount}, function(data) {
-		$("#dictionary-table").val(data);
+		
+		
+		var JSdata = JSON.parse(data);
+		console.log(JSdata.length);
+
+		var html = '<table class="table table-striped"> \
+					  <thead> \
+					    <tr> \
+					      <th scope="col"></th> \
+					      <th scope="col">Hebrew</th> \
+					      <th scope="col">Engligh</th> \
+					      <th scope="col">Type</th> \
+					    </tr> \
+					  </thead>\
+					  <tbody>';
+		for(var i = 0; i < JSdata.length; i++) {
+			if (JSdata[i].dictionary_word_inf != "") {
+				var heb = JSdata[i].dictionary_word_inf + ") " + JSdata[i].dictionary_word_he+")";
+			} else {
+				var heb = JSdata[i].dictionary_word_he;
+			}
+			html+='<tr> \
+					<td></td> \
+					<td>' + heb + '</td> \
+					<td>' + JSdata[i].dictionary_word_en + '</td> \
+					<td>' + JSdata[i].dictionary_word_type + '</td> \
+				   </tr>';
+		}
+		html+='</tbody></table>';
+		$("#dictionary-table").html(html);
 	});
 }
 
+fillDictionaryTable("", "", "", 100);
 
 
 

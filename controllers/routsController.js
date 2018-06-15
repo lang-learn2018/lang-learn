@@ -3,6 +3,12 @@ var url = require('url');
 var mysql = require('mysql');
 var email = require('nodemailer');
 var path = require('path');
+var ejs = require('ejs')
+
+// var stringMultiline = require('string-multiline');
+// stringMultiline.parseMultilineVars('./data/somedata.dat', function(result){
+//     console.log(result);
+// });
 //var request = require('ajax-request');
 
 var con = mysql.createConnection({
@@ -132,6 +138,10 @@ module.exports = function(app) {
       var checked = req.body.checked;
       var wordtypes = req.body.wordtypes;
       var rowsCount = req.body.rowsCount;
+      if(typeof req.session.rating == undefined) req.session.rating = "not learned";
+      if(typeof req.session.checked == undefined) req.session.checked = "false";
+      if(typeof req.session.wordtypes == undefined) req.session.wordtypes = "all";
+      if(typeof req.session.rowsCount == undefined) req.session.rowsCount = 100;
       if(rating == "not learned" || rating == "ascending" || rating == "descending") {
         req.session.rating = rating;
       }
@@ -143,10 +153,26 @@ module.exports = function(app) {
       }
       if(parseInt(rowsCount)) {
         req.session.rowsCount = rowsCount;
-      } else {
-        req.session.rowsCount = 100;
       }
-      var sql = "SE";
+      var sql = "SELECT dictionary_id, \
+                        dictionary_word_he, \
+                        dictionary_word_inf, \
+                        dictionary_word_en, \
+                        dictionary_word_tr, \
+                        dictionary_word_type \
+                FROM  dictionary \
+                  LEFT JOIN 
+
+
+
+                raiting ON dictionary.dictionary_id 
+                ";
+      con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log(JSON.stringify(result));
+        res.send(JSON.stringify(result));
+        res.end();
+      });
   });
 
 
