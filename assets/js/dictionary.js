@@ -67,12 +67,14 @@ function infinitiveToggle() {
 
 }
 
-function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
-	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordtypes: wordtypes, rowsCount: rowsCount}, function(data) {
+function fillDictionaryTable(rating, checked, wordType, rowsCount=100){
+	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount}, function(data) {
 		
-		
+		console.log(wordType)
 		var JSdata = JSON.parse(data);
 		console.log(JSdata.length);
+
+
 
 		var html = '<table class="table table-striped"> \
 					  <thead> \
@@ -100,7 +102,7 @@ function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
 					<td><input type="checkbox" ' + checked + ' onchange="checkWord(JSdata[i].dictionary_id)"></td> \
 					<td>' + heb + '</td> \
 					<td>' + JSdata[i].dictionary_word_en + '</td> \
-					<td>' + JSdata[i].dictionary_word_type + '</td> \
+					<td>' + setWordType(JSdata[i].dictionary_word_type) + '</td> \
 					<td class="text-center">' + JSdata[i].raiting_sum + '</td> \
 				   </tr>';
 		}
@@ -115,6 +117,12 @@ function checkWord(wordID){
 	$.post( '/checkWord', {word_id:wordID});
 }
 
+function setWordType(typeCode) {
+	if(typeCode == "verb") return "Verb";
+	if(typeCode == "noun") return "Noun";
+	if(typeCode == "adj") return "Adjective";
+	if(typeCode == "frss") return "Frase";
+}
 
 
 

@@ -7,12 +7,16 @@ var path = require('path');
 var ejs = require('ejs');
 var db = require('./mysqlController.js').createConnection();
 var param = function(config, req) {
-  return {
+  var args = {
     "config"    : config, 
     "variables" : variables, 
     "page"      : req.path, 
     "login"     : req.session.login
   };
+  for (var i = 3; i < arguments.length; i++) {
+    args.i = arguments[i];
+  }
+  return args;
 }
 
 module.exports = function(app) {
@@ -134,20 +138,27 @@ module.exports = function(app) {
   app.post('/getdictionarytable', function(req, res){
       var rating = req.body.rating;
       var checked = req.body.checked;
-      var wordtypes = req.body.wordtypes;
+      var wordtypes = req.body.wordType;
       var rowsCount = req.body.rowsCount;
       if(typeof req.session.rating == undefined) req.session.rating = "not learned";
       if(typeof req.session.checked == undefined) req.session.checked = "false";
-      if(typeof req.session.wordtypes == undefined) req.session.wordtypes = "all";
+      //if(typeof req.session.wordtypes == undefined) req.session.wordtypes = "all";
       if(typeof req.session.rowsCount == undefined) req.session.rowsCount = 100;
+      
+      if (typeof req.session.wordtypesfilter == "undefined") {
+        req.session.wordtypesfilter = "";
+      }
+
       if(rating == "not learned" || rating == "ascending" || rating == "descending") {
         req.session.rating = rating;
       }
       if(checked == "true" || checked == "false") {
         req.session.checked = checked;
       }
-      if(wordtypes == "all" || wordtypes == "verbs" || wordtypes == "nouns" || wordtypes == "adjective" || wordtypes == "frases") {
-        req.session.wordtypes = wordtypes;
+      if(wordtypes == "verb" || wordtypes == "noun" || wordtypes == "adj" || wordtypes == "frss") {
+        req.session.wordtypesfilter = " AND dictionary_word_type = '" + wordtypes +"' ";
+      } else if (wordtypes == "all") {
+        req.session.wordtypesfilter = "";
       }
       if(parseInt(rowsCount)) {
         req.session.rowsCount = rowsCount;
@@ -168,11 +179,12 @@ module.exports = function(app) {
                               FROM  raiting \
                               WHERE raiting_user_id = '" + req.session.userid + "' ) AS tRating \
                     ON dictionary.dictionary_id = tRating.raiting_word_id \
-                  WHERE 1=1 \
+                  WHERE 1=1 " + req.session.wordtypesfilter + "\
                 ";
+         console.log(sql);
       db.query(sql, function (err, result) {
         if (err) throw err;
-        console.log(JSON.stringify(result));
+        // console.log(JSON.stringify(result));
         res.send(JSON.stringify(result));
         res.end();
       });
