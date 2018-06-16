@@ -97,7 +97,7 @@ function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
 				var checked = "";
 			}
 			html+='<tr> \
-					<td><input type="checkbox" ' + checked + '></td> \
+					<td><input type="checkbox" ' + checked + ' onchange="checkWord(JSdata[i].dictionary_id)"></td> \
 					<td>' + heb + '</td> \
 					<td>' + JSdata[i].dictionary_word_en + '</td> \
 					<td>' + JSdata[i].dictionary_word_type + '</td> \
@@ -111,7 +111,9 @@ function fillDictionaryTable(rating, checked, wordtypes, rowsCount=100){
 
 fillDictionaryTable("", "", "", 100);
 
-
+function checkWord(wordID){
+	$.post( '/checkWord', {word_id:wordID});
+}
 
 
 

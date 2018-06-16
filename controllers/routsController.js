@@ -113,9 +113,7 @@ module.exports = function(app) {
       if (err) throw err;
       if (result[0].n > 0) {
         answer = "exists";
-        // console.log(answer);
         res.send(answer);
-        // res.write(answer);
         res.end();
       } else {
         if (word_he != "" && word_en != "" && word_type != "") {
@@ -129,8 +127,6 @@ module.exports = function(app) {
         }
       }
       console.log("answer: " + answer);
-      // res.writeHead(200, {'Content-Type' : 'text/html'});
-      // res.send(answer);
     });
   });
 
