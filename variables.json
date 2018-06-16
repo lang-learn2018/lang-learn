@@ -1,0 +1,9 @@
+{
+	"greet" : "Hello",
+	"auth_btn_text" : "Enter",
+	"home_btn_text" : "Home",
+	"start_btn_text" : "Start",
+	"dictionary_btn_text" : "Dictionary",
+	"exit_btn_text" : "Exit"
+
+}

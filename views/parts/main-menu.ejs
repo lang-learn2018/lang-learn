@@ -4,26 +4,37 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+          <div class="nav-item dropdown">
+<% if (login == undefined) {%> 
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= variables.greet %>, guest!  </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="nav-item dropdown-item" href="<%= config.root %>/auth" id="authorization"><%= variables.auth_btn_text %></a>
+            </div>
+<% } else {%> 
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= variables.greet %>, <%= login %>!  </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="nav-item dropdown-item" href="<%= config.root %>/logout" id="authorization"><%= variables.exit_btn_text %></a>
+              <div class="dropdown-divider"></div>
+            </div>
+<% } %>              
+          </div>
           <a class="nav-item nav-link
 
 <% if (page == "/") {%> active<% } %>
 
-          " href="<%= config.root %>/" id="begin">Home</a>
+          " href="<%= config.root %>/" id="begin"><%= variables.home_btn_text %></a>
           <a class="nav-item nav-link
 
 <% if (page == "/learn") {%> active<% } %>
 
-          " href="<%= config.root %>/learn" id="begin">Start</a>
+          " href="<%= config.root %>/learn" id="begin"><%= variables.start_btn_text %></a>
           <a class="nav-item nav-link
 
 <% if (page == "/dictionary") {%> active<% } %>
 
-          " href="<%= config.root %>/dictionary" id="dictionary">Dictionary</a>
-          <a class="nav-item nav-link
+          " href="<%= config.root %>/dictionary" id="dictionary"><%= variables.dictionary_btn_text %></a>
 
-<% if (page == "/auth") {%> active<% } %>
 
-          " href="<%= config.root %>/auth" id="authorization">Enter</a>
         </div>
       </div>
 </nav>

@@ -1,26 +1,19 @@
+//var request = require('ajax-request');
 var config = require('../config.json');
-var url = require('url');
+var variables = require('../variables.json');
 var mysql = require('mysql');
 var email = require('nodemailer');
 var path = require('path');
-var ejs = require('ejs')
-
-// var stringMultiline = require('string-multiline');
-// stringMultiline.parseMultilineVars('./data/somedata.dat', function(result){
-//     console.log(result);
-// });
-//var request = require('ajax-request');
-
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: config.dbPswd,
-  database: config.dbName
-});
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
+var ejs = require('ejs');
+var db = require('./mysqlController.js').createConnection();
+var param = function(config, req) {
+  return {
+    "config"    : config, 
+    "variables" : variables, 
+    "page"      : req.path, 
+    "login"     : req.session.login
+  };
+}
 
 module.exports = function(app) {
 
@@ -31,17 +24,17 @@ module.exports = function(app) {
     if(typeof req.session.login !== "undefined" && typeof req.session.password !== "undefined"){
       res.redirect("/login");
     } else {
-      res.render('main-page.ejs', {"config" : config, "page" : req.path});   
+      res.render('main-page.ejs', param(config,req));   
     }
   });
 
   app.get('/auth', function(req, res) {
-    res.render('main-page.ejs', {"config" : config, "page" : req.path});
+    res.render('main-page.ejs', param(config,req));
   });
     
   app.post('/auth', function(req, res) {
     var sql = "SELECT * FROM users WHERE users_login = '"+ req.body.login +"' AND users_password = '"+ req.body.password +"'";
-    con.query(sql, function (err, rows) {
+    db.query(sql, function (err, rows) {
       if (err) throw err;
       if (rows == 0) {
         res.writeHead(200, {'Content-Type' : 'text/html'});
@@ -53,7 +46,7 @@ module.exports = function(app) {
         req.session.password = req.body.password;
         req.session.userid = rows[0].users_id;
         req.session.usersname = rows[0].users_name;
-        req.session.expires = new Date(Date.now() + 3600000*5);
+        req.session.expires = new Date(Date.now() + 36000000*5);
         res.redirect("/login");
       }
     });
@@ -61,16 +54,22 @@ module.exports = function(app) {
     
   app.get('/login', function(req, res) {
     if(typeof req.session.login !== "undefined" && typeof req.session.password !== "undefined"){
-      res.render('main-page.ejs', {"config" : config, "page" : req.path});
+      res.render('main-page.ejs', param(config,req));
     } else {
-      res.writeHead(200, {'Content-Type' : 'text/html'});
-      res.write("You must to <a href='auth'>authorize</a>");
-      res.end();   
+      // res.writeHead(200, {'Content-Type' : 'text/html'});
+      // res.write("You must to <a href='auth'>authorize</a>");
+      // res.end(); 
+      res.redirect("/dictionary");
     }
+  });
+
+  app.get('/logout', function(req, res) {
+      req.session.destroy();
+      res.redirect("/dictionary");
   });
     
   app.get('/registration', function(req, res) {
-    res.render('main-page.ejs', {"config" : config, "page" : req.path});
+    res.render('main-page.ejs', param(config,req));
   });
     
   app.get('/dictionary', function(req, res) {
@@ -79,7 +78,7 @@ module.exports = function(app) {
     } else {
       var username = "";
     }
-    res.render('main-page.ejs', {"config" : config, "page" : req.path, "login": login});
+    res.render('main-page.ejs', param(config,req));
   });
 
   app.delete('/' + config.root, function(req, res) {
@@ -90,10 +89,12 @@ module.exports = function(app) {
     res.writeHead(200, {'Content-Type' : 'text/html'});
     res.write(req.path);
     var sql = "INSERT INTO users (users_name, users_login, users_email, users_password, users_status) VALUES (" + mysql.escape(req.body.name) + "," + mysql.escape(req.body.login) + "," + mysql.escape(req.body.email) + "," + mysql.escape(req.body.pass) + ", 'CREATED')";
-    con.query(sql, function (err, result) {
+    db.query(sql, function (err, result) {
       if (err) throw err;
       sendEmail(req.body.email, 'success registration', 'to activate account go to the link');
+
     });
+    // res.redirect("/dictionary");
     res.end();
   });
 
@@ -109,7 +110,7 @@ module.exports = function(app) {
     }
     var answer = "";
     var sql = "SELECT COUNT(*) AS n FROM dictionary WHERE dictionary_word_he = " + mysql.escape(word_he);
-    con.query(sql, function (err, result) {
+    dbquery(sql, function (err, result) {
       if (err) throw err;
       if (result[0].n > 0) {
         answer = "exists";
@@ -118,7 +119,7 @@ module.exports = function(app) {
       } else {
         if (word_he != "" && word_en != "" && word_type != "") {
           sql = "INSERT INTO dictionary (dictionary_word_he, dictionary_word_inf, dictionary_word_en, dictionary_word_tr, dictionary_word_type) VALUES (" + mysql.escape(word_he) + ", " + mysql.escape(word_inf) + ", " + mysql.escape(word_en) + ", " + mysql.escape(word_tr) + ", " + mysql.escape(word_type) + ")";
-          con.query(sql, function (err, result) {
+          db.query(sql, function (err, result) {
             if (err) throw err;
             answer = "success";
             res.send(answer);
@@ -169,7 +170,7 @@ module.exports = function(app) {
                     ON dictionary.dictionary_id = tRating.raiting_word_id \
                   WHERE 1=1 \
                 ";
-      con.query(sql, function (err, result) {
+      db.query(sql, function (err, result) {
         if (err) throw err;
         console.log(JSON.stringify(result));
         res.send(JSON.stringify(result));
@@ -179,7 +180,7 @@ module.exports = function(app) {
 
 
   app.get('*', function(req, res) {
-    res.status(404).render('main-page.ejs', {"config" : config, "page" : "404"});
+    res.status(404).render('main-page.ejs', param(config,req));
   });
 };
 
@@ -187,12 +188,12 @@ var sendEmail = function(emailAdr, sbj, txt) {
   var transporter = email.createTransport({
   service: 'gmail',
   auth: {
-    user: 'config.email',
-    pass: 'config.emailPass'
+    user: config.email,
+    pass: config.emailPass
   }
   });
   var mailOptions = {
-    from: 'learnhebrew1234@gmail.com',
+    from: config.email,
     to: emailAdr,
     subject: sbj,
     text: txt
