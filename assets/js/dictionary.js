@@ -72,10 +72,6 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100){
 		
 		console.log(wordType)
 		var JSdata = JSON.parse(data);
-		console.log(JSdata.length);
-
-
-
 		var html = '<table class="table table-striped"> \
 					  <thead> \
 					    <tr> \
@@ -99,7 +95,7 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100){
 				var checked = "";
 			}
 			html+='<tr> \
-					<td><input type="checkbox" ' + checked + ' onchange="checkWord(JSdata[i].dictionary_id)"></td> \
+					<td><input type="checkbox" ' + checked + ' onchange="checkWord('+JSdata[i].dictionary_id+', this.checked)"></td> \
 					<td>' + heb + '</td> \
 					<td>' + JSdata[i].dictionary_word_en + '</td> \
 					<td>' + setWordType(JSdata[i].dictionary_word_type) + '</td> \
@@ -113,8 +109,10 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100){
 
 fillDictionaryTable("", "", "", 100);
 
-function checkWord(wordID){
-	$.post( '/checkWord', {word_id:wordID});
+function checkWord(wordID, checked) {
+	$.post( '/checkWord', { wordID, checked }, function(data) {
+		console.log(data);
+	});
 }
 
 function setWordType(typeCode) {
