@@ -114,7 +114,7 @@ module.exports = function(app) {
     }
     var answer = "";
     var sql = "SELECT COUNT(*) AS n FROM dictionary WHERE dictionary_word_he = " + mysql.escape(word_he);
-    dbquery(sql, function (err, result) {
+    db.query(sql, function (err, result) {
       if (err) throw err;
       if (result[0].n > 0) {
         answer = "exists";
