@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 16, 2018 at 03:59 PM
+-- Generation Time: Jun 22, 2018 at 05:36 PM
 -- Server version: 5.6.37
 -- PHP Version: 5.6.31
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `dictionary` (
   `dictionary_word_en` varchar(150) NOT NULL,
   `dictionary_word_tr` varchar(150) NOT NULL,
   `dictionary_word_type` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=782 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=783 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `dictionary`
@@ -823,6 +823,60 @@ INSERT INTO `dictionary` (`dictionary_id`, `dictionary_word_he`, `dictionary_wor
 (780, ' צעיר', '', 'young', 'tse''eyr', 'adj'),
 (781, 'על לא דבר.', '', 'You''re welcome.', 'al lo da-var.', 'frss');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `raiting`
+--
+
+DROP TABLE IF EXISTS `raiting`;
+CREATE TABLE IF NOT EXISTS `raiting` (
+  `raiting_id` int(11) NOT NULL,
+  `raiting_word_id` int(11) NOT NULL,
+  `raiting_user_id` int(11) NOT NULL,
+  `raiting_user_check` tinyint(1) NOT NULL,
+  `raiting_sum` int(11) NOT NULL,
+  `raiting_hit` int(11) NOT NULL DEFAULT '0',
+  `raiting_miss` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `raiting`
+--
+
+INSERT INTO `raiting` (`raiting_id`, `raiting_word_id`, `raiting_user_id`, `raiting_user_check`, `raiting_sum`, `raiting_hit`, `raiting_miss`) VALUES
+(3, 2, 3, 1, 0, 0, 0),
+(4, 3, 3, 0, 0, 0, 0),
+(5, 135, 3, 1, 0, 0, 0),
+(6, 6, 3, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `users_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `users_name` varchar(50) NOT NULL,
+  `users_email` varchar(50) NOT NULL,
+  `users_password` varchar(50) NOT NULL,
+  `users_status` varchar(20) NOT NULL,
+  `users_login` varchar(100) NOT NULL,
+  `users_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`users_time`, `users_name`, `users_email`, `users_password`, `users_status`, `users_login`, `users_id`) VALUES
+('2018-06-07 13:33:58', 'sdfs', 'serjio.rv@gmail.com', '111', 'CREATED', '', 1),
+('2018-06-07 13:39:24', 'f', 've.doroshenko@yandex.ru', '1111', 'CREATED', '', 2),
+('2018-06-15 17:38:35', 'Serjio', 'serjio.rv@gmail.com', 'jewcards', 'CREATED', 'serjio', 3),
+('2018-06-16 06:15:25', 'Arina', 'arina.y2443@gmail.com', 'arina2003', 'CREATED', 'arina', 4);
+
 --
 -- Indexes for dumped tables
 --
@@ -834,6 +888,19 @@ ALTER TABLE `dictionary`
   ADD PRIMARY KEY (`dictionary_id`);
 
 --
+-- Indexes for table `raiting`
+--
+ALTER TABLE `raiting`
+  ADD PRIMARY KEY (`raiting_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`users_id`),
+  ADD UNIQUE KEY `users_id` (`users_time`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -841,7 +908,17 @@ ALTER TABLE `dictionary`
 -- AUTO_INCREMENT for table `dictionary`
 --
 ALTER TABLE `dictionary`
-  MODIFY `dictionary_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=782;
+  MODIFY `dictionary_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=783;
+--
+-- AUTO_INCREMENT for table `raiting`
+--
+ALTER TABLE `raiting`
+  MODIFY `raiting_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
