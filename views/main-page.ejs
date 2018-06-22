@@ -8,13 +8,11 @@
 </head>
 <body>
   <%- include('parts/main-menu') %>
-  <% if(page == "/auth") {%> <%- include('parts/auth')%> <% }  %>
-  <% if(page == "/registration") {%> <%- include('parts/registration')%> <% }  %>
-  <% if(page == "/login") {%> <%- include('parts/login')%> <% }  %>
-  <% if(page == "/dictionary") {%> <%- include('parts/dictionary')%> <% }  %>
-  <% if(page == "404") {%> <%- include('parts/404')%> <% }  %>
-  
-  <% console.log("asfsa"); %>
+  <% if(path == "/auth") {%> <%- include('parts/auth')%> <% }  %>
+  <% if(path == "/registration") {%> <%- include('parts/registration')%> <% }  %>
+  <% if(path == "/login") {%> <%- include('parts/login')%> <% }  %>
+  <% if(path == "/dictionary") {%> <%- include('parts/dictionary')%> <% }  %>
+  <% if(path == "404") {%> <%- include('parts/404')%> <% }  %>
 
 </body>
 </html>

@@ -1,16 +1,12 @@
 var config = require('./config.json');
 var express = require('express');
-var router = require('./controllers/routsController');
+var router = require('./controllers/RoutsController');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var url = require('url');
-var mysql = require('mysql');
-var email = require('nodemailer');
-var path = require('path');
 var ejs = require('ejs');
-
-
+var cookieParser = require('cookie-parser');
+var SessionController = require('./controllers/SessionController');
 
 var app = express();
 app.set('view-engine', 'ejs');
@@ -21,9 +17,15 @@ app.use(cookieParser());
 app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'supersecret'
+    secret: config.sessionSecret
 }));
-
+app.use(cookieParser());
+app.use(function(req, res, next) {
+    res.locals.login = SessionController.getUser(req).login;
+    res.locals.userid = SessionController.getUser(req).id;
+    res.locals.path = req.path;
+    res.locals.config = config;
+    next();
+});
 router(app);
-
-app.listen(config.port, () => console.log('Example app listening on port ' + config.port + '!'));
+app.listen(config.port, () => console.log('Listening on port ' + config.port + '!'));
