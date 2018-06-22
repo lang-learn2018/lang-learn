@@ -11,19 +11,14 @@ var getUser = function(req){
         var user = {
             "login" : typeof  req.cookies.login != "undefined" ? req.cookies.login : "guest",
             "id" : typeof  req.cookies.userid != "undefined" ? req.cookies.userid : null,
-            "name" : typeof  req.cookies.username != "undefined" ? req.cookies.login : "guest"
+            "name" : typeof  req.cookies.username != "undefined" ? req.cookies.username : "guest"
         }
-        console.log(user);
         createUserSession(req, user);
     }
     return req.session.user;
 }
 
-var createUserSession = function(req, user = {
-                                                "login" : "guest",
-                                                "id" : null,
-                                                "name" : "guest"
-                                                }) {
+var createUserSession = function(req, user) {
     req.session.user = user;
     req.session.expires = new Date(2000000000);
 

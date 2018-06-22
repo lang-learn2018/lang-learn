@@ -19,5 +19,6 @@
   "dictionary_btn_text" : "Dictionary",
   "exit_btn_text" : "Exit",
 
-  "auth_err" : "You entered not correct data!"
+  "auth_err" : "You entered not correct data!",
+  "reg_mail" : "success registration', 'to activate account go to the link"
 }

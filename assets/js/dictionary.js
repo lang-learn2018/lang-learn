@@ -54,6 +54,7 @@ function isFieldEmpty(value) {
 
 function fillModalHb(value) {
 	$("#wordHb").val(value);
+	fillDictionaryTable("", "", "", "", value);
 }
 
 function infinitiveToggle() {
@@ -67,43 +68,53 @@ function infinitiveToggle() {
 
 }
 
-function fillDictionaryTable(rating, checked, wordType, rowsCount=100){
-	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount}, function(data) {
+function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null){
+	if(word == null) word = $('#searchWord').val();
+	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount, word: word}, function(data) {
 		
 		console.log(wordType)
 		var JSdata = JSON.parse(data);
-		var html = '<table class="table table-striped"> \
-					  <thead> \
-					    <tr> \
-					      <th scope="col"></th> \
-					      <th scope="col">Hebrew</th> \
-					      <th scope="col">Engligh</th> \
-					      <th scope="col">Type</th> \
-					      <th scope="col"  class="text-center">Rating</th> \
-					    </tr> \
-					  </thead>\
-					<tbody>';
+		var html = `<table class="table table-striped"> 
+					  <thead> 
+					    <tr> 
+					      <th scope="col"></th> 
+					      <th scope="col">Hebrew</th> 
+					      <th scope="col">Engligh</th> 
+					      <th scope="col">Transcription</th> 
+					      <th scope="col">Type</th> 
+					      <th scope="col"  class="text-center">Rating</th> 
+					    </tr> 
+					  </thead>
+					<tbody>`;
 		for(var i = 0; i < JSdata.length; i++) {
 			if (JSdata[i].dictionary_word_inf != "") {
 				var heb = JSdata[i].dictionary_word_inf + ") " + JSdata[i].dictionary_word_he+")";
 			} else {
 				var heb = JSdata[i].dictionary_word_he;
 			}
-			if (JSdata[i].raiting_user_check == "true") {
+			if (JSdata[i].raiting_user_check == 1) {
 				var checked = "checked";
 			} else {
 				var checked = "";
 			}
-			html+='<tr> \
-					<td><input type="checkbox" ' + checked + ' onchange="checkWord('+JSdata[i].dictionary_id+', this.checked)"></td> \
-					<td>' + heb + '</td> \
-					<td>' + JSdata[i].dictionary_word_en + '</td> \
-					<td>' + setWordType(JSdata[i].dictionary_word_type) + '</td> \
-					<td class="text-center">' + JSdata[i].raiting_sum + '</td> \
-				   </tr>';
+			html+=`<tr> 
+					<td><input type="checkbox" ${checked} onchange="checkWord(${JSdata[i].dictionary_id}, this.checked)"></td> 
+					<td>${heb}</td> 
+					<td>${JSdata[i].dictionary_word_en}</td> 
+					<td>${JSdata[i].dictionary_word_tr}</td>
+					<td>${setWordType(JSdata[i].dictionary_word_type)}</td> 
+					<td class="text-center">${JSdata[i].raiting_sum}</td> 
+				   </tr>`;
 		}
 		html+='</tbody></table>';
 		$("#dictionary-table").html(html);
+		getFilterSettings();
+	});
+}
+
+function getFilterSettings(){
+	$.post( '/getfiltersettings', {}, function(data) {
+		$('#filterSetting').html(data);
 	});
 }
 
@@ -120,6 +131,7 @@ function setWordType(typeCode) {
 	if(typeCode == "noun") return "Noun";
 	if(typeCode == "adj") return "Adjective";
 	if(typeCode == "frss") return "Frase";
+	if(typeCode == "other") return "Other";
 }
 
 
