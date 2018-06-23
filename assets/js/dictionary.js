@@ -1,3 +1,5 @@
+var JSdataCurrentDictionary;
+
 function saveWord() {
 	var wordHb = $("#wordHb").val();
 	var wordEn = $("#wordEn").val();
@@ -71,25 +73,23 @@ function infinitiveToggle() {
 function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null){
 	if(word == null) word = $('#searchWord').val();
 	$.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount, word: word}, function(data) {
-		
-		console.log(wordType)
-		var JSdata = JSON.parse(data);
-		for(var i = 0; i < JSdata.length; i++) {
-			if (JSdata[i].dictionary_word_inf != "") {
-				var heb = JSdata[i].dictionary_word_inf + ") " + JSdata[i].dictionary_word_he+")";
+		JSdataCurrentDictionary = JSON.parse(data);
+		for(var i = 0; i < JSdataCurrentDictionary.length; i++) {
+			if (JSdataCurrentDictionary[i].dictionary_word_inf != "") {
+				var heb = JSdataCurrentDictionary[i].dictionary_word_inf + ") " + JSdataCurrentDictionary[i].dictionary_word_he+")";
 			} else {
-				var heb = JSdata[i].dictionary_word_he;
+				var heb = JSdataCurrentDictionary[i].dictionary_word_he;
 			}
 			var checked = "";
-			if (JSdata[i].raiting_user_check == 1) 
-				checked = `<input type="checkbox" checked onchange="checkWord(${JSdata[i].dictionary_id}, this.checked)">`;
-			if (JSdata[i].raiting_user_check == 0) 
-				checked = `<input type="checkbox" onchange="checkWord(${JSdata[i].dictionary_id}, this.checked)">`;
+			if (JSdataCurrentDictionary[i].raiting_user_check == 1) 
+				checked = `<input type="checkbox" checked onchange="checkWord(${JSdataCurrentDictionary[i].dictionary_id}, this.checked)">`;
+			if (JSdataCurrentDictionary[i].raiting_user_check == 0) 
+				checked = `<input type="checkbox" onchange="checkWord(${JSdataCurrentDictionary[i].dictionary_id}, this.checked)">`;
 			
 			var raiting = "";
 			var ratingTh = "";
-			if (JSdata[i].raiting_sum != "null") {
-				raiting = `<td class="text-center">${JSdata[i].raiting_sum}</td>`;
+			if (JSdataCurrentDictionary[i].raiting_sum != "null") {
+				raiting = `<td class="text-center">${JSdataCurrentDictionary[i].raiting_sum}</td>`;
 				ratingTh = `<th scope="col"  class="text-center">Rating</th>`;
 			}
 			
@@ -111,9 +111,9 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 			html+=`<tr> 
 					<td>${checked}</td> 
 					<td>${heb}</td> 
-					<td>${JSdata[i].dictionary_word_en}</td> 
-					<td>${JSdata[i].dictionary_word_tr}</td>
-					<td>${setWordType(JSdata[i].dictionary_word_type)}</td> 
+					<td>${JSdataCurrentDictionary[i].dictionary_word_en}</td> 
+					<td>${JSdataCurrentDictionary[i].dictionary_word_tr}</td>
+					<td>${setWordType(JSdataCurrentDictionary[i].dictionary_word_type)}</td> 
 					${raiting} 
 				   </tr>`;
 		}
@@ -145,6 +145,27 @@ function setWordType(typeCode) {
 	if(typeCode == "other") return "Other";
 }
 
+function startLearn() {
+	if($("#startStop").hasClass("btn-success")){
+		$("#startStop").removeClass("btn-success");
+		$("#startStop").addClass("btn-danger");
+		$("#startStop").html("Stop learning");
+		$("#searchWord").attr("disabled", true);
+		$("#addbtn").attr("disabled", true);
+		$("#wordtype").attr("disabled", true);
+		$("#wordcheck").attr("disabled", true);
+		$("#wordstatus").attr("disabled", true);
+	} else {
+		$("#startStop").removeClass("btn-danger");
+		$("#startStop").addClass("btn-success");
+		$("#startStop").html("Start learning");
+		$("#searchWord").attr("disabled", false);
+		$("#addbtn").attr("disabled", false);
+		$("#wordtype").attr("disabled", false);
+		$("#wordcheck").attr("disabled", false);
+		$("#wordstatus").attr("disabled", false);
+	}
+}
 
 
 

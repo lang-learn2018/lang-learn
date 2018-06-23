@@ -56,12 +56,13 @@
             <input id="searchWord" type="text" class="form-control" id="word" onkeyup="fillModalHb(this.value)">
           </div>
           
-          <button type="button" class="btn btn-primary mb-2" id="addbtn" data-toggle="modal" data-target="#addWordModal">Добавить</button>
+          <button type="button" class="btn btn-primary mb-2" id="addbtn" data-toggle="modal" data-target="#addWordModal">Add word</button>
+
           <div class="form-group mb-2 mx-sm-3">
               <div class="btn-group" role="group">
                   <% if (userid != null) {%>
                   <div class="btn-group" role="group">
-                    <button id="wordtype" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button id="wordstatus" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Rating
                     </button>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -99,7 +100,9 @@
                     </div>
                   </div>
               </div>
-            </div>
+          </div>
+          
+          <button id="startStop" type="button" class="btn btn-success mb-2" onclick="startLearn()">Start learning</button>
         </form>
 
     </div>

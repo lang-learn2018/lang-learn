@@ -82,6 +82,10 @@ module.exports = function (app) {
         View.renderDictionary(req, res);
     });
 
+    app.post('/learn', function (req, res) {
+        res.render('main-page.ejs');
+    });
+
 
     app.get('*', function (req, res) {
         res.status(404).render('main-page.ejs', {error: 404});
