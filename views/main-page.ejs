@@ -8,11 +8,7 @@
 </head>
 <body>
   <%- include('parts/main-menu') %>
-  <% if(path == "/auth") {%> <%- include('parts/auth')%> <% }  %>
-  <% if(path == "/registration") {%> <%- include('parts/registration')%> <% }  %>
-  <% if(path == "/login") {%> <%- include('parts/login')%> <% }  %>
-  <% if(path == "/dictionary") {%> <%- include('parts/dictionary')%> <% }  %>
-  <% if(path == "404") {%> <%- include('parts/404')%> <% }  %>
-
-</body>
-</html>
+  <% if(typeof error != "undefined" && error == "404") path = '/404' %>
+  <%- include('parts' + path) %> 
+ </body>
+ </html>

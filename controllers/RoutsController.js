@@ -84,7 +84,7 @@ module.exports = function (app) {
 
 
     app.get('*', function (req, res) {
-        res.status(404).render('main-page.ejs', param(config, req));
+        res.status(404).render('main-page.ejs', {error: 404});
     });
 };
 

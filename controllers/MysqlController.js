@@ -55,11 +55,18 @@ exports.getDictionaryTable = function(req, res, word) {
   var db = createConnection();
   var user = SessionController.getUser(req);
   var wordfilter = "";
-  word = mysql.escape(word+"%");
+  word = mysql.escape("%"+word+"%");
   console.log(word);
   if(word != null && word != "" && word != "'%'") {
     wordfilter = ` AND (dictionary_word_he LIKE ${word} OR 
                         dictionary_word_en LIKE ${word}) `;
+  }
+  if(user.id == null) {
+    var sqlRatingSum = "'null' AS raiting_sum";
+    var sqlCheckWord = "'null' AS raiting_user_check";
+  } else {
+    var sqlRatingSum = "IFNULL(tRating.raiting_sum, '0') AS raiting_sum";
+    var sqlCheckWord = "IFNULL(tRating.raiting_user_check, '0') AS raiting_user_check";
   }
   var sql = ` SELECT *
               FROM (SELECT  dictionary.dictionary_id, 
@@ -71,8 +78,8 @@ exports.getDictionaryTable = function(req, res, word) {
                             tRating.raiting_id, 
                             IFNULL(tRating.raiting_word_id, '0') AS raiting_word_id, 
                             IFNULL(tRating.raiting_user_id, ${user.id})  AS raiting_user_id, 
-                            IFNULL(tRating.raiting_user_check, '0') AS raiting_user_check, 
-                            IFNULL(tRating.raiting_sum, '0') AS raiting_sum,
+                            ${sqlCheckWord}, 
+                            ${sqlRatingSum},
                             IFNULL(tRating.raiting_hit, '0') AS raiting_hit,
                             IFNULL(tRating.raiting_miss, '0') AS raiting_miss, 
                             IFNULL(tRating.raiting_hit, '0') - IFNULL(tRating.raiting_miss, '0') AS raiting_diff

@@ -74,7 +74,27 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 		
 		console.log(wordType)
 		var JSdata = JSON.parse(data);
-		var html = `<table class="table table-striped"> 
+		for(var i = 0; i < JSdata.length; i++) {
+			if (JSdata[i].dictionary_word_inf != "") {
+				var heb = JSdata[i].dictionary_word_inf + ") " + JSdata[i].dictionary_word_he+")";
+			} else {
+				var heb = JSdata[i].dictionary_word_he;
+			}
+			var checked = "";
+			if (JSdata[i].raiting_user_check == 1) 
+				checked = `<input type="checkbox" checked onchange="checkWord(${JSdata[i].dictionary_id}, this.checked)">`;
+			if (JSdata[i].raiting_user_check == 0) 
+				checked = `<input type="checkbox" onchange="checkWord(${JSdata[i].dictionary_id}, this.checked)">`;
+			
+			var raiting = "";
+			var ratingTh = "";
+			if (JSdata[i].raiting_sum != "null") {
+				raiting = `<td class="text-center">${JSdata[i].raiting_sum}</td>`;
+				ratingTh = `<th scope="col"  class="text-center">Rating</th>`;
+			}
+			
+			if(i == 0) {
+				var html = `<table class="table table-striped"> 
 					  <thead> 
 					    <tr> 
 					      <th scope="col"></th> 
@@ -82,28 +102,19 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 					      <th scope="col">Engligh</th> 
 					      <th scope="col">Transcription</th> 
 					      <th scope="col">Type</th> 
-					      <th scope="col"  class="text-center">Rating</th> 
+					      ${ratingTh} 
 					    </tr> 
 					  </thead>
 					<tbody>`;
-		for(var i = 0; i < JSdata.length; i++) {
-			if (JSdata[i].dictionary_word_inf != "") {
-				var heb = JSdata[i].dictionary_word_inf + ") " + JSdata[i].dictionary_word_he+")";
-			} else {
-				var heb = JSdata[i].dictionary_word_he;
 			}
-			if (JSdata[i].raiting_user_check == 1) {
-				var checked = "checked";
-			} else {
-				var checked = "";
-			}
+
 			html+=`<tr> 
-					<td><input type="checkbox" ${checked} onchange="checkWord(${JSdata[i].dictionary_id}, this.checked)"></td> 
+					<td>${checked}</td> 
 					<td>${heb}</td> 
 					<td>${JSdata[i].dictionary_word_en}</td> 
 					<td>${JSdata[i].dictionary_word_tr}</td>
 					<td>${setWordType(JSdata[i].dictionary_word_type)}</td> 
-					<td class="text-center">${JSdata[i].raiting_sum}</td> 
+					${raiting} 
 				   </tr>`;
 		}
 		html+='</tbody></table>';
