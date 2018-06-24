@@ -90,7 +90,12 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 			var ratingTh = "";
 			if (JSdataCurrentDictionary[i].raiting_sum != "null") {
 				raiting = `<td class="text-center">${JSdataCurrentDictionary[i].raiting_sum}</td>`;
-				ratingTh = `<th scope="col"  class="text-center">Rating</th>`;
+				ratingTh = `<th scope="col"  style="white-space:nowrap;" class="text-center">Rating
+								<span id="raitingsort">
+						      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-up.png" height="13" width="13">
+						      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-down.png" height="13" width="13">
+					      		</span>
+							</th>`;
 			}
 			
 			if(i == 0) {
@@ -98,10 +103,30 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 					  <thead> 
 					    <tr> 
 					      <th scope="col"></th> 
-					      <th scope="col">Hebrew</th> 
-					      <th scope="col">Engligh</th> 
-					      <th scope="col">Transcription</th> 
-					      <th scope="col">Type</th> 
+					      <th  style="white-space:nowrap;" scope="col">Hebrew 
+					      	<span id="hebrewsort">
+					      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-up.png" height="13" width="13">
+					      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-down.png" height="13" width="13">
+					      	</span>
+					      </th> 
+					      <th style="white-space:nowrap;" scope="col">Engligh
+							<span id="englishsort">
+					      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-up.png" height="13" width="13">
+					      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-down.png" height="13" width="13">
+					      	</span>
+					      </th> 
+					      <th style="white-space:nowrap;" scope="col">Transcription
+							<span id="transsort">
+					      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-up.png" height="13" width="13">
+					      		<img style="cursor: pointer;" class="arrows" src="assets/img/arrow-down.png" height="13" width="13">
+					      	</span>
+					      </th> 
+					      <th style="white-space:nowrap;" scope="col" style="white-space:nowrap;">Type
+							<span>
+					      		<img id="typeupsort" style="cursor: pointer;" onclick="sortBy(this.id)" class="arrows" src="assets/img/arrow-up.png" height="13" width="13">
+					      		<img id="typedownsort" style="cursor: pointer;" onclick="sortBy(this.id)"  class="arrows" src="assets/img/arrow-down.png" height="13" width="13">
+					      	</span>
+					      </th> 
 					      ${ratingTh} 
 					    </tr> 
 					  </thead>
@@ -191,7 +216,9 @@ function startLearn() {
 	}
 }
 
-
+function sortBy(id){
+	alert(id);
+}
 
 
 
