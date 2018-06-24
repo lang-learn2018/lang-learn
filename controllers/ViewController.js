@@ -103,7 +103,7 @@ exports.getFilterFettings = function(req, res) {
     if (typeof req.session.wordtypes == "undefined") req.session.wordtypes = "all";
     
 
-	res.send("<div class='alert alert-primary' role='alert'><strong>Filter settings</strong>: Word raiting <u>"+req.session.rating+"</u>; Checked <u>"+req.session.checked+"</u>; Type <u>"+req.session.wordtypes)+"</u></div>";
+	res.send("<div class='' role='alert'><strong>Filter settings</strong>: Word raiting <u>"+req.session.rating+"</u>; Checked <u>"+req.session.checked+"</u>; Type <u>"+req.session.wordtypes)+"</u></div>";
     res.end();
 }
 

@@ -118,6 +118,26 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 				   </tr>`;
 		}
 		html+='</tbody></table>';
+		if (JSdataCurrentDictionary == "") {
+		    html = '<div class="row" style="margin-top:25px;">\n' +
+                '  <div class="col-sm-4"></div>\n' +
+                '  <div class="col-sm-4"><div class="card" style="max-width: 500px;">\n' +
+                '  <h5 class="card-header">Warning</h5>\n' +
+                '  <div class="card-body">\n' +
+                '    <h5 class="card-title">There is no such word in dictionary</h5>\n' +
+                '    <p class="card-text">There is no word <span class="badge badge-warning">' +word +'</span> in' +
+                ' dictionary.' +
+                ' You' +
+                ' can' +
+                ' add' +
+                ' it!</p>\n' +
+                '    <button id="addbtn" class="btn btn-outline-primary" type="button" data-toggle="modal"\n' +
+                '                    data-target="#addWordModal">Add</button>' +
+                '  </div>\n' +
+                '</div></div>\n' +
+                '  <div class="col-sm-4"></div>\n' +
+                '</div>';
+        }
 		$("#dictionary-table").html(html);
 		getFilterSettings();
 	});
@@ -152,6 +172,8 @@ function startLearn() {
 		$("#startStop").html("Stop learning");
 		$("#searchWord").attr("disabled", true);
 		$("#addbtn").attr("disabled", true);
+		$("#addbtn").removeClass("btn-outline-primary");
+		$("#addbtn").addClass("btn-outline-secondary");
 		$("#wordtype").attr("disabled", true);
 		$("#wordcheck").attr("disabled", true);
 		$("#wordstatus").attr("disabled", true);
@@ -161,6 +183,8 @@ function startLearn() {
 		$("#startStop").html("Start learning");
 		$("#searchWord").attr("disabled", false);
 		$("#addbtn").attr("disabled", false);
+        $("#addbtn").removeClass("btn-outline-secondary");
+        $("#addbtn").addClass("btn-outline-primary");
 		$("#wordtype").attr("disabled", false);
 		$("#wordcheck").attr("disabled", false);
 		$("#wordstatus").attr("disabled", false);
