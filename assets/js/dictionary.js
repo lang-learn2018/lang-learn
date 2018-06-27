@@ -1,4 +1,5 @@
 var JSdataCurrentDictionary;
+var JSdataCurrentPlay;
 
 function saveWord() {
     var wordHb = $("#wordHb").val();
@@ -281,9 +282,49 @@ function cardPlayStart(){
 }
 
 function getFirstWordCardPlay(hebrew) {
-    
+    if(JSdataCurrentPlay = JSdataCurrentDictionary){
+        getNextCardPlay(hebrew);
+    }
 }
 
+function getNextCardPlay(hebrew) {
+    if (JSdataCurrentPlay.length > 0) {
+        var index = Math.floor(Math.random()*JSdataCurrentPlay.length);
+        var currentCard = JSdataCurrentPlay[index];
+        if(hebrew) {
+            var firstWord = currentCard.dictionary_word_he;
+            if (currentCard.dictionary_word_inf != "") 
+                firstWord = currentCard.dictionary_word_inf + ") " + currentCard.dictionary_word_he+")";
+             firstWord = `<h3>${firstWord}</h3>`;
+            if (currentCard.dictionary_word_tr != "") 
+                firstWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;
+            var secondWord = currentCard.dictionary_word_en;
+        } else {
+            var firstWord = `<h3>${currentCard.dictionary_word_en}</h3>`;
+            var secondWord = currentCard.dictionary_word_he;
+            if (currentCard.dictionary_word_inf != "") 
+                secondWord = currentCard.dictionary_word_inf + ") " + secondWord +")";   
+            if (currentCard.dictionary_word_tr != "") 
+                secondWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;        
+        }
+        var html = `
+            <div class="card-body text-center">
+                ${firstWord}<br><br>
+                <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
+                <br><br>
+                <button onclick="getNextCardPlay(${hebrew})" type="button" class="btn btn-outline-success">Hebrew</button>
+            </div>`;
+        JSdataCurrentPlay.splice(index, 1);
+    } else {
+        var html = `GAME OVER`;
+    }
+    $("#dictionary-table .card").html(html);
+
+}
+
+function changeContent(t, content) {
+    $(t).html(content);
+}
 
 
 
