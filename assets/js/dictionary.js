@@ -79,7 +79,7 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
 
         html+= fillTableBody();
 
-    html+='</tbody></table>';
+    html+='</tbody></table></div>';
 
     if (JSdataCurrentDictionary == "") {
         html = '<div class="row" style="margin-top:25px;">\n' +
@@ -140,6 +140,7 @@ function startLearn() {
         $("#wordtype").attr("disabled", true);
         $("#wordcheck").attr("disabled", true);
         $("#wordstatus").attr("disabled", true);
+        $("#dictionary-table").html(getCardPlayType("playtype"));
     } else {
         $("#startStop").removeClass("btn-danger");
         $("#startStop").addClass("btn-success");
@@ -151,6 +152,9 @@ function startLearn() {
         $("#wordtype").attr("disabled", false);
         $("#wordcheck").attr("disabled", false);
         $("#wordstatus").attr("disabled", false);
+        var htmlTable = fillTableHead();
+        htmlTable += fillTableBody();
+        $("#dictionary-table").html(htmlTable);
     }
 }
 
@@ -218,7 +222,7 @@ function fillTableHead() {
 							</th>`;
     }
 
-    var html = `<table id="dictionary-table" class="table table-striped"> 
+    var html = `<div class="col-sm-12"><table id="dictionary-table" class="table table-striped"> 
 					  <thead> 
 					    <tr> 
 					      <th scope="col"></th> 
@@ -251,9 +255,34 @@ function fillTableHead() {
     return html;
 }
 
+function getCardPlayType(cardType=null) {
+	var htmlCard = `
+		<div class="col-sm-4"></div>
+        <div class="col-sm-4">
+        	<div class="card border-success mb-3" style="max-width: 25rem;">
+                <div class="card-header">Choose play type</div>
+                <div class="card-body">
+                    <button style="width:100%;" onclick="cardPlayStart()" type="button" class="btn btn-outline-success">Cards</button>
+                </div>
+            </div>
+		</div>
+		<div class="col-sm-4"></div>`;
+	return htmlCard;
+}
 
+function cardPlayStart(){
+    var html = `
+        <div class="card-header">Choose lenguage witch will show first</div>
+        <div class="card-body">
+            <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" class="btn btn-outline-success">Hebrew</button>
+            <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" class="btn btn-outline-success">English</button>
+        </div>`;
+    $("#dictionary-table .card").html(html);
+}
 
-
+function getFirstWordCardPlay(hebrew) {
+    
+}
 
 
 
