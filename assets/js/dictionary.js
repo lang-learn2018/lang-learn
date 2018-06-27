@@ -258,7 +258,7 @@ function fillTableHead() {
 
 function getCardPlayType(cardType=null) {
 	var htmlCard = `
-		<div class="col-sm-4"></div>
+		<div id="play-stat" class="col-sm-4 text-center"></div>
         <div class="col-sm-4">
         	<div class="card border-success mb-3" style="max-width: 25rem;">
                 <div class="card-header">Choose play type</div>
@@ -283,11 +283,35 @@ function cardPlayStart(){
 
 function getFirstWordCardPlay(hebrew) {
     if(JSdataCurrentPlay = JSdataCurrentDictionary){
+        var stat = `
+            <p>
+                <h4>Statistic:</h4>
+                <strong>Total:</strong>
+                <span id="total-word" class="text-dark">${JSdataCurrentPlay.length}</span><br>
+                <strong>Current:</strong>
+                <span id="cur-word" class="text-primary">0</span><br>
+                <strong>Results:</strong>
+                <span id="corr-word" class="text-success">0</span>/<span id="wrong-word" class="text-danger">0</span>
+            </p>`;
+        $("#play-stat").html(stat);
         getNextCardPlay(hebrew);
     }
 }
 
-function getNextCardPlay(hebrew) {
+function getNextCardPlay(hebrew, hit=null) {
+    var current = $("#cur-word").html();
+    current = parseInt(current);
+    $("#cur-word").html(++current);
+    if(hit == true){
+        var correct = $("#corr-word").html();
+        correct = parseInt(correct);
+        $("#corr-word").html(++correct);
+    }
+    if(hit == false){
+        var correct = $("#wrong-word").html();
+        correct = parseInt(correct);
+        $("#wrong-word").html(++correct);
+    }
     if (JSdataCurrentPlay.length > 0) {
         var index = Math.floor(Math.random()*JSdataCurrentPlay.length);
         var currentCard = JSdataCurrentPlay[index];
@@ -312,7 +336,8 @@ function getNextCardPlay(hebrew) {
                 ${firstWord}<br><br>
                 <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${hebrew})" type="button" class="btn btn-outline-success">Hebrew</button>
+                <button onclick="getNextCardPlay(${hebrew}, false)" type="button" class="btn btn-outline-success">Hebrew</button>
+                <button onclick="getNextCardPlay(${hebrew}, true)" type="button" class="btn btn-outline-success">Hebrew</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {
