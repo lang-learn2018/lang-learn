@@ -336,8 +336,8 @@ function getNextCardPlay(hebrew, hit=null) {
                 ${firstWord}<br><br>
                 <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${hebrew}, false)" type="button" class="btn btn-outline-success">Hebrew</button>
-                <button onclick="getNextCardPlay(${hebrew}, true)" type="button" class="btn btn-outline-success">Hebrew</button>
+                <button onclick="getNextCardPlay(${hebrew}, false)" type="button" class="btn btn-outline-danger">Wrong</button>
+                <button onclick="getNextCardPlay(${hebrew}, true)" type="button" class="btn btn-outline-success">Correct</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {
