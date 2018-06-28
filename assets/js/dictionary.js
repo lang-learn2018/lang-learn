@@ -273,10 +273,10 @@ function getCardPlayType(cardType=null) {
 
 function cardPlayStart(){
     var html = `
-        <div class="card-header">Choose lenguage witch will show first</div>
+        <div class="card-header">Choose language witch will show first</div>
         <div class="card-body">
-            <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" class="btn btn-outline-success">Hebrew</button>
-            <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" class="btn btn-outline-success">English</button>
+            <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" class="btn btn-block btn-outline-success">Hebrew</button>
+            <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" class="btn btn-block btn-outline-success">English</button>
         </div>`;
     $("#dictionary-table .card").html(html);
 }
@@ -298,46 +298,58 @@ function getFirstWordCardPlay(hebrew) {
     }
 }
 
-function getNextCardPlay(hebrew, hit=null) {
+function getNextCardPlay(hebrew, hit = null, wordId = null) {
+    if (hit != null && wordId != null) {
+        $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {
+
+
+        });
+    }
+
+
     var current = $("#cur-word").html();
     current = parseInt(current);
     $("#cur-word").html(++current);
-    if(hit == true){
+    if (hit == true) {
         var correct = $("#corr-word").html();
         correct = parseInt(correct);
         $("#corr-word").html(++correct);
+
     }
-    if(hit == false){
+    if (hit == false) {
         var correct = $("#wrong-word").html();
         correct = parseInt(correct);
         $("#wrong-word").html(++correct);
     }
+
     if (JSdataCurrentPlay.length > 0) {
-        var index = Math.floor(Math.random()*JSdataCurrentPlay.length);
+        var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
         var currentCard = JSdataCurrentPlay[index];
-        if(hebrew) {
+        if (hebrew) {
             var firstWord = currentCard.dictionary_word_he;
-            if (currentCard.dictionary_word_inf != "") 
-                firstWord = currentCard.dictionary_word_inf + ") " + currentCard.dictionary_word_he+")";
-             firstWord = `<h3>${firstWord}</h3>`;
-            if (currentCard.dictionary_word_tr != "") 
+            if (currentCard.dictionary_word_inf != "")
+                firstWord = currentCard.dictionary_word_inf + ") " + currentCard.dictionary_word_he + ")";
+            firstWord = `<h3>${firstWord}</h3>`;
+            if (currentCard.dictionary_word_tr != "")
                 firstWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;
             var secondWord = currentCard.dictionary_word_en;
         } else {
             var firstWord = `<h3>${currentCard.dictionary_word_en}</h3>`;
             var secondWord = currentCard.dictionary_word_he;
-            if (currentCard.dictionary_word_inf != "") 
-                secondWord = currentCard.dictionary_word_inf + ") " + secondWord +")";   
-            if (currentCard.dictionary_word_tr != "") 
-                secondWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;        
+            if (currentCard.dictionary_word_inf != "")
+                secondWord = currentCard.dictionary_word_inf + ") " + secondWord + ")";
+            if (currentCard.dictionary_word_tr != "")
+                secondWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;
         }
         var html = `
             <div class="card-body text-center">
                 ${firstWord}<br><br>
                 <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${hebrew}, false)" type="button" class="btn btn-outline-danger">Wrong</button>
-                <button onclick="getNextCardPlay(${hebrew}, true)" type="button" class="btn btn-outline-success">Correct</button>
+                <button onclick="getNextCardPlay(${hebrew}, false, '${currentCard.dictionary_id}')" 
+                type="button" 
+                class="btn btn-outline-danger">Wrong</button>
+                <button onclick="getNextCardPlay(${hebrew}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">Correct</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {

@@ -82,6 +82,11 @@ module.exports = function (app) {
         View.renderDictionary(req, res);
     });
 
+    app.post('/setwordstat', function (req, res) {
+        if (Session.getUser(req).id != null)
+            MySQL.setWordStat(req);
+    });
+
     app.post('/learn', function (req, res) {
         res.render('main-page.ejs');
     });

@@ -2,6 +2,7 @@ var mysql = require('mysql');
 // var Session = require('./SessionController');
 var config = require('../config.json');
 var SessionController = require('./SessionController.js');
+var Support = require('./Support');
 
 createConnection = function() {
 	var con = mysql.createConnection({
@@ -56,7 +57,7 @@ exports.getDictionaryTable = function(req, res, word) {
   var user = SessionController.getUser(req);
   var wordfilter = "";
   word = mysql.escape("%"+word+"%");
-  console.log(word);
+  // console.log(word);
   if(word != null && word != "" && word != "'%'") {
     wordfilter = ` AND (dictionary_word_he LIKE ${word} OR 
                         dictionary_word_en LIKE ${word}) `;
@@ -92,7 +93,7 @@ exports.getDictionaryTable = function(req, res, word) {
   db.query(sql, function (err, result) {
     if (err) throw err;
     res.send(JSON.stringify(result));
-    console.log(sql);
+    // console.log(sql);
     res.end();
   });
   db.end();
@@ -161,7 +162,7 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_en, word_tr, w
     } else {
       if (word_he != "" && word_en != "" && word_type != "") {
         sql = "INSERT INTO dictionary (dictionary_word_he, dictionary_word_inf, dictionary_word_en, dictionary_word_tr, dictionary_word_type) VALUES (" + mysql.escape(word_he) + ", " + mysql.escape(word_inf) + ", " + mysql.escape(word_en) + ", " + mysql.escape(word_tr) + ", " + mysql.escape(word_type) + ")";
-        console.log(sql);
+        // console.log(sql);
         db.query(sql, function (err, result) {
           if (err) throw err;
           answer = "success";
@@ -173,6 +174,73 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_en, word_tr, w
   return answer;
 }
 
+exports.setWordStat = function (req) {
+    var hit = (req.body.hit == 'true');
+    console.log(typeof hit);
+    db = createConnection();
+    var sql = `
+        SELECT  raiting_hit, 
+                raiting_miss
+        FROM    raiting
+        WHERE   raiting_word_id = ${mysql.escape(req.body.wordId)} AND
+                raiting_user_id = ${mysql.escape(SessionController.getUser(req).id)}
+    `;
+    var timestamp = ` TIMESTAMP ("${Support.getCurrDateFormatted()}", "${Support.getCurrentTimeFormatted()}") `;
+    db.query(sql, function (err, result) {
+        if (err) throw err;
+        if (result.length > 0) {
+            if (hit) {
+                var setSQL = ` raiting_hit = ${parseInt(result[0].raiting_hit) + 1} `;
+                var setTryTime = ` rating_last_hit = ${timestamp} `;
+
+            } else {
+                var setSQL = ` raiting_miss = ${parseInt(result[0].raiting_miss) + 1} `;
+                var setTryTime = ` rating_last_miss = ${timestamp} `;
+            }
+            sql = `
+                UPDATE  raiting
+                SET     ${setSQL}, ${setTryTime}
+                WHERE   raiting_word_id = ${mysql.escape(req.body.wordId)} AND
+                        raiting_user_id = ${mysql.escape(SessionController.getUser(req).id)}
+            `;
+        } else {
+            if (hit) {
+                var setHit = `1`;
+                var setMiss = `0`;
+                var setHitTime = timestamp;
+                var setMissTime = "NULL";
+            } else {
+                var setHit = `0`;
+                var setMiss = `1`;
+                var setHitTime = "NULL";
+                var setMissTime = timestamp;
+            }
+
+            sql = `
+                INSERT INTO raiting (
+                    raiting_word_id, 
+                    raiting_user_id,  
+                    raiting_hit,
+                    raiting_miss,
+                    rating_last_hit,
+                    rating_last_miss
+                )
+                VALUES (
+                    ${mysql.escape(req.body.wordId)},
+                    ${mysql.escape(SessionController.getUser(req).id)},
+                    ${setHit},
+                    ${setMiss},
+                    ${setHitTime},
+                    ${setMissTime}
+                )`;
+        }
+        db.query(sql, function (err, result) {
+            if (err) throw err;
+        });
+        db.end();
+    });
+};
+
 // exports.userRegistration = function(req, res) {
 //     var db = createConnection();
 //     var sql = "INSERT INTO users (users_name, users_login, users_email, users_password, users_status) VALUES (" + mysql.escape(req.body.name) + "," + mysql.escape(req.body.login) + "," + mysql.escape(req.body.email) + "," + mysql.escape(req.body.pass) + ", 'CREATED')";
@@ -182,3 +250,4 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_en, word_tr, w
 
 //     });
 // };
+
