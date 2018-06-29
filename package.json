@@ -11,6 +11,7 @@
   "dependencies": {
     "JSON": "^1.0.0",
     "ajax-request": "^1.2.3",
+    "ava": "^0.25.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
@@ -19,6 +20,7 @@
     "mysql": "^2.15.0",
     "nodemailer": "^4.6.5",
     "nodemon": "^1.17.5",
+    "npm": "^6.1.0",
     "path": "^0.12.7",
     "string-multiline": "^0.1.1",
     "url": "^0.11.0"

@@ -14,7 +14,7 @@ createConnection = function() {
 	
 	con.connect(function(err) {
 		if (err) throw err;
-		console.log("Connected!");
+		// console.log("Connected!");
 	});
 	return con;
 };
@@ -176,44 +176,40 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_en, word_tr, w
 
 exports.setWordStat = function (req) {
     var hit = (req.body.hit == 'true');
-    console.log(typeof hit);
+    var wordId = req.body.wordId;
+    var userId = SessionController.getUser(req).id;
     db = createConnection();
     var sql = `
         SELECT  raiting_hit, 
                 raiting_miss
         FROM    raiting
-        WHERE   raiting_word_id = ${mysql.escape(req.body.wordId)} AND
-                raiting_user_id = ${mysql.escape(SessionController.getUser(req).id)}
+        WHERE   raiting_word_id = ${mysql.escape(wordId)} AND
+                raiting_user_id = ${mysql.escape(userId)}
     `;
-    var timestamp = ` TIMESTAMP ("${Support.getCurrDateFormatted()}", "${Support.getCurrentTimeFormatted()}") `;
     db.query(sql, function (err, result) {
         if (err) throw err;
         if (result.length > 0) {
             if (hit) {
-                var setSQL = ` raiting_hit = ${parseInt(result[0].raiting_hit) + 1} `;
-                var setTryTime = ` rating_last_hit = ${timestamp} `;
-
+                var hitsDates = Support.addCurrentDate(result[0].raiting_hit);
+                var setSQL = `raiting_hit = '${hitsDates}' `;
             } else {
-                var setSQL = ` raiting_miss = ${parseInt(result[0].raiting_miss) + 1} `;
-                var setTryTime = ` rating_last_miss = ${timestamp} `;
+                var missesDates = Support.addCurrentDate(result[0].raiting_miss);
+                var setSQL = `raiting_miss = '${missesDates}' `;
             }
             sql = `
                 UPDATE  raiting
-                SET     ${setSQL}, ${setTryTime}
-                WHERE   raiting_word_id = ${mysql.escape(req.body.wordId)} AND
-                        raiting_user_id = ${mysql.escape(SessionController.getUser(req).id)}
+                SET     ${setSQL}
+                WHERE   raiting_word_id = ${mysql.escape(wordId)} AND
+                        raiting_user_id = ${mysql.escape(userId)}
             `;
         } else {
+            var triesDates = Support.addCurrentDate(JSON.stringify(new Array()));
             if (hit) {
-                var setHit = `1`;
-                var setMiss = `0`;
-                var setHitTime = timestamp;
-                var setMissTime = "NULL";
+                var setHit = ` '${triesDates}' `;
+                var setMiss = ` '[]' `;
             } else {
-                var setHit = `0`;
-                var setMiss = `1`;
-                var setHitTime = "NULL";
-                var setMissTime = timestamp;
+                var setHit = ` '[]' `;
+                var setMiss = ` '${triesDates}' `;
             }
 
             sql = `
@@ -221,17 +217,13 @@ exports.setWordStat = function (req) {
                     raiting_word_id, 
                     raiting_user_id,  
                     raiting_hit,
-                    raiting_miss,
-                    rating_last_hit,
-                    rating_last_miss
+                    raiting_miss
                 )
                 VALUES (
-                    ${mysql.escape(req.body.wordId)},
-                    ${mysql.escape(SessionController.getUser(req).id)},
+                    ${mysql.escape(wordId)},
+                    ${mysql.escape(userId)},
                     ${setHit},
-                    ${setMiss},
-                    ${setHitTime},
-                    ${setMissTime}
+                    ${setMiss}
                 )`;
         }
         db.query(sql, function (err, result) {

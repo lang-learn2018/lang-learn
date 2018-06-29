@@ -300,10 +300,7 @@ function getFirstWordCardPlay(hebrew) {
 
 function getNextCardPlay(hebrew, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
-        $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {
-
-
-        });
+        $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {});
     }
 
 

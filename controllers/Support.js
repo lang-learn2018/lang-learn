@@ -1,4 +1,4 @@
-exports.getCurrDateFormatted = function() {
+exports.getCurrDateFormatted = function () {
     var date = new Date();
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
@@ -11,8 +11,7 @@ exports.getCurrDateFormatted = function() {
     }
     return `${year}-${month}-${day}`;
 }
-
-exports.getCurrentTimeFormatted = function() {
+exports.getCurrentTimeFormatted = function () {
     var date = new Date();
     var hour = date.getHours();
     var minute = date.getMinutes();
@@ -28,3 +27,33 @@ exports.getCurrentTimeFormatted = function() {
     }
     return `${hour}:${minute}:${second}`;
 }
+/**
+ *
+ * adds current date to the end of the stringified array of dates;
+ * if length of array more than MAX_ARR_CAPACITY, removes first
+ * array date-element;
+ * @param dates
+ * @return strigified array of dates with max length == MAX_ARR_CAPACITY
+ */
+exports.addCurrentDate = function (dates) {
+    const MAX_ARR_CAPACITY = 7;
+    var currentDate = new Date();
+    var dates = JSON.parse(dates);
+    if (dates.length > MAX_ARR_CAPACITY) {
+        dates.shift();
+    }
+    dates.push(currentDate);
+    dates = JSON.stringify(dates);
+    return dates;
+};
+
+
+
+
+
+
+
+
+
+
+
