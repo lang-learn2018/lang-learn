@@ -213,7 +213,7 @@ exports.setWordStat = function (req) {
             if (hit) {
                 var setHit = ` '${dates}' `;
                 var setMiss = ` '[]' `;
-                var rating = ` ${Support.getRating(dates, []уу4)} `;
+                var rating = ` ${Support.getRating(dates, [])} `;
             } else {
                 var setHit = ` '[]' `;
                 var setMiss = ` '${dates}' `;

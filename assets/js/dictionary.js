@@ -1,5 +1,6 @@
 var JSdataCurrentDictionary;
 var JSdataCurrentPlay;
+var gameType;
 
 function saveWord() {
     var wordHb = $("#wordHb").val();
@@ -263,6 +264,26 @@ function getCardPlayType(cardType=null) {
         	<div class="card border-success mb-3" style="max-width: 25rem;">
                 <div class="card-header">Choose play type</div>
                 <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>Order of the game.</strong></p>
+                            <div class="form-check">
+                              <input id="radio-straight-game" class="form-check-input" type="radio" name="radio-game-type" value="straight-game" checked>
+                              <label class="form-check-label" for="exampleRadios1">
+                                Straight
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input id="radio-random-game" class="form-check-input" type="radio" 
+                              name="radio-game-type" 
+                              value="random-game">
+                              <label class="form-check-label" for="exampleRadios2">
+                                Random
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
                     <button style="width:100%;" onclick="cardPlayStart()" type="button" class="btn btn-outline-success">Cards</button>
                 </div>
             </div>
@@ -272,16 +293,19 @@ function getCardPlayType(cardType=null) {
 }
 
 function cardPlayStart(){
-    var html = `
-        <div class="card-header">Choose language witch will show first</div>
-        <div class="card-body">
-            <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" class="btn btn-block btn-outline-success">Hebrew</button>
-            <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" class="btn btn-block btn-outline-success">English</button>
-        </div>`;
-    $("#dictionary-table .card").html(html);
-}
+    gameType = $("input[name=radio-game-type]:checked").val();
+        var html = `
+            <div class="card-header">Choose language witch will show first</div>
+            <div class="card-body">
+                <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" 
+                class="btn btn-block btn-outline-success">Hebrew</button>
+                <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" 
+                class="btn btn-block btn-outline-success">English</button>
+            </div>`;
+        $("#dictionary-table .card").html(html);
+    }
 
-function getFirstWordCardPlay(lang) {
+function getFirstWordCardPlay(lang, gameType) {
     if(JSdataCurrentPlay = JSdataCurrentDictionary){
         var stat = `
             <p>
@@ -302,8 +326,6 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
         $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {});
     }
-
-
     var current = $("#cur-word").html();
     current = parseInt(current);
     $("#cur-word").html(++current);
@@ -320,7 +342,12 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
     }
 
     if (JSdataCurrentPlay.length > 0) {
-        var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
+        if (gameType == 'straight-game') {
+            var index = 0;
+        }
+        if (gameType == 'random-game') {
+            var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
+        }
         var currentCard = JSdataCurrentPlay[index];
         if (lang) {
             var firstWord = currentCard.dictionary_word_he;
