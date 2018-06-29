@@ -189,27 +189,35 @@ exports.setWordStat = function (req) {
     db.query(sql, function (err, result) {
         if (err) throw err;
         if (result.length > 0) {
+            var hits = JSON.parse(result[0].raiting_hit);
+            var misses = JSON.parse(result[0].raiting_miss);
+            var rating = Support.getRating(hits, misses);
             if (hit) {
-                var hitsDates = Support.addCurrentDate(result[0].raiting_hit);
-                var setSQL = `raiting_hit = '${hitsDates}' `;
+                hits = Support.addCurrentDate(hits);
+                hits = JSON.stringify(hits);
+                var setSQL = `raiting_hit = '${hits}' `;
             } else {
-                var missesDates = Support.addCurrentDate(result[0].raiting_miss);
-                var setSQL = `raiting_miss = '${missesDates}' `;
+                misses = Support.addCurrentDate(misses);
+                misses = JSON.stringify(misses);
+                var setSQL = `raiting_miss = '${misses}' `;
             }
             sql = `
                 UPDATE  raiting
-                SET     ${setSQL}
+                SET     ${setSQL}, raiting_sum = '${rating}'
                 WHERE   raiting_word_id = ${mysql.escape(wordId)} AND
                         raiting_user_id = ${mysql.escape(userId)}
             `;
         } else {
-            var triesDates = Support.addCurrentDate(JSON.stringify(new Array()));
+            var dates = Support.addCurrentDate([]);
+            dates = JSON.stringify(dates);
             if (hit) {
-                var setHit = ` '${triesDates}' `;
+                var setHit = ` '${dates}' `;
                 var setMiss = ` '[]' `;
+                var rating = ` ${Support.getRating(dates, []уу4)} `;
             } else {
                 var setHit = ` '[]' `;
-                var setMiss = ` '${triesDates}' `;
+                var setMiss = ` '${dates}' `;
+                var rating = ` 0 `;
             }
 
             sql = `
@@ -217,13 +225,15 @@ exports.setWordStat = function (req) {
                     raiting_word_id, 
                     raiting_user_id,  
                     raiting_hit,
-                    raiting_miss
+                    raiting_miss,
+                    raiting_sum
                 )
                 VALUES (
                     ${mysql.escape(wordId)},
                     ${mysql.escape(userId)},
                     ${setHit},
-                    ${setMiss}
+                    ${setMiss},
+                    ${rating}
                 )`;
         }
         db.query(sql, function (err, result) {

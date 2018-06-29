@@ -281,7 +281,7 @@ function cardPlayStart(){
     $("#dictionary-table .card").html(html);
 }
 
-function getFirstWordCardPlay(hebrew) {
+function getFirstWordCardPlay(lang) {
     if(JSdataCurrentPlay = JSdataCurrentDictionary){
         var stat = `
             <p>
@@ -294,11 +294,11 @@ function getFirstWordCardPlay(hebrew) {
                 <span id="corr-word" class="text-success">0</span>/<span id="wrong-word" class="text-danger">0</span>
             </p>`;
         $("#play-stat").html(stat);
-        getNextCardPlay(hebrew);
+        getNextCardPlay(lang);
     }
 }
 
-function getNextCardPlay(hebrew, hit = null, wordId = null) {
+function getNextCardPlay(lang, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
         $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {});
     }
@@ -322,7 +322,7 @@ function getNextCardPlay(hebrew, hit = null, wordId = null) {
     if (JSdataCurrentPlay.length > 0) {
         var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
         var currentCard = JSdataCurrentPlay[index];
-        if (hebrew) {
+        if (lang) {
             var firstWord = currentCard.dictionary_word_he;
             if (currentCard.dictionary_word_inf != "")
                 firstWord = currentCard.dictionary_word_inf + ") " + currentCard.dictionary_word_he + ")";
@@ -343,10 +343,10 @@ function getNextCardPlay(hebrew, hit = null, wordId = null) {
                 ${firstWord}<br><br>
                 <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${hebrew}, false, '${currentCard.dictionary_id}')" 
+                <button onclick="getNextCardPlay(${lang}, false, '${currentCard.dictionary_id}')" 
                 type="button" 
                 class="btn btn-outline-danger">Wrong</button>
-                <button onclick="getNextCardPlay(${hebrew}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">Correct</button>
+                <button onclick="getNextCardPlay(${lang}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">Correct</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {

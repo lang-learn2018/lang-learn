@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5136b6ca-f171-43db-a887-f2fc4f8c236f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/js/dictionary.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/dictionary.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/MysqlController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/MysqlController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/Support.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/Support.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -28,17 +24,24 @@
       <file leaf-file-name="dictionary.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/parts/dictionary.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="62" column="94" selection-start-line="62" selection-start-column="94" selection-end-line="62" selection-end-column="94" />
+            <state relative-caret-position="252">
+              <caret line="53" column="24" lean-forward="true" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
+              <folding>
+                <element signature="n#div#0;n#!!top" />
+                <element signature="n#div#0;n#nav#0;n#!!top" />
+                <element signature="n#input#0;n#div#0;n#nav#0;n#!!top" />
+                <element signature="n#div#0;n#div#0;n#nav#0;n#!!top" />
+                <element signature="n#button#0;n#div#0;n#div#0;n#nav#0;n#!!top" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dictionary.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dictionary.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/js/dictionary.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="322" column="64" selection-start-line="322" selection-start-column="47" selection-end-line="322" selection-end-column="64" />
+            <state relative-caret-position="-169">
+              <caret line="300" column="29" selection-start-line="300" selection-start-column="29" selection-end-line="300" selection-end-column="29" />
               <folding>
                 <element signature="n#!!block;n#saveWord#0" />
                 <element signature="n#!!block;n#fieldCheck#0" />
@@ -47,12 +50,9 @@
                 <element signature="n#!!block;n#infinitiveToggle#0" />
                 <element signature="e#2388#3595#0" />
                 <element signature="e#2589#3529#0" />
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#!!block;n#getFilterSettings#0" />
                 <element signature="n#!!block;n#checkWord#0" />
                 <element signature="n#!!block;n#setWordType#0" />
-                <element signature="n#!!block;n#startLearn#0" />
               </folding>
             </state>
           </provider>
@@ -67,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MysqlController.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MysqlController.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/MysqlController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="193" selection-start-line="193" selection-end-line="193" />
+            <state relative-caret-position="452">
+              <caret line="215" column="63" selection-start-line="215" selection-start-column="63" selection-end-line="215" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -79,8 +79,8 @@
       <file leaf-file-name="Support.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/Support.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
+            <state relative-caret-position="253">
+              <caret line="55" column="6" selection-start-line="55" selection-start-column="6" selection-end-line="55" selection-end-column="6" />
               <folding>
                 <element signature="e#42#320#0" />
                 <element signature="e#163#199#0" />
@@ -136,6 +136,7 @@
       <find>GET</find>
       <find>setTr</find>
       <find>JSdataCurrentPlay</find>
+      <find>play-stat</find>
     </findStrings>
     <replaceStrings>
       <replace>path</replace>
@@ -162,12 +163,12 @@
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/controllers/SessionController.js" />
         <option value="$PROJECT_DIR$/controllers/ViewController.js" />
-        <option value="$PROJECT_DIR$/views/parts/dictionary.ejs" />
         <option value="$PROJECT_DIR$/controllers/RoutsController.js" />
         <option value="$PROJECT_DIR$/test.js" />
+        <option value="$PROJECT_DIR$/views/parts/dictionary.ejs" />
+        <option value="$PROJECT_DIR$/assets/js/dictionary.js" />
         <option value="$PROJECT_DIR$/controllers/Support.js" />
         <option value="$PROJECT_DIR$/controllers/MysqlController.js" />
-        <option value="$PROJECT_DIR$/assets/js/dictionary.js" />
       </list>
     </option>
   </component>
@@ -277,12 +278,12 @@
       <workItem from="1529630508533" duration="3931000" />
       <workItem from="1529815769129" duration="11121000" />
       <workItem from="1530196431610" duration="8423000" />
-      <workItem from="1530257407361" duration="7944000" />
+      <workItem from="1530257407361" duration="14740000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59732000" />
+    <option name="totallyTimeSpent" value="66528000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -301,6 +302,7 @@
       <window_info anchor="right" id="TODO" order="4" weight="0.32904148" />
       <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5003524" side_tool="true" weight="0.32969698" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32969698" />
       <window_info anchor="right" id="Version Control" order="3" sideWeight="0.49964765" weight="0.32904148" />
       <window_info id="npm" order="2" sideWeight="0.5090909" side_tool="true" weight="0.17688513" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32969698" />
@@ -314,7 +316,6 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32969698" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -637,13 +638,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/parts/dictionary.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="62" column="94" selection-start-line="62" selection-start-column="94" selection-end-line="62" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/SessionController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="537">
@@ -651,20 +645,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/MysqlController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="193" selection-start-line="193" selection-end-line="193" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/RoutsController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="86" column="35" selection-start-line="86" selection-start-column="35" selection-end-line="86" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/parts/dictionary.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="53" column="24" lean-forward="true" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
+          <folding>
+            <element signature="n#div#0;n#!!top" />
+            <element signature="n#div#0;n#nav#0;n#!!top" />
+            <element signature="n#input#0;n#div#0;n#nav#0;n#!!top" />
+            <element signature="n#div#0;n#div#0;n#nav#0;n#!!top" />
+            <element signature="n#button#0;n#div#0;n#div#0;n#nav#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/js/dictionary.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-169">
+          <caret line="300" column="29" selection-start-line="300" selection-start-column="29" selection-end-line="300" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!block;n#saveWord#0" />
+            <element signature="n#!!block;n#fieldCheck#0" />
+            <element signature="n#!!block;n#isFieldEmpty#0" />
+            <element signature="n#!!block;n#fillModalHb#0" />
+            <element signature="n#!!block;n#infinitiveToggle#0" />
+            <element signature="e#2388#3595#0" />
+            <element signature="e#2589#3529#0" />
+            <element signature="n#!!block;n#getFilterSettings#0" />
+            <element signature="n#!!block;n#checkWord#0" />
+            <element signature="n#!!block;n#setWordType#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/Support.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
+        <state relative-caret-position="253">
+          <caret line="55" column="6" selection-start-line="55" selection-start-column="6" selection-end-line="55" selection-end-column="6" />
           <folding>
             <element signature="e#42#320#0" />
             <element signature="e#163#199#0" />
@@ -674,32 +701,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/RoutsController.js">
+    <entry file="file://$PROJECT_DIR$/controllers/MysqlController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="86" column="35" selection-start-line="86" selection-start-column="35" selection-end-line="86" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/dictionary.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="322" column="64" selection-start-line="322" selection-start-column="47" selection-end-line="322" selection-end-column="64" />
-          <folding>
-            <element signature="n#!!block;n#saveWord#0" />
-            <element signature="n#!!block;n#fieldCheck#0" />
-            <element signature="n#!!block;n#isFieldEmpty#0" />
-            <element signature="n#!!block;n#fillModalHb#0" />
-            <element signature="n#!!block;n#infinitiveToggle#0" />
-            <element signature="e#2388#3595#0" />
-            <element signature="e#2589#3529#0" />
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#!!block;n#getFilterSettings#0" />
-            <element signature="n#!!block;n#checkWord#0" />
-            <element signature="n#!!block;n#setWordType#0" />
-            <element signature="n#!!block;n#startLearn#0" />
-          </folding>
+        <state relative-caret-position="452">
+          <caret line="215" column="63" selection-start-line="215" selection-start-column="63" selection-end-line="215" selection-end-column="63" />
         </state>
       </provider>
     </entry>
