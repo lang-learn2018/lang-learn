@@ -363,7 +363,7 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
             if (currentCard.dictionary_word_inf != "")
                 secondWord = currentCard.dictionary_word_inf + ") " + secondWord + ")";
             if (currentCard.dictionary_word_tr != "")
-                secondWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;
+                secondWord = `${secondWord} ${currentCard.dictionary_word_tr}`;
         }
         var html = `
             <div class="card-body text-center">
