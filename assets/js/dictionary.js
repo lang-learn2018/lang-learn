@@ -269,7 +269,7 @@ function getCardPlayType(cardType=null) {
                             <p><strong>Order of the game.</strong></p>
                             <div class="form-check">
                               <input id="radio-straight-game" class="form-check-input" type="radio" name="radio-game-type" value="straight-game" checked>
-                              <label class="form-check-label" for="exampleRadios1">
+                              <label class="form-check-label" for="radio-straight-game">
                                 Straight
                               </label>
                             </div>
@@ -277,7 +277,7 @@ function getCardPlayType(cardType=null) {
                               <input id="radio-random-game" class="form-check-input" type="radio" 
                               name="radio-game-type" 
                               value="random-game">
-                              <label class="form-check-label" for="exampleRadios2">
+                              <label class="form-check-label" for="radio-random-game">
                                 Random
                               </label>
                             </div>
