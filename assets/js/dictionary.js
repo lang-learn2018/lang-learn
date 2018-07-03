@@ -217,11 +217,11 @@ function fillTableBody() {
 
 function fillTableHead() {
     var ratingTh = "";
-    if (JSdataCurrentDictionary[0].raiting_sum != "null") {
+    if (getCookie("userid") != "" && getCookie("userid") != "null") {
         ratingTh = `<th scope="col"  style="white-space:nowrap;" class="text-center">Rating
-								<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows"><strong>&#8593;</strong></span>
-					      		<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)"  class="arrows"><strong>&#8595;<strong></span>
-							</th>`;
+						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows"><strong>&#8593;</strong></span>
+						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)"  class="arrows"><strong>&#8595;<strong></span>
+					</th>`;
     }
 
     var html = `<div class="col-sm-12"><table id="dictionary-table" class="table table-striped"> 
@@ -387,5 +387,20 @@ function changeContent(t, content) {
     $(t).html(content);
 }
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 

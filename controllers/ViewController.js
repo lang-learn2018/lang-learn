@@ -14,8 +14,6 @@ exports.renderDictionary = function(req, res) {
     if (checked != "") req.session.checked = checked;
     if (wordtypes != "") req.session.wordtypes = wordtypes;
 
-
-
     if (typeof req.session.rowsCount == "undefined") req.session.rowsCount = 100;
     if (typeof req.session.wordtypesfilter == "undefined") req.session.wordtypesfilter = "";
     if (typeof req.session.ratingsfilter == "undefined") req.session.ratingsfilter = "";
