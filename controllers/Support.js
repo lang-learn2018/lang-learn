@@ -58,6 +58,20 @@ exports.getRating = function (hits, misses) {
     return rating;
 };
 
+exports.getUserLangStrings = function(JSONArrayAll, userLang){
+    var JSONArrayCurLang = "{";
+    var l = JSONArrayAll.length;
+    for(var i = 0; i < l; i++){
+        var coma = "";
+        if(i < l-1) coma = ",";
+        JSONArrayCurLang+=`"${JSONArrayAll[i].id}": "${JSONArrayAll[i][userLang]}"${coma}`;
+    }
+    JSONArrayCurLang+="}";
+    JSONArrayCurLang = JSON.parse(JSONArrayCurLang);
+    return JSONArrayCurLang;
+};
+
+
 
 
 

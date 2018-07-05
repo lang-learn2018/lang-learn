@@ -17,6 +17,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "google-translate-api": "^2.3.0",
     "mysql": "^2.15.0",
     "nodemailer": "^4.6.5",
     "nodemon": "^1.17.5",

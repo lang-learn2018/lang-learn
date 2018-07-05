@@ -1,16 +1,19 @@
 var config = require('../config.json');
 var variables = require('../variables.json');
+var strings = require('../strings.json');
 var mysql = require('mysql');
 var email = require('nodemailer');
 var MySQL = require('./MysqlController');
 var Session = require('./SessionController');
 var View = require('./ViewController');
+var support = require('./Support');
 var param = function(config, req) {
   var args = {
     "config"    : config, 
     "variables" : variables, 
     "page"      : req.path, 
-    "login"     : req.session.login
+    "login"     : req.session.login,
+    "strings"   : strings
   };
   for (var i = 3; i < arguments.length; i++) {
     args.i = arguments[i];
@@ -85,6 +88,14 @@ module.exports = function (app) {
     app.post('/setwordstat', function (req, res) {
         if (Session.getUser(req).id != null)
             MySQL.setWordStat(req);
+    });
+
+    app.post('/setlanguage', function (req, res) {
+        Session.setUserLang(req, res);
+        var userLangStrings = support.getUserLangStrings(strings, Session.getUserLang(req, res));
+        res.locals.strings = userLangStrings;
+        res.send("success");
+        res.end();
     });
 
     app.post('/learn', function (req, res) {

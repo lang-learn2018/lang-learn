@@ -3,6 +3,7 @@ var mysql = require('mysql');
 var config = require('../config.json');
 var SessionController = require('./SessionController.js');
 var Support = require('./Support');
+const translate = require('google-translate-api');
 
 createConnection = function() {
 	var con = mysql.createConnection({
@@ -69,11 +70,15 @@ exports.getDictionaryTable = function(req, res, word) {
     var sqlRatingSum = "IFNULL(tRating.raiting_sum, '0') AS raiting_sum";
     var sqlCheckWord = "IFNULL(tRating.raiting_user_check, '0') AS raiting_user_check";
   }
+  var lg_sql = "";
+  var lg = SessionController.getUserLang(req, res);
+  if(lg != "en") lg_sql = ` dictionary.dictionary_word_${lg}, `;
   var sql = ` SELECT *
               FROM (SELECT  dictionary.dictionary_id, 
                             dictionary.dictionary_word_he, 
                             dictionary.dictionary_word_inf, 
-                            dictionary.dictionary_word_en, 
+                            dictionary.dictionary_word_en,
+                            ${lg_sql}
                             dictionary.dictionary_word_tr, 
                             dictionary.dictionary_word_type, 
                             tRating.raiting_id, 
@@ -92,8 +97,25 @@ exports.getDictionaryTable = function(req, res, word) {
               WHERE 1=1 ${req.session.wordtypesfilter} ${req.session.ratingsfilter} ${req.session.wordcheckfilter} ${wordfilter}`;
   db.query(sql, function (err, result) {
     if (err) throw err;
+    if(lg != "en") {
+      for(var i = 0; i < result.length; i++){
+        if(result[i][`dictionary_word_${lg}`] == ""){
+          translate(result[i].dictionary_word_en, {from: 'en', to: lg}).then(tres => {
+              console.log(tres.text);
+              // //=> Ik spreek Nederlands!
+              // console.log(tres.from.text.autoCorrected);
+              // //=> true
+              // console.log(tres.from.text.value);
+              // //=> I [speak] Dutch!
+              // console.log(tres.from.text.didYouMean);
+              //=> false
+          }).catch(err => {
+              console.error(err);
+          });
+        }
+      }
+    }
     res.send(JSON.stringify(result));
-    // console.log(sql);
     res.end();
   });
   db.end();
@@ -181,7 +203,8 @@ exports.setWordStat = function (req) {
     db = createConnection();
     var sql = `
         SELECT  raiting_hit, 
-                raiting_miss
+                raiting_miss,
+                raiting_sum
         FROM    raiting
         WHERE   raiting_word_id = ${mysql.escape(wordId)} AND
                 raiting_user_id = ${mysql.escape(userId)}
@@ -191,54 +214,42 @@ exports.setWordStat = function (req) {
         if (result.length > 0) {
             var hits = JSON.parse(result[0].raiting_hit);
             var misses = JSON.parse(result[0].raiting_miss);
-            var rating = Support.getRating(hits, misses);
-            if (hit) {
-                hits = Support.addCurrentDate(hits);
-                hits = JSON.stringify(hits);
-                var setSQL = `raiting_hit = '${hits}' `;
-            } else {
-                misses = Support.addCurrentDate(misses);
-                misses = JSON.stringify(misses);
-                var setSQL = `raiting_miss = '${misses}' `;
-            }
+            var rating = parseInt(result[0].raiting_sum);
+            if(hit && rating < 5) rating++;
+            if(!hit && rating >0) rating--;
+        
             sql = `
                 UPDATE  raiting
-                SET     ${setSQL}, raiting_sum = '${rating}'
+                SET     raiting_sum = '${rating}'
                 WHERE   raiting_word_id = ${mysql.escape(wordId)} AND
                         raiting_user_id = ${mysql.escape(userId)}
             `;
+            db.query(sql, function (err, result) {
+                if (err) throw err;
+            });
         } else {
             var dates = Support.addCurrentDate([]);
-            dates = JSON.stringify(dates);
-            if (hit) {
-                var setHit = ` '${dates}' `;
-                var setMiss = ` '[]' `;
-                var rating = ` ${Support.getRating(dates, [])} `;
-            } else {
-                var setHit = ` '[]' `;
-                var setMiss = ` '${dates}' `;
-                var rating = ` 0 `;
-            }
+            //dates = JSON.stringify(dates);
+            if(hit)
+              var rating = `1`;
+            else
+              var rating = `0`;
 
             sql = `
                 INSERT INTO raiting (
                     raiting_word_id, 
                     raiting_user_id,  
-                    raiting_hit,
-                    raiting_miss,
                     raiting_sum
                 )
                 VALUES (
                     ${mysql.escape(wordId)},
                     ${mysql.escape(userId)},
-                    ${setHit},
-                    ${setMiss},
                     ${rating}
                 )`;
+            db.query(sql, function (err, result) {
+                if (err) throw err;
+            });
         }
-        db.query(sql, function (err, result) {
-            if (err) throw err;
-        });
         db.end();
     });
 };

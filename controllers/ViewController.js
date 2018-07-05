@@ -1,4 +1,5 @@
 var config = require('../config');
+var strings = require('../strings');
 var MySQL = require('./MysqlController.js');
 
 exports.renderDictionary = function(req, res) {
