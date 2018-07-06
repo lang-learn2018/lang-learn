@@ -3,7 +3,12 @@ var mysql = require('mysql');
 var config = require('../config.json');
 var SessionController = require('./SessionController.js');
 var Support = require('./Support');
-const translate = require('google-translate-api');
+//const translate = require('google-translate-api');
+//var googleTranslate = require('google-translate')("AIzaSyA19ETkzItGYg4lgp4lm0HodReC4QsN770");
+const translate = require('translate');
+translate.engine = 'yandex';
+translate.key = config.YANDEX_API_KEY;
+var Sync = require('sync');
 
 createConnection = function() {
 	var con = mysql.createConnection({
@@ -98,27 +103,48 @@ exports.getDictionaryTable = function(req, res, word) {
   db.query(sql, function (err, result) {
     if (err) throw err;
     if(lg != "en") {
+      var db_sub = createConnection();
+      var translateArray = [];
+      var idArray = [];
       for(var i = 0; i < result.length; i++){
-        if(result[i][`dictionary_word_${lg}`] == ""){
-          translate(result[i].dictionary_word_en, {from: 'en', to: lg}).then(tres => {
-              console.log(tres.text);
-              // //=> Ik spreek Nederlands!
-              // console.log(tres.from.text.autoCorrected);
-              // //=> true
-              // console.log(tres.from.text.value);
-              // //=> I [speak] Dutch!
-              // console.log(tres.from.text.didYouMean);
-              //=> false
+        if(result[i][`dictionary_word_${lg}`] == "" || result[i][`dictionary_word_${lg}`] == "undefined"){
+          idArray.push(result[i].dictionary_word_id);
+          /*googleTranslate.translate(result[i].dictionary_word_en, lg, function(err, translation) {
+            translate_result = translation.translatedText;
+            console.log(transResult);
+          });*/
+
+          /*translate(result[i].dictionary_word_en, {from: 'en', to: lg}).then(res => {
+              translate_result = res.text;
+              console.log(translate_result);
           }).catch(err => {
               console.error(err);
+          });*/
+          var textTr;
+          textTr = translate(result[i].dictionary_word_en, lg);
+
+          /*translate(result[i].dictionary_word_en, lg).then(text => {
+            console.log(text);
+            textTr = text;
+          });*/
+
+          var sql_add_translate = `
+              UPDATE  dictionary
+              SET     dictionary_word_${lg} = '${textTr}'
+              WHERE   dictionary_id = '${result[i].dictionary_id}'`;
+          console.log(sql_add_translate);
+          db_sub.query(sql_add_translate, function (err, result) {
+            if (err) throw err;
+            console.log(err);
           });
         }
       }
-    }
+      //db_sub.end();
+    };
     res.send(JSON.stringify(result));
     res.end();
+    db.end();
   });
-  db.end();
 }
 exports.createUser = function (login, password) {
   var db = createConnection();
@@ -135,7 +161,7 @@ exports.createUser = function (login, password) {
     }
   });
   db.end(function (err) {
-    console.log('something went wrong!');
+    console.log('something wrong!');
   });
 };
 

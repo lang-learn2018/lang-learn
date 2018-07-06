@@ -8,6 +8,8 @@
   "dbUser"	: "root",
   "dbName" 	: "learn_hebrew",
   "dbPswd" 	: "111",
+  "GOOGLE_API_KEY": "AIzaSyA19ETkzItGYg4lgp4lm0HodReC4QsN770",
+  "YANDEX_API_KEY": "trnsl.1.1.20180705T174422Z.223d25962b1febfc.44efeb5ffaf84a16c85886a130bdb4f32fd5ec8c",
   
   "email" : "learnhebrew1234@gmail.com",
   "emailPass" : "TelRan2018`",
