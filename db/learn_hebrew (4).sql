@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 09, 2018 at 11:13 AM
+-- Generation Time: Jul 09, 2018 at 11:53 AM
 -- Server version: 5.6.37
 -- PHP Version: 5.6.31
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `dictionary` (
   `dictionary_word_he` varchar(150) NOT NULL,
   `dictionary_word_inf` varchar(50) NOT NULL,
   `dictionary_word_en` varchar(150) NOT NULL,
-  `dictionary_word_ru` varchar(150) NOT NULL,
+  `dictionary_word_ru` varchar(150) NOT NULL DEFAULT '',
   `dictionary_word_tr` varchar(150) NOT NULL,
   `dictionary_word_type` varchar(50) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=782 DEFAULT CHARSET=utf8;
@@ -854,6 +854,33 @@ INSERT INTO `raiting` (`raiting_id`, `raiting_word_id`, `raiting_user_id`, `rait
 (28, 5, 3, 1, 4, NULL, NULL),
 (29, 6, 3, 0, 0, NULL, NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `users_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `users_name` varchar(50) NOT NULL,
+  `users_email` varchar(50) NOT NULL,
+  `users_password` varchar(50) NOT NULL,
+  `users_status` varchar(20) NOT NULL,
+  `users_login` varchar(100) NOT NULL,
+  `users_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`users_time`, `users_name`, `users_email`, `users_password`, `users_status`, `users_login`, `users_id`) VALUES
+('2018-06-07 13:33:58', 'sdfs', 'serjio.rv@gmail.com', '111', 'CREATED', '', 1),
+('2018-06-07 13:39:24', 'f', 've.doroshenko@yandex.ru', '1111', 'CREATED', '', 2),
+('2018-06-15 17:38:35', 'Serjio', 'serjio.rv@gmail.com', 'jewcards', 'CREATED', 'serjio', 3),
+('2018-06-16 06:15:25', 'Arina', 'arina.y2443@gmail.com', 'arina2003', 'CREATED', 'arina', 4);
+
 --
 -- Indexes for dumped tables
 --
@@ -871,6 +898,13 @@ ALTER TABLE `raiting`
   ADD PRIMARY KEY (`raiting_id`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`users_id`),
+  ADD UNIQUE KEY `users_id` (`users_time`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -884,6 +918,11 @@ ALTER TABLE `dictionary`
 --
 ALTER TABLE `raiting`
   MODIFY `raiting_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
