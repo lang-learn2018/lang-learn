@@ -1,0 +1,37 @@
+[
+	{"id":"main_menu_hello",		"en":"Hello",			"ru":"Привет"	},
+	{"id":"main_menu_exit",			"en":"Exit",			"ru":"Выйти"	},
+	{"id":"main_menu_quest",		"en":"guest", 			"ru":"гость"	},
+	{"id":"main_menu_main",			"en":"Home", 			"ru":"Главная"	},
+	{"id":"main_menu_learning",		"en":"Dictionary",		"ru":"Словарь"	},
+	{"id":"main_menu_enter",		"en":"Enter",			"ru":"Войти"	},
+	{"id":"main_menu_language",		"en":"Language",		"ru":"Язык"		},
+	{"id":"main_menu_en_lang",		"en":"English",			"ru":"English"	},
+	{"id":"main_menu_ru_lang",		"en":"Русский",			"ru":"Русский"	},
+
+	{"id":"learning_he",			"en":"Hebrew",			"ru":"Иврит"	},
+	{"id":"learning_native_lang",	"en":"English",			"ru":"Русский"	},
+	{"id":"learning_transctiption",	"en":"Transctiption",	"ru":"Транскрипция(анг.)"},
+
+	{"id":"learning_start_btn",		"en":"Start learning",	"ru":"Начать учебу"},
+	{"id":"learning_search_input",	"en":"search word",		"ru":"найти слово"},
+	{"id":"learning_add_btn",		"en":"Add",				"ru":"Добавить"	},
+	{"id":"learning_filter_rating",	"en":"Rating",			"ru":"Рейтиг"	},
+	{"id":"learning_filter_types",	"en":"Types",			"ru":"Части речи"},
+	{"id":"learning_all",			"en":"All",				"ru":"Все"		},
+	{"id":"learning_best",			"en":"Best learned",	"ru":"Лучшие"	},
+	{"id":"learning_good",			"en":"Good learned",	"ru":"Хорошо выученые"	},
+	{"id":"learning_normal",		"en":"Normal learned",	"ru":"Норм. выученные"	},
+	{"id":"learning_twice",			"en":"Twice learned",	"ru":"Дважды "	},
+	{"id":"learning_bad",			"en":"Bad learned",		"ru":"Плохо выученные"	},
+	{"id":"learning_not_learned",	"en":"Not learned",		"ru":"Не ученные"},
+	{"id":"learning_not_checked",	"en":"Not checked",		"ru":"Не отмеченные"},
+	{"id":"learning_checked",		"en":"Checked",			"ru":"Отмеченные"},
+	{"id":"learning_verbs",			"en":"Verbs",			"ru":"Глаголы"	},
+	{"id":"learning_nouns",			"en":"Nouns",			"ru":"Существительные"},
+	{"id":"learning_adj",			"en":"Adjectives",		"ru":"Прилагательные"},
+	{"id":"learning_frases",		"en":"Frases",			"ru":"Фразы"	},
+	{"id":"learning_other",			"en":"Other",			"ru":"Прочее"	},
+
+	{"id":"filter_setting",			"en":"Words Filter Settings","ru":"Настройки фильтра слов"}
+]
