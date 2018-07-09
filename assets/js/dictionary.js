@@ -151,8 +151,8 @@ function startLearn() {
         $("#wordtype").attr("disabled", false);
         $("#wordcheck").attr("disabled", false);
         $("#wordstatus").attr("disabled", false);
-        var htmlTable = fillTableHead();
-        htmlTable += fillTableBody();
+        var htmlTable = fillTableHead()
+                   .then(response => document.getElementById("dictionary-table").innerHTML = response+fillTableBody()+"</tbody></table></div>");
         $("#dictionary-table").html(htmlTable);
     }
 }
