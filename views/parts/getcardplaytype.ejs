@@ -1,0 +1,30 @@
+<div id="play-stat" class="col-sm-4 text-center"></div>
+    <div class="col-sm-4">
+       	<div class="card border-warning mb-3" style="max-width: 25rem;">
+            <div class="card-header"><%= strings.play_type %></div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong><%= strings.play_order %></strong></p>
+                        <div class="form-check">
+    	                    <input id="radio-straight-game" class="form-check-input" type="radio" name="radio-game-type" value="straight-game" checked>
+       	                    <label class="form-check-label" for="radio-straight-game">
+                	               <%= strings.play_straight %>
+        	        	    </label>
+                        </div>
+      	                <div class="form-check">
+                            <input id="radio-random-game" class="form-check-input" type="radio" 
+                              name="radio-game-type" 
+                              value="random-game">
+                            <label class="form-check-label" for="radio-random-game">
+                                <%= strings.play_random %>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button style="width:100%;" onclick="cardPlayStart()" type="button" class="btn btn-outline-success"><%= strings.play_cards %></button>
+            </div>
+        </div>
+	</div>
+<div class="col-sm-4"></div>`;
