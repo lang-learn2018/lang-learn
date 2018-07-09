@@ -118,15 +118,29 @@ exports.getDictionaryTable = function(req, res, word) {
     db.end();
   });
 }
-exports.createUser = function (login, password) {
+exports.createUser = function (req, res) {
   var db = createConnection();
-  var sql = `SELECT * FROM users WHERE users_login = '${login} '
-  AND users_password = '${password}'`;
+  var sql = ` SELECT * FROM users 
+              WHERE users_login = '${req.body.login}' AND users_password = '${req.body.password}'`;
+  console.log(sql);
   db.query(sql, function (err, rows) {
     if (err) throw err;
-    if (rows != 0) {
-      var sql = "INSERT INTO users (users_name, users_login, users_email, users_password, users_status) VALUES (" + mysql.escape(req.body.name) + "," + mysql.escape(req.body.login) + "," + mysql.escape(req.body.email) + "," + mysql.escape(req.body.pass) + ", 'CREATED')";
-      db.query(sql, function (err, result) {
+    if (rows.length == 0) {
+      var dbadd = createConnection();
+      var sql = `INSERT INTO users 
+                    (users_name, 
+                    users_login, 
+                    users_email, 
+                    users_password, 
+                    users_status) 
+                VALUES 
+                    (${mysql.escape(req.body.name)},
+                    ${mysql.escape(req.body.login)},
+                    ${mysql.escape(req.body.email)},
+                    ${mysql.escape(req.body.password)}, 
+                    'CREATED')`;
+      console.log(sql);
+      dbadd.query(sql, function (err, result) {
         if (err) throw err;
         sendEmail(req.body.email, config.reg_mail);
       });

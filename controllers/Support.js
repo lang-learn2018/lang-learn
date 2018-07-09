@@ -71,8 +71,28 @@ exports.getUserLangStrings = function(JSONArrayAll, userLang){
     return JSONArrayCurLang;
 };
 
-
-
+var sendEmail = function(emailAdr, sbj, txt) {
+  var transporter = email.createTransport({
+  service: 'gmail',
+  auth: {
+    user: config.email,
+    pass: config.emailPass
+  }
+  });
+  var mailOptions = {
+    from: config.email,
+    to: emailAdr,
+    subject: sbj,
+    text: txt
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
 
 
 
