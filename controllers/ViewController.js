@@ -135,4 +135,13 @@ exports.getTableHead = function(req, res) {
     res.end();
 }
 
+exports.renderPlayType = function(req, res) {
+    res.render('parts/getcardplaytype.ejs');
+    res.end();
+}
+
+exports.cardPlayStart = function(req, res) {
+    res.render('parts/cardplaystart.ejs');
+    res.end();
+}
 

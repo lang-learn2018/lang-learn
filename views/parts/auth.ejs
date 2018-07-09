@@ -3,22 +3,22 @@
     <div class="col-sm-4"></div>
     <div class="col-sm-4 card">
         <form class="card-body" method="post">
-            <h5 class="card-title">Authorization</h5>
+            <h5 class="card-title"><%= strings.author_title %></h5>
             <div class="form-group">
-                <label for="login">login</label>
-                <input type="text" class="form-control" name="login" id="login" placeholder="login">
+                <label for="login"><%= strings.author_login %></label>
+                <input type="text" class="form-control" name="login" id="login" placeholder="<%= strings.author_login %>">
             </div>
             <div class="form-group">
-                <label for="password">password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                <label for="password"><%= strings.author_password %></label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="<%= strings.author_password %>">
             </div>
 
             <div>
-                <a href="registration">registration</a>
-                <a href="restorepass" style="float:right;">forgot password?</a>
+                <a href="registration"><%= strings.author_reg %></a>
+                <a href="restorepass" style="float:right;"><%= strings.author_forgot %></a>
             </div>
             <br>
-            <button type="submit" style="float:right;" class="btn btn-outline-dark" >Enter</button>
+            <button type="submit" style="float:right;" class="btn btn-outline-dark" ><%= strings.author_enter %></button>
         </form>
     </div>
     <div class="col-sm-4"></div>

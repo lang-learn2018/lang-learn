@@ -1,8 +1,6 @@
 var JSdataCurrentDictionary;
 var JSdataCurrentPlay;
 var gameType;
-/*var strings;
-getStrings();*/
 
 function saveWord() {
     var wordHb = $("#wordHb").val();
@@ -26,7 +24,6 @@ function saveWord() {
                 $('#modal-alert').val("");
                 $('#addWordModal').hide();
                 $('.modal-backdrop').remove();
-                // $('body').removeClass("modal-open");
 
             }
             if (data == 'exists') {
@@ -139,7 +136,8 @@ function startLearn() {
         $("#wordtype").attr("disabled", true);
         $("#wordcheck").attr("disabled", true);
         $("#wordstatus").attr("disabled", true);
-        $("#dictionary-table").html(getCardPlayType("playtype"));
+        getCardPlayType().then(response => document.getElementById("dictionary-table").innerHTML = response) ;
+        //$("#dictionary-table").html(cardHTML);
     } else {
         $("#startStop").removeClass("btn-danger");
         $("#startStop").addClass("btn-success");
@@ -202,7 +200,7 @@ function fillTableBody() {
         html+=`<tr> 
 					<td>${checked}</td> 
 					<td>${heb}</td> 
-					<td>${JSdataCurrentDictionary[i].dictionary_word_en}</td> 
+					<td>${JSdataCurrentDictionary[i]["dictionary_word_"+getCookie("language")]}</td> 
 					<td>${JSdataCurrentDictionary[i].dictionary_word_tr}</td>
 					<td>${setWordType(JSdataCurrentDictionary[i].dictionary_word_type)}</td> 
 					${raiting} 
@@ -217,120 +215,54 @@ function fillTableHead() {
     return new Promise(function(resolve, reject) {
     
         $.post( '/gettablehead', {}, function(data) {
-            console.log(data);
             resolve(data);
         });
 
     });
-    /*var ratingTh = "";
-    if (getCookie("userid") != "" && getCookie("userid") != "null") {
-        ratingTh = `<th scope="col"  style="white-space:nowrap;" class="text-center">Rating
-						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows"><strong>&#8593;</strong></span>
-						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)"  class="arrows"><strong>&#8595;<strong></span>
-					</th>`;
-    }
-
-    var html = `<div class="col-sm-12"><table id="dictionary-table" class="table table-striped"> 
-					  <thead> 
-					    <tr> 
-					      <th scope="col"></th> 
-					      <th  style="white-space:nowrap;" scope="col">Hebrew 
-					      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_he', true, this)" 
-					      	class="arrows"><strong>&#8593;</strong></span>
-					      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_he', false, this)"  class="arrows"><strong>&#8595;<strong></span>
-					      </th> 
-					      <th style="white-space:nowrap;" scope="col">Engligh
-							<span style="cursor: pointer;" onclick="sortBy('dictionary_word_en', true, this)" 
-							class="arrows"><strong>&#8593;</strong></span>
-					      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_en', false, this)"  class="arrows"><strong>&#8595;<strong></span>
-					      </th> 
-					      <th style="white-space:nowrap;" scope="col">Transcription
-							<span style="cursor: pointer;" onclick="sortBy('dictionary_word_tr', true, this)" 
-							class="arrows"><strong>&#8593;</strong></span>
-					      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_tr', false, this)" 
-					      	class="arrows"><strong>&#8595;<strong></span>
-						  </th> 
-					      <th style="white-space:nowrap;" scope="col" style="white-space:nowrap;">Type
-							<span style="cursor: pointer;" onclick="sortBy('dictionary_word_type', true, this)" 
-							class="arrows"><strong>&#8593;</strong></span>
-					      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_type', false, this)"  class="arrows"><strong>&#8595;<strong></span>
-					      </th> 
-					      ${ratingTh} 
-					    </tr> 
-					  </thead>
-					<tbody>`;
-
-    return html;*/
 }
 
-function getCardPlayType(cardType=null) {
-	var htmlCard = `
-		<div id="play-stat" class="col-sm-4 text-center"></div>
-        <div class="col-sm-4">
-        	<div class="card border-success mb-3" style="max-width: 25rem;">
-                <div class="card-header">Choose play type</div>
-                <div class="card-body">
-                    <div class="card">
-                        <div class="card-body">
-                            <p><strong>Order of the game.</strong></p>
-                            <div class="form-check">
-                              <input id="radio-straight-game" class="form-check-input" type="radio" name="radio-game-type" value="straight-game" checked>
-                              <label class="form-check-label" for="radio-straight-game">
-                                Straight
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input id="radio-random-game" class="form-check-input" type="radio" 
-                              name="radio-game-type" 
-                              value="random-game">
-                              <label class="form-check-label" for="radio-random-game">
-                                Random
-                              </label>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <button style="width:100%;" onclick="cardPlayStart()" type="button" class="btn btn-outline-success">Cards</button>
-                </div>
-            </div>
-		</div>
-		<div class="col-sm-4"></div>`;
-	return htmlCard;
+function getCardPlayType() {
+    return new Promise(function(resolve, reject) {
+        
+        $.post( '/getcardplaytype', {}, function(data) {
+            resolve(data);
+        });
+
+    });
+	
 }
 
 function cardPlayStart(){
-    gameType = $("input[name=radio-game-type]:checked").val();
-        var html = `
-            <div class="card-header">Choose language witch will show first</div>
-            <div class="card-body">
-                <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" 
-                class="btn btn-block btn-outline-success">Hebrew</button>
-                <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" 
-                class="btn btn-block btn-outline-success">English</button>
-            </div>`;
-        $("#dictionary-table .card").html(html);
-    }
-
-function getFirstWordCardPlay(lang, gameType) {
-    if(JSdataCurrentPlay = JSdataCurrentDictionary){
-        var stat = `
-            <p>
-                <h4>Statistic:</h4>
-                <strong>Total:</strong>
-                <span id="total-word" class="text-dark">${JSdataCurrentPlay.length}</span><br>
-                <strong>Current:</strong>
-                <span id="cur-word" class="text-primary">0</span><br>
-                <strong>Results:</strong>
-                <span id="corr-word" class="text-success">0</span>/<span id="wrong-word" class="text-danger">0</span>
-            </p>`;
-        $("#play-stat").html(stat);
-        getNextCardPlay(lang);
-    }
+    gameType = $("#radio-random-game").is(":checked");
+    $.post( '/cardplaystart', {}, function(data) {
+        $("#dictionary-table .card").html(data);
+    });
 }
 
-function getNextCardPlay(lang, hit = null, wordId = null) {
+function getFirstWordCardPlay(lang, gameType) {
+    $.post( '/getfirstcardres', {}, function(data) {
+        var dataArray = data.split(",");
+        if(JSdataCurrentPlay = JSdataCurrentDictionary){
+            var stat = `
+                <p>
+                    <h4>${dataArray[0]}:</h4>
+                    <strong>${dataArray[1]}:</strong>
+                    <span id="total-word" class="text-dark">${JSdataCurrentPlay.length}</span><br>
+                    <strong>${dataArray[2]}:</strong>
+                    <span id="cur-word" class="text-primary">0</span><br>
+                    <strong>${dataArray[3]}:</strong>
+                    <span id="corr-word" class="text-success">0</span>/<span id="wrong-word" class="text-danger">0</span>
+                </p>`;
+            $("#play-stat").html(stat);
+            getNextCardPlay(getCookie("language"), [dataArray[4],dataArray[5],dataArray[6]]);
+        }
+    });
+   }
+
+
+function getNextCardPlay(lang, strings, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
-        $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {});
+        $.post('/setwordstat', { hit:hit, wordId:wordId }, function (data) {});
     }
     var current = $("#cur-word").html();
     current = parseInt(current);
@@ -348,12 +280,11 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
     }
 
     if (JSdataCurrentPlay.length > 0) {
-        if (gameType == 'straight-game') {
-            var index = 0;
-        }
-        if (gameType == 'random-game') {
+        if (gameType) 
             var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
-        }
+        else
+            var index = 0;
+
         var currentCard = JSdataCurrentPlay[index];
         if (lang) {
             var firstWord = currentCard.dictionary_word_he;
@@ -362,9 +293,9 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
             firstWord = `<h3>${firstWord}</h3>`;
             if (currentCard.dictionary_word_tr != "")
                 firstWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;
-            var secondWord = currentCard.dictionary_word_en;
+            var secondWord = currentCard['dictionary_word_'+lang];
         } else {
-            var firstWord = `<h3>${currentCard.dictionary_word_en}</h3>`;
+            var firstWord = `<h3>${currentCard['dictionary_word_'+lang]}</h3>`;
             var secondWord = currentCard.dictionary_word_he;
             if (currentCard.dictionary_word_inf != "")
                 secondWord = currentCard.dictionary_word_inf + ") " + secondWord + ")";
@@ -374,12 +305,13 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
         var html = `
             <div class="card-body text-center">
                 ${firstWord}<br><br>
-                <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
+                <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">${strings[0]}</strong>
                 <br><br>
                 <button onclick="getNextCardPlay(${lang}, false, '${currentCard.dictionary_id}')" 
                 type="button" 
-                class="btn btn-outline-danger">Wrong</button>
-                <button onclick="getNextCardPlay(${lang}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">Correct</button>
+                class="btn btn-outline-danger">${strings[1]}</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button onclick="getNextCardPlay(${lang}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">${strings[2]}</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {

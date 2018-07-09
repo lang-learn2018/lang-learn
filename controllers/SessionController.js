@@ -38,7 +38,6 @@ exports.getUserLang = function (req, res) {
     if(typeof req.session.language == "undefined"){
         setUserLang(req, res);
     }
-    console.log(req.session.language);
     return req.session.language;
 }
 

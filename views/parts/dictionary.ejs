@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add word to dictionary</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><%= strings.learning_modal_title %></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -11,37 +11,38 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label for="wordType">Word type</label>
+            <label for="wordType"><%= strings.learning_modal_type %></label>
             <select class="form-control" id="wordType" onchange="infinitiveToggle()">
               <option value=""></option>
-              <option value="verb">Verbs</option>
-              <option value="noun">Nouns</option>
-              <option value="adj">Adjectives</option>
-              <option value="frss">Frases</option>
+              <option value="verb"><%= strings.learning_verbs %></option>
+              <option value="noun"><%= strings.learning_nouns %></option>
+              <option value="adj"><%= strings.learning_adj %></option>
+              <option value="frss"><%= strings.learning_frases %></option>
+              <option value="other"><%= strings.learning_other %></option>
             </select>
           </div>
           <div class="form-group">
-            <label for="wordHb">Hebrew</label>
+            <label for="wordHb"><%= strings.learning_other %></label>
             <input type="text" class="form-control" id="wordHb">
           </div>
           <div id="div-inf" class="form-group" style="display: none;">
-            <label for="wordInf">Infinitive</label>
+            <label for="wordInf"><%= strings.learning_infin %></label>
             <input type="text" class="form-control is-invalid" id="wordInf">
           </div>
           <div class="form-group">
-            <label for="wordRu">English</label>
+            <label for="wordRu"><%= strings.main_menu_en_lang %></label>
             <input type="text" class="form-control" id="wordEn">
           </div>
           <div class="form-group">
-            <label for="wordTr">Transcription</label>
+            <label for="wordTr"><%= strings.learning_transctiption %></label>
             <input type="text" class="form-control" id="wordTr">
           </div>
         </form>
         <div id="modal-alert" class="text-danger"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="saveWord()" >Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= strings.learning_close %></button>
+        <button type="button" class="btn btn-primary" onclick="saveWord()" ><%= strings.learning_save %></button>
       </div>
     </div>
   </div>

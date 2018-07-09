@@ -107,24 +107,11 @@ exports.getDictionaryTable = function(req, res, word) {
         if(result[i][`dictionary_word_${lg}`] == "" || result[i][`dictionary_word_${lg}`] == "undefined"){
           var word_id = result[i].dictionary_id;
           var word_en = result[i].dictionary_word_en;
-          /*googleTranslate.translate(result[i].dictionary_word_en, lg, function(err, translation) {
-            translate_result = translation.translatedText;
-            console.log(transResult);
-          });*/
-
-          /*translate(result[i].dictionary_word_en, {from: 'en', to: lg}).then(res => {
-              translate_result = res.text;
-              console.log(translate_result);
-          }).catch(err => {
-              console.error(err);
-          });*/
-          //console.log(word_id);
 
           setTranslateWord(word_id, word_en, lg)
           
         }
       }
-      //db_sub.end();
     };
     res.send(JSON.stringify(result));
     res.end();

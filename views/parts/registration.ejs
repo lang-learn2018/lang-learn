@@ -4,29 +4,29 @@
     <form class="card" action="registration" method="post">
       <div class="card-body">
         <div class="form-group">
-          <label for="login">Login</label>
-          <input name="login" type="text" class="form-control" id="login" placeholder="Enter Login">
+          <label for="login"><%= strings.author_login %></label>
+          <input name="login" type="text" class="form-control" id="login" placeholder="<%= strings.author_login %>">
         </div>
         <div class="form-group">
-          <label for="name">Name</label>
-          <input name="name" type="text" class="form-control" id="name" placeholder="Enter Name">
+          <label for="name"><%= strings.author_name %></label>
+          <input name="name" type="text" class="form-control" id="name" placeholder="<%= strings.author_name %>">
         </div>
         <div class="form-group">
-          <label for="email">Email address</label>
-          <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          <label for="email"><%= strings.author_email %></label>
+          <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="<%= strings.author_email %>">
+          <small id="emailHelp" class="form-text text-muted"><%= strings.author_info1 %></small>
         </div>
         <div class="form-group">
-          <label for="password1">Password</label>
-          <input name="pass" type="password" class="form-control" id="password1" placeholder="Password">
-          <small id="passHelp" class="form-text text-muted">Password must contain 6 chars or more.</small>
+          <label for="password1"><%= strings.author_password %></label>
+          <input name="pass" type="password" class="form-control" id="password1" placeholder="<%= strings.author_password %>">
+          <small id="passHelp" class="form-text text-muted"><%= strings.author_info2 %></small>
         </div>
         <div class="form-group">
-          <label for="password2">Password</label>
-          <input type="password" class="form-control" id="password2" placeholder="Enter password again">
+          <label for="password2"><%= strings.author_password_again %></label>
+          <input type="password" class="form-control" id="password2" placeholder="<%= strings.author_password_again %>">
         </div>
-        <button type="submit" class="btn btn-outline-dark" id="sbmt" disabled>Submit</button>
-        <small  id="submitHelp" class="form-text text-muted">Need to enter correct information to proceed!</small>
+        <button type="submit" class="btn btn-outline-dark" id="sbmt" disabled><%= strings.author_submit %></button>
+        <small  id="submitHelp" class="form-text text-muted"><%= strings.author_info3 %></small>
       </div>
     </form>
   </div>

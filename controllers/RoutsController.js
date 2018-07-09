@@ -89,6 +89,25 @@ module.exports = function (app) {
         View.renderDictionary(req, res);
     });
 
+    app.post('/getcardplaytype', function (req, res) {
+        View.renderPlayType(req, res);
+    });
+
+    app.post('/cardplaystart', function (req, res) {
+        View.cardPlayStart(req, res);
+    });
+
+    app.post('/getfirstcardres', function (req, res) {
+        res.send(`  ${res.locals.strings.play_statistic}, 
+                    ${res.locals.strings.play_total}, 
+                    ${res.locals.strings.play_current}, 
+                    ${res.locals.strings.play_results},
+                    ${res.locals.strings.play_see},
+                    ${res.locals.strings.play_wrong},
+                    ${res.locals.strings.play_correct}`);
+        res.end();
+    });
+
     app.post('/setwordstat', function (req, res) {
         if (Session.getUser(req).id != null)
             MySQL.setWordStat(req);

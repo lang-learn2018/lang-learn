@@ -33,5 +33,42 @@
 	{"id":"learning_frases",		"en":"Frases",			"ru":"Фразы"	},
 	{"id":"learning_other",			"en":"Other",			"ru":"Прочее"	},
 
-	{"id":"filter_setting",			"en":"Words Filter Settings","ru":"Настройки фильтра слов"}
+	{"id":"learning_modal_title",	"en":"Add word to dictionary",	"ru":"Добавить слово в словарь"},
+	{"id":"learning_modal_type",	"en":"Word type",		"ru":"Часть речи"},
+	{"id":"learning_infin",			"en":"Infinitive",		"ru":"Инфинитив"	},
+	{"id":"learning_other",			"en":"Other",			"ru":"Прочее"	},
+	{"id":"learning_close",			"en":"Close",			"ru":"Закрыть"	},
+	{"id":"learning_save",			"en":"Save",			"ru":"Сохранить"},
+
+	{"id":"filter_setting",			"en":"Filter settings",	"ru":"Настройки фильтра"},
+
+	{"id":"play_type",				"en":"Choose play type","ru":"Выберите тип игры"},
+	{"id":"play_order",				"en":"Order of the cards","ru":"Последовательность карточек"},
+	{"id":"play_straight",			"en":"Straight",		"ru":"Прямой"},
+	{"id":"play_random",			"en":"Random",			"ru":"Случайный"},
+	{"id":"play_cards",				"en":"Cards",			"ru":"Карточки"},
+
+	{"id":"play_statistic",			"en":"Statistic",		"ru":"Статистика"},
+	{"id":"play_total",				"en":"Total",			"ru":"Всего"},
+	{"id":"play_current",			"en":"Current",			"ru":"Текущее"},
+	{"id":"play_results",			"en":"Results",			"ru":"Результаты"},
+	{"id":"play_see",				"en":"See translate",	"ru":"Перевод"},
+	{"id":"play_wrong",				"en":"Wrong",			"ru":"Ошибся"},
+	{"id":"play_correct",			"en":"Correct",			"ru":"Верно"},
+
+	{"id":"author_title",			"en":"Authorization",	"ru":"Авторизация"},
+	{"id":"author_login",			"en":"Login",			"ru":"Логин"},
+	{"id":"author_password",		"en":"Password",		"ru":"Пароль"},
+	{"id":"author_reg",				"en":"Registration",	"ru":"Зарегистрироваться"},
+	{"id":"author_forgot",			"en":"Forgot password?","ru":"Забыли пароль?"},
+	{"id":"author_enter",			"en":"Enter",			"ru":"Войти"},
+	{"id":"author_name",			"en":"Name",			"ru":"Имя"},
+	{"id":"author_email",			"en":"Email",			"ru":"Эл.почта"},
+	{"id":"author_password_again",	"en":"Enter password again","ru":"Введите пароль снова"},
+	{"id":"author_info1",			"en":"We'll never share your email with anyone else.","ru":"Мы никогда не передадим ваш пароль тритьим лицам"},
+	{"id":"author_info2",			"en":"Password must contain 6 chars or more.","ru":"Пароль должен содержать 6 или более символов"},
+	{"id":"author_info3",			"en":"Need to enter correct information to proceed!","ru":"Необходимо ввести корректную информацию для продолжения"},
+	{"id":"author_submit",			"en":"Submit",			"ru":"Подтвердить"},
+
+	{"id":"play_first_lang","en":"Choose language witch will show first","ru":"Выберите язык лицевой стороны карточки"}
 ]
