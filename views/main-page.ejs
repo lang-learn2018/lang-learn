@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script defer src="assets/js/main.js"></script>
   <% include headers/header %>
   <% include headers/styles %>
   <% include headers/scripts %>
@@ -14,6 +15,5 @@
   <% if(path == "/dictionary") {%> <%- include('parts/dictionary')%> <% }  %>
   <% if(typeof error != "undefined" && error == "404") {%> <%- include('parts/404')%> <% }  %>
   
-  <script defer src="assets/js/main.js"></script>
 </body>
 </html>

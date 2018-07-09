@@ -73,6 +73,10 @@ module.exports = function (app) {
         View.getFilterFettings(req, res);
     });
 
+    app.post('/gettablehead', function (req, res) {
+        View.getTableHead(req, res);
+    });
+
     app.post('/saveword', function (req, res) {
         View.saveWord(req, res);
     });
@@ -88,6 +92,11 @@ module.exports = function (app) {
     app.post('/setwordstat', function (req, res) {
         if (Session.getUser(req).id != null)
             MySQL.setWordStat(req);
+    });
+
+    app.post('/getstrings', function (req, res) {
+        res.send(res.locals.strings);
+        res.end();
     });
 
     app.post('/setlanguage', function (req, res) {

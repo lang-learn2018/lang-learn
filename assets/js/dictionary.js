@@ -1,6 +1,8 @@
 var JSdataCurrentDictionary;
 var JSdataCurrentPlay;
 var gameType;
+/*var strings;
+getStrings();*/
 
 function saveWord() {
     var wordHb = $("#wordHb").val();
@@ -76,34 +78,29 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
     if(word == null) word = $('#searchWord').val();
     $.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount, word: word}, function(data) {
         JSdataCurrentDictionary = JSON.parse(data);
+        var html = fillTableHead()
+                   .then(response => document.getElementById("dictionary-table").innerHTML = response+fillTableBody()+"</tbody></table></div>");
 
-        var html = fillTableHead();
-
-        html+= fillTableBody();
-
-    html+='</tbody></table></div>';
-
-    if (JSdataCurrentDictionary == "") {
-        html = '<div class="row" style="margin-top:25px;">\n' +
-            '  <div class="col-sm-4"></div>\n' +
-            '  <div class="col-sm-4"><div class="card" style="max-width: 500px;">\n' +
-            '  <h5 class="card-header">Warning</h5>\n' +
-            '  <div class="card-body">\n' +
-            '    <h5 class="card-title">There is no such word in dictionary</h5>\n' +
-            '    <p class="card-text">There is no word <span class="badge badge-warning">' +word +'</span> in' +
-            ' dictionary.' +
-            ' You' +
-            ' can' +
-            ' add' +
-            ' it!</p>\n' +
-            '    <button id="addbtn" class="btn btn-outline-primary" type="button" data-toggle="modal"\n' +
-            '                    data-target="#addWordModal">Add</button>' +
-            '  </div>\n' +
-            '</div></div>\n' +
-            '  <div class="col-sm-4"></div>\n' +
-            '</div>';
+        if (JSdataCurrentDictionary == "") {
+            html = '<div class="row" style="margin-top:25px;">\n' +
+                '  <div class="col-sm-4"></div>\n' +
+                '  <div class="col-sm-4"><div class="card" style="max-width: 500px;">\n' +
+                '  <h5 class="card-header">Warning</h5>\n' +
+                '  <div class="card-body">\n' +
+                '    <h5 class="card-title">There is no such word in dictionary</h5>\n' +
+                '    <p class="card-text">There is no word <span class="badge badge-warning">' +word +'</span> in' +
+                ' dictionary.' +
+                ' You' +
+                ' can' +
+                ' add' +
+                ' it!</p>\n' +
+                '    <button id="addbtn" class="btn btn-outline-primary" type="button" data-toggle="modal"\n' +
+                '                    data-target="#addWordModal">Add</button>' +
+                '  </div>\n' +
+                '</div></div>\n' +
+                '  <div class="col-sm-4"></div>\n' +
+                '</div>';
     }
-    $("#dictionary-table").html(html);
     getFilterSettings();
 });
 }
@@ -216,7 +213,16 @@ function fillTableBody() {
 }
 
 function fillTableHead() {
-    var ratingTh = "";
+
+    return new Promise(function(resolve, reject) {
+    
+        $.post( '/gettablehead', {}, function(data) {
+            console.log(data);
+            resolve(data);
+        });
+
+    });
+    /*var ratingTh = "";
     if (getCookie("userid") != "" && getCookie("userid") != "null") {
         ratingTh = `<th scope="col"  style="white-space:nowrap;" class="text-center">Rating
 						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows"><strong>&#8593;</strong></span>
@@ -254,7 +260,7 @@ function fillTableHead() {
 					  </thead>
 					<tbody>`;
 
-    return html;
+    return html;*/
 }
 
 function getCardPlayType(cardType=null) {

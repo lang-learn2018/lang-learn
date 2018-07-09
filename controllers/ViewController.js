@@ -1,6 +1,7 @@
 var config = require('../config');
 var strings = require('../strings');
 var MySQL = require('./MysqlController.js');
+var SessionController = require('./SessionController.js');
 
 exports.renderDictionary = function(req, res) {
     var rating = req.body.rating;
@@ -16,38 +17,62 @@ exports.renderDictionary = function(req, res) {
     if (wordtypes != "") req.session.wordtypes = wordtypes;
 
     if (typeof req.session.rowsCount == "undefined") req.session.rowsCount = 100;
-    if (typeof req.session.wordtypesfilter == "undefined") req.session.wordtypesfilter = "";
-    if (typeof req.session.ratingsfilter == "undefined") req.session.ratingsfilter = "";
-    if (typeof req.session.wordcheckfilter == "undefined") req.session.wordcheckfilter = "";
+    if (typeof req.session.wordtypesfilter == "undefined") req.session.wordtypesfilter = {"where": "", "string":"learning_all"};
+    if (typeof req.session.ratingsfilter == "undefined") req.session.ratingsfilter = {"where": "", "string":"learning_all"};
+    if (typeof req.session.wordcheckfilter == "undefined") req.session.wordcheckfilter = {"where": "", "string":"learning_all"};
 
-    if (wordtypes == "verb" || wordtypes == "noun" || wordtypes == "adj" || wordtypes == "frss") {
-        req.session.wordtypesfilter = " AND dictionary_word_type = '" + wordtypes + "' ";
-    } else if (wordtypes == "all") {
-        req.session.wordtypesfilter = "";
+    switch(wordtypes){
+        case "verb":
+            req.session.wordtypesfilter = {"where": " AND dictionary_word_type = '" + wordtypes + "' ", "string":"learning_verbs"};
+            break;
+        case "noun":
+            req.session.wordtypesfilter = {"where": " AND dictionary_word_type = '" + wordtypes + "' ", "string":"learning_nouns"};
+            break;
+        case "adj":
+            req.session.wordtypesfilter = {"where": " AND dictionary_word_type = '" + wordtypes + "' ", "string":"learning_adj"};
+            break;
+        case "frss":
+            req.session.wordtypesfilter = {"where": " AND dictionary_word_type = '" + wordtypes + "' ", "string":"learning_frases"};
+            break;
+        case "other":
+            req.session.wordtypesfilter = {"where": " AND dictionary_word_type = '" + wordtypes + "' ", "string":"learning_other"};
+            break;
+        case "all":
+            req.session.wordtypesfilter = {"where": "", "string":"learning_all"};
+            break;
     }
     switch(rating) {
     	case "not learned":
-	    	req.session.ratingsfilter = " AND raiting_hit = 0 AND raiting_miss = 0 ";
+	    	req.session.ratingsfilter = {"where": " AND raiting_sum = '-1' ", "string":"learning_not_learned"};
 	    	break;
-    	case "hit":
-	    	req.session.ratingsfilter = " AND raiting_diff > 0 ";
+        case "0":
+            req.session.ratingsfilter = {"where": " AND raiting_sum = '0' ", "string":"learning_bad"};
+            break;
+    	case "1":
+	    	req.session.ratingsfilter = {"where": " AND raiting_sum = '1' ", "string":"learning_normal"};
 	    	break;
-    	case "miss":
-	    	req.session.ratingsfilter = "  AND raiting_diff <= 0  ";
+    	case "2":
+	    	req.session.ratingsfilter = {"where": " AND raiting_sum = '2' ", "string":"learning_twice"};
 	    	break;
+        case "3":
+            req.session.ratingsfilter = {"where": " AND raiting_sum = '3' ", "string":"learning_good"};
+            break;
+        case "4":
+            req.session.ratingsfilter = {"where": "  AND raiting_sum = '4' ", "string":"learning_best"};
+            break;
 	    case "all":
-	    	req.session.ratingsfilter = "";
+	    	req.session.ratingsfilter = {"where": "", "string":"learning_all"};
 	    	break;
     }
     switch (checked) {
     	case "checked":
-    		req.session.wordcheckfilter = " AND raiting_user_check = '1' ";
+    		req.session.wordcheckfilter = {"where": " AND raiting_user_check = '1' ", "string":"learning_checked"};
     		break;
     	case "not checked":
-    		req.session.wordcheckfilter = " AND raiting_user_check = '0' ";
+    		req.session.wordcheckfilter = {"where": " AND raiting_user_check = '0' ", "string":"learning_not_checked"};
     		break;
     	case "all":
-    		req.session.wordcheckfilter = "";
+    		req.session.wordcheckfilter = {"where": "", "string":"learning_all"};
     		break;
     }
    
@@ -101,8 +126,12 @@ exports.getFilterFettings = function(req, res) {
     if (typeof req.session.checked == "undefined") req.session.checked = "all";
     if (typeof req.session.wordtypes == "undefined") req.session.wordtypes = "all";
     
+	res.render('parts/filtersettings.ejs', { check: req.session.wordcheckfilter.string, rating: req.session.ratingsfilter.string, type: req.session.wordtypesfilter.string});
+    res.end();
+}
 
-	res.send("<div class='' role='alert'><strong>Filter settings</strong>: Word raiting <u>"+req.session.rating+"</u>; Checked <u>"+req.session.checked+"</u>; Type <u>"+req.session.wordtypes)+"</u></div>";
+exports.getTableHead = function(req, res) {
+    res.render('parts/gettablehead.ejs', { userid: SessionController.getUser(req).id });
     res.end();
 }
 

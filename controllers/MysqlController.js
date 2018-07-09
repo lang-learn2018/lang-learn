@@ -72,7 +72,7 @@ exports.getDictionaryTable = function(req, res, word) {
     var sqlRatingSum = "'null' AS raiting_sum";
     var sqlCheckWord = "'null' AS raiting_user_check";
   } else {
-    var sqlRatingSum = "IFNULL(tRating.raiting_sum, '0') AS raiting_sum";
+    var sqlRatingSum = "IFNULL(tRating.raiting_sum, -1) AS raiting_sum";
     var sqlCheckWord = "IFNULL(tRating.raiting_user_check, '0') AS raiting_user_check";
   }
   var lg_sql = "";
@@ -99,16 +99,14 @@ exports.getDictionaryTable = function(req, res, word) {
                                   FROM  raiting 
                                   WHERE raiting_user_id = ${user.id}) AS tRating 
                       ON dictionary.dictionary_id = tRating.raiting_word_id) AS dictionary
-              WHERE 1=1 ${req.session.wordtypesfilter} ${req.session.ratingsfilter} ${req.session.wordcheckfilter} ${wordfilter}`;
+              WHERE 1=1 ${req.session.wordtypesfilter.where} ${req.session.ratingsfilter.where} ${req.session.wordcheckfilter.where} ${wordfilter}`;
   db.query(sql, function (err, result) {
     if (err) throw err;
     if(lg != "en") {
-      var db_sub = createConnection();
-      var translateArray = [];
-      var idArray = [];
       for(var i = 0; i < result.length; i++){
         if(result[i][`dictionary_word_${lg}`] == "" || result[i][`dictionary_word_${lg}`] == "undefined"){
-          idArray.push(result[i].dictionary_word_id);
+          var word_id = result[i].dictionary_id;
+          var word_en = result[i].dictionary_word_en;
           /*googleTranslate.translate(result[i].dictionary_word_en, lg, function(err, translation) {
             translate_result = translation.translatedText;
             console.log(transResult);
@@ -120,23 +118,10 @@ exports.getDictionaryTable = function(req, res, word) {
           }).catch(err => {
               console.error(err);
           });*/
-          var textTr;
-          textTr = translate(result[i].dictionary_word_en, lg);
+          //console.log(word_id);
 
-          /*translate(result[i].dictionary_word_en, lg).then(text => {
-            console.log(text);
-            textTr = text;
-          });*/
-
-          var sql_add_translate = `
-              UPDATE  dictionary
-              SET     dictionary_word_${lg} = '${textTr}'
-              WHERE   dictionary_id = '${result[i].dictionary_id}'`;
-          console.log(sql_add_translate);
-          db_sub.query(sql_add_translate, function (err, result) {
-            if (err) throw err;
-            console.log(err);
-          });
+          setTranslateWord(word_id, word_en, lg)
+          
         }
       }
       //db_sub.end();
@@ -279,6 +264,21 @@ exports.setWordStat = function (req) {
         db.end();
     });
 };
+
+setTranslateWord = async function(word_id, word_en, lg) {
+    const text = await translate(word_en, {to: lg} )
+    db = createConnection();
+    var sql = `
+          UPDATE  dictionary
+          SET     dictionary_word_${lg} = ${mysql.escape(text)}
+          WHERE   dictionary_id = '${mysql.escape(word_id)}'`;
+    db.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log(err);
+    });
+    db.end();
+}
+
 
 // exports.userRegistration = function(req, res) {
 //     var db = createConnection();

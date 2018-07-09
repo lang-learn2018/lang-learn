@@ -52,19 +52,18 @@
     <!--start lesson button-->
     <button id="startStop" style="min-width: 250px;" type="button" class="btn btn-success mb-2"
             onclick="startLearn()
-                ">Start
-        learning</button>
+                "><%= strings.learning_start_btn %></button>
     <!--//start lesson button-->
     <!--search word-->
     <div class="input-group mb-2 mx-sm-3">
-        <input id="searchWord" type="text" class="form-control" placeholder="search word"
+        <input id="searchWord" type="text" class="form-control" placeholder="<%= strings.learning_search_input %>"
         onkeyup="fillModalHb(this.value)">
         <!--<div class="input-group-append">-->
             <!--<button id="clear" class="btn btn-outline-secondary" type="button" onkeyup="clearFilter()">Clear</button>-->
         <!--</div>-->
         <div class="input-group-append">
             <button id="addbtn" class="btn btn-outline-primary" type="button" data-toggle="modal"
-                    data-target="#addWordModal">Add</button>
+                    data-target="#addWordModal"><%= strings.learning_add_btn %></button>
         </div>
     </div>
     <!--//search word-->
@@ -74,30 +73,36 @@
             <div class="btn-group" role="group">
                 <button id="wordstatus" type="button" class="btn btn-secondary dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Rating
+                    <%= strings.learning_filter_rating %>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                     <a class="dropdown-item" onclick="fillDictionaryTable('all', '', '', '')"
-                       href="#">All</a>
+                       href="#"><%= strings.learning_all %></a>
                     <a class="dropdown-item" onclick="fillDictionaryTable('not learned', '', '', '')"
-                       href="#">Not learned</a>
-                    <a class="dropdown-item" onclick="fillDictionaryTable('hit', '', '', '')"
-                       href="#">Hits</a>
-                    <a class="dropdown-item" onclick="fillDictionaryTable('miss', '', '', '')" href="#">Misses</a>
+                       href="#"><%= strings.learning_not_learned %></a>
+                    <a class="dropdown-item" onclick="fillDictionaryTable('4', '', '', '')"
+                       href="#"><%= strings.learning_best %></a>
+                    <a class="dropdown-item" onclick="fillDictionaryTable('3', '', '', '')"
+                       href="#"><%= strings.learning_good %></a>
+                    <a class="dropdown-item" onclick="fillDictionaryTable('2', '', '', '')"
+                       href="#"><%= strings.learning_twice %></a>
+                    <a class="dropdown-item" onclick="fillDictionaryTable('1', '', '', '')"
+                       href="#"><%= strings.learning_normal %></a>
+                    <a class="dropdown-item" onclick="fillDictionaryTable('0', '', '', '')" href="#"><%= strings.learning_bad %></a>
                 </div>
             </div>
 
             <div class="btn-group" role="group">
                 <button id="wordcheck" type="button" class="btn btn-secondary dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Checked
+                    <%= strings.learning_checked %>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                     <a class="dropdown-item" onclick="fillDictionaryTable('', 'all', '', '')"
-                       href="#">All</a>
-                    <a class="dropdown-item" onclick="fillDictionaryTable('', 'checked', '', '')" href="#">Checked</a>
+                       href="#"><%= strings.learning_all %></a>
+                    <a class="dropdown-item" onclick="fillDictionaryTable('', 'checked', '', '')" href="#"><%= strings.learning_checked %></a>
                     <a class="dropdown-item" onclick="fillDictionaryTable('', 'not checked', '', '')"
-                       href="#">Not checked</a>
+                       href="#"><%= strings.learning_not_checked %></a>
                 </div>
             </div>
 
@@ -106,16 +111,16 @@
             <div class="btn-group" role="group">
                 <button id="wordtype" type="button" class="btn btn-secondary dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Types
+                    <%= strings.learning_filter_types %>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                     <a class="dropdown-item" href="#"
-                       onclick="fillDictionaryTable('', '', 'all', '')">All</a>
-                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'verb', '')">Verbs</a>
-                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'noun', '')">Nouns</a>
-                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'adj', '')">Adjective</a>
-                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'frss', '')">Frases</a>
-                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'other', '')">Other</a>
+                       onclick="fillDictionaryTable('', '', 'all', '')"><%= strings.learning_all %></a>
+                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'verb', '')"><%= strings.learning_verbs %></a>
+                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'noun', '')"><%= strings.learning_nouns %></a>
+                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'adj', '')"><%= strings.learning_adj %></a>
+                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'frss', '')"><%= strings.learning_frases %></a>
+                    <a class="dropdown-item" href="#" onclick="fillDictionaryTable('', '', 'other', '')"><%= strings.learning_other %></a>
                 </div>
             </div>
 
