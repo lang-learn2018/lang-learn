@@ -104,11 +104,3 @@ exports.generateRamdomCharacters = function(count=1){
 
     return text;
 }
-
-
-
-
-
-
-
-

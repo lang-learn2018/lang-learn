@@ -17,6 +17,10 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+<<<<<<< HEAD
+=======
+    "fibers": "^2.0.2",
+>>>>>>> origin/viktor
     "google-translate": "^2.2.0",
     "google-translate-api": "^2.3.0",
     "google-translate-api-nodejs-client": "^1.5.11",

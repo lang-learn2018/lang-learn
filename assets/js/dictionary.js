@@ -13,27 +13,26 @@ function saveWord() {
     if(fieldCheck("wordHb", wordHb) & fieldCheck("wordEn", wordEn) & fieldCheck("wordType", wordType) & (wordType == "verb" ^ wordInf == "")){
         var parameters = {word_he: wordHb, word_inf: wordInf, word_en: wordEn, word_tr: wordTr, word_type: wordType};
         $.post( '/saveword', parameters, function(data) {
-            console.log(data);
             $("#wordHb").val("");
             $("#wordEn").val("");
             $("#wordTr").val("");
             $("#wordInf").val("");
             $("#wordType option:first").attr('selected','selected');
-
             if (data == 'success') {
                 $('#modal-alert').val("");
                 $('#addWordModal').hide();
                 $('.modal-backdrop').remove();
 
             }
-            if (data == 'exists') {
-                $('#modal-alert').html("Word already exists!");
+            else if (data == 'exists') {
+                $('#modal-alert').html("Word exists!");
+            }
+            else if (data == 'adding_denied') {
+                $('#modal-alert').html("Access denied!");
             }
         });
-
     }
 }
-
 function fieldCheck(fieldId, value){
     if(isFieldEmpty(value)) {
         if (!$("#"+fieldId).hasClass("is-invalid")){
@@ -48,18 +47,15 @@ function fieldCheck(fieldId, value){
     }
 
 }
-
 function isFieldEmpty(value) {
     value = value.replace(/\s/g,'');
     if (value == "") return true;
     return false;
 }
-
 function fillModalHb(value) {
     $("#wordHb").val(value);
     fillDictionaryTable("", "", "", "", value);
 }
-
 function infinitiveToggle() {
     var wordType = $("#wordType option:selected").val();
     if (wordType == "verb") {
@@ -70,7 +66,6 @@ function infinitiveToggle() {
     }
 
 }
-
 function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null){
     if(word == null) word = $('#searchWord').val();
     $.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount, word: word}, function(data) {
@@ -101,21 +96,17 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
     getFilterSettings();
 });
 }
-
 function getFilterSettings(){
     $.post( '/getfiltersettings', {}, function(data) {
         $('#filterSetting').html(data);
     });
 }
-
 fillDictionaryTable("", "", "", 100);
-
 function checkWord(wordID, checked) {
     $.post( '/checkWord', { wordID, checked }, function(data) {
         console.log(data);
     });
 }
-
 function setWordType(typeCode) {
     if(typeCode == "verb") return "Verb";
     if(typeCode == "noun") return "Noun";
@@ -123,7 +114,6 @@ function setWordType(typeCode) {
     if(typeCode == "frss") return "Frase";
     if(typeCode == "other") return "Other";
 }
-
 function startLearn() {
     if($("#startStop").hasClass("btn-success")){
         $("#startStop").removeClass("btn-success");
@@ -154,7 +144,6 @@ function startLearn() {
         $("#dictionary-table").html(htmlTable);
     }
 }
-
 function sortBy(field, order, elem){
     $( ".arrows" ).each(function(  ) {
         $(this).removeClass("text-success")
@@ -172,7 +161,6 @@ function sortBy(field, order, elem){
     var html = fillTableBody();
     $("#dictionary-table tbody").html(html);
 }
-
 function fillTableBody() {
     var rowsLength = JSdataCurrentDictionary.length;
     var row, html = "";
@@ -197,23 +185,22 @@ function fillTableBody() {
 
         }
 
-        html+=`<tr> 
-					<td>${checked}</td> 
-					<td>${heb}</td> 
-					<td>${JSdataCurrentDictionary[i]["dictionary_word_"+getCookie("language")]}</td> 
+        html+=`<tr>
+					<td>${checked}</td>
+					<td>${heb}</td>
+					<td>${JSdataCurrentDictionary[i]["dictionary_word_"+getCookie("language")]}</td>
 					<td>${JSdataCurrentDictionary[i].dictionary_word_tr}</td>
-					<td>${setWordType(JSdataCurrentDictionary[i].dictionary_word_type)}</td> 
-					${raiting} 
+					<td>${setWordType(JSdataCurrentDictionary[i].dictionary_word_type)}</td>
+					${raiting}
 				   </tr>`;
 
     }
     return html;
 }
-
 function fillTableHead() {
 
     return new Promise(function(resolve, reject) {
-    
+
         $.post( '/gettablehead', {}, function(data) {
             resolve(data);
         });
@@ -223,15 +210,14 @@ function fillTableHead() {
 
 function getCardPlayType() {
     return new Promise(function(resolve, reject) {
-        
+
         $.post( '/getcardplaytype', {}, function(data) {
             resolve(data);
         });
 
     });
-	
-}
 
+}
 function cardPlayStart(){
     gameType = $("#radio-random-game").is(":checked");
     $.post( '/cardplaystart', {}, function(data) {
@@ -280,7 +266,7 @@ function getNextCardPlay(lang, strings, hit = null, wordId = null) {
     }
 
     if (JSdataCurrentPlay.length > 0) {
-        if (gameType) 
+        if (gameType)
             var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
         else
             var index = 0;
@@ -307,8 +293,8 @@ function getNextCardPlay(lang, strings, hit = null, wordId = null) {
                 ${firstWord}<br><br>
                 <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">${strings[0]}</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${lang}, false, '${currentCard.dictionary_id}')" 
-                type="button" 
+                <button onclick="getNextCardPlay(${lang}, false, '${currentCard.dictionary_id}')"
+                type="button"
                 class="btn btn-outline-danger">${strings[1]}</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onclick="getNextCardPlay(${lang}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">${strings[2]}</button>
@@ -320,11 +306,9 @@ function getNextCardPlay(lang, strings, hit = null, wordId = null) {
     $("#dictionary-table .card").html(html);
 
 }
-
 function changeContent(t, content) {
     $(t).html(content);
 }
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -340,5 +324,3 @@ function getCookie(cname) {
     }
     return "";
 }
-
-

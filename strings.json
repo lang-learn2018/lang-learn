@@ -33,6 +33,7 @@
 	{"id":"learning_frases",		"en":"Frases",			"ru":"Фразы"	},
 	{"id":"learning_other",			"en":"Other",			"ru":"Прочее"	},
 
+<<<<<<< HEAD
 	{"id":"learning_modal_title",	"en":"Add word to dictionary",	"ru":"Добавить слово в словарь"},
 	{"id":"learning_modal_type",	"en":"Word type",		"ru":"Часть речи"},
 	{"id":"learning_infin",			"en":"Infinitive",		"ru":"Инфинитив"	},
@@ -77,4 +78,12 @@
 	{"id":"reg_result_exist",		"en":"A user with this name or email allready exists",	"ru":"Пользователь с таким именем или эл.почтой уже существует"},
 
 	{"id":"play_first_lang","en":"Choose language witch will show first","ru":"Выберите язык лицевой стороны карточки"}
+=======
+	{"id":"filter_setting",			"en":"Words Filter Settings","ru":"Настройки фильтра слов"},
+
+	{"id": "perm_word_guest_add",   "en": "You don't have permission to add words!",
+									"ru": "У вас нет прав на добавление слов!"},
+	{"id": "word_exists", 			"en": "This word already exists!", 
+									"ru": "Такое слово уже существует!"}
+>>>>>>> origin/viktor
 ]

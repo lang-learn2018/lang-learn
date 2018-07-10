@@ -112,13 +112,18 @@ exports.saveWord = function(req, res) {
 	var word_inf = req.body.word_inf.replace(/^\s+|\s+$/gm, '');
 	var word_en = req.body.word_en.replace(/^\s+|\s+$/gm, '');
 	var word_tr = req.body.word_tr.replace(/^\s+|\s+$/gm, '');
-	var word_type = req.body.word_type.replace(/^\s+|\s+$/gm, '');
+    var word_type = req.body.word_type.replace(/^\s+|\s+$/gm, '');
+    var user_id = SessionController.getUser(req).id;
 	if (word_type != "verb") {
 		word_inf = "";
-	}
-	var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_en, word_tr, word_type, word_inf);
-	res.send(answer);
-    res.end();
+    }
+    console.log(user_id);
+        var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_en, word_tr, word_type, user_id)
+        answer.then(result => {
+            console.log(result);
+            res.send(result);
+            res.end();
+        });
 }
 
 exports.getFilterFettings = function(req, res) {
