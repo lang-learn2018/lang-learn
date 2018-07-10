@@ -9,7 +9,6 @@ function saveWord() {
     var wordType = $("#wordType option:selected").val();
     var wordInf = $("#wordInf").val();
     fieldCheck("wordInf", wordInf);
-
     if(fieldCheck("wordHb", wordHb) & fieldCheck("wordEn", wordEn) & fieldCheck("wordType", wordType) & (wordType == "verb" ^ wordInf == "")){
         var parameters = {word_he: wordHb, word_inf: wordInf, word_en: wordEn, word_tr: wordTr, word_type: wordType};
         $.post( '/saveword', parameters, function(data) {
