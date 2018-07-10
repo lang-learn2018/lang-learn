@@ -69,6 +69,12 @@
 	{"id":"author_info2",			"en":"Password must contain 6 chars or more.","ru":"Пароль должен содержать 6 или более символов"},
 	{"id":"author_info3",			"en":"Need to enter correct information to proceed!","ru":"Необходимо ввести корректную информацию для продолжения"},
 	{"id":"author_submit",			"en":"Submit",			"ru":"Подтвердить"},
+	{"id":"email_registration_txt",	"en":"You are registered on the site 'Learn Hebrew'. To activate your account, please follow the link - ","ru":"Вы зарегистрированы на сайте 'Learn Hebrew'. Для активации аккаунта перейдите по сылке - "},
+	{"id":"email_registration_sbj",	"en":"Successful registration on the 'Learn Hebrew'","ru":"Успешная регистрация на сайте 'Learn Hebrew'"},
+
+	{"id":"reg_result_good",		"en":"Successful registration. For activate of your account follow the link sent to your email.",	"ru":"Успешная регистрация. Для активации вашей учетной записи перейдите по ссылке, отправленной на ваш адрес электронной почты."},
+	{"id":"reg_result_bad",			"en":"Registration error","ru":"Ошибка регистрации"},
+	{"id":"reg_result_exist",		"en":"A user with this name or email allready exists",	"ru":"Пользователь с таким именем или эл.почтой уже существует"},
 
 	{"id":"play_first_lang","en":"Choose language witch will show first","ru":"Выберите язык лицевой стороны карточки"}
 ]

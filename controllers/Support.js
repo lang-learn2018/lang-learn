@@ -71,19 +71,20 @@ exports.getUserLangStrings = function(JSONArrayAll, userLang){
     return JSONArrayCurLang;
 };
 
-var sendEmail = function(emailAdr, sbj, txt) {
+exports.sendEmail = function(res, emailAdr, sbj, txt) {
+  var email = require('nodemailer');
   var transporter = email.createTransport({
   service: 'gmail',
   auth: {
-    user: config.email,
-    pass: config.emailPass
+    user: res.locals.config.email,
+    pass: res.locals.config.emailPass
   }
   });
   var mailOptions = {
-    from: config.email,
+    from: res.locals.config.email,
     to: emailAdr,
     subject: sbj,
-    text: txt
+    html: txt
   };
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
@@ -94,6 +95,15 @@ var sendEmail = function(emailAdr, sbj, txt) {
   });
 }
 
+exports.generateRamdomCharacters = function(count=1){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < count; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 
 
 

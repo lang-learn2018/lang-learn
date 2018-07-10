@@ -2,7 +2,6 @@ var config = require('../config.json');
 var variables = require('../variables.json');
 var strings = require('../strings.json');
 var mysql = require('mysql');
-var email = require('nodemailer');
 var MySQL = require('./MysqlController');
 var Session = require('./SessionController');
 var View = require('./ViewController');
@@ -63,9 +62,9 @@ module.exports = function (app) {
     });
     // managing registration post data
     app.post('/registration' + config.root, function (req, res) {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(req.path);
-        MySQL.createUser(req, res);
+        //res.writeHead(200, {'Content-Type': 'text/html'});
+        var reg = MySQL.createUser(req, res);
+        res.render('main-page.ejs', { reg: reg });
         res.end();
     });
 

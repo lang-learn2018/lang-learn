@@ -120,13 +120,16 @@ exports.getDictionaryTable = function(req, res, word) {
 }
 exports.createUser = function (req, res) {
   var db = createConnection();
+  var result = `<div class="alert alert-danger" role="alert">
+                  ${res.locals.strings.reg_result_bad}
+                </div>`;
   var sql = ` SELECT * FROM users 
               WHERE users_login = '${req.body.login}' AND users_password = '${req.body.password}'`;
-  console.log(sql);
   db.query(sql, function (err, rows) {
     if (err) throw err;
     if (rows.length == 0) {
       var dbadd = createConnection();
+      var status  = Support.generateRamdomCharacters(8);
       var sql = `INSERT INTO users 
                     (users_name, 
                     users_login, 
@@ -138,17 +141,25 @@ exports.createUser = function (req, res) {
                     ${mysql.escape(req.body.login)},
                     ${mysql.escape(req.body.email)},
                     ${mysql.escape(req.body.password)}, 
-                    'CREATED')`;
-      console.log(sql);
+                    ${mysql.escape(status)})`;
       dbadd.query(sql, function (err, result) {
         if (err) throw err;
-        sendEmail(req.body.email, config.reg_mail);
+        var linkForActivate = `${res.locals.config.host}:${res.locals.config.port}/activate&id=${status}`;
+        Support.sendEmail(res, req.body.email, res.locals.strings.email_registration_sbj, res.locals.strings.email_registration_txt+`<a href='${linkForActivate}'>${linkForActivate}</a>`);
+        result = `<div class="alert alert-success" role="alert">
+                    ${res.locals.strings.reg_result_good}
+                  </div>`;
+        return result;
       });
+      dbadd.end();
+    } else {
+      result = `<div class="alert alert-warning" role="alert">
+                  ${res.locals.strings.reg_result_exist}
+                </div>`;
+      return result;
     }
   });
-  db.end(function (err) {
-    console.log('something wrong!');
-  });
+  db.end();
 };
 
 exports.setCheckWord = function(req, word_id, user_check) {
