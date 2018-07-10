@@ -7,16 +7,15 @@
           <div class="nav-item dropdown">
               <% if (userid == null) {%>
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                 aria-haspopup="true" aria-expanded="false"><%= config.greet %>, <%= login %>!  </a>
+                 aria-haspopup="true" aria-expanded="false"><%= strings.main_menu_hello %>, <%= strings.main_menu_quest %>!  </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="nav-item dropdown-item" href="<%= config.root %>/auth" id="authorization"><%= config.auth_btn_text %></a>
+                  <a class="nav-item dropdown-item" href="<%= config.root %>/auth" id="authorization"><%= strings.main_menu_enter %></a>
               </div>
               <% } else {%>
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                 aria-haspopup="true" aria-expanded="false"><%= config.greet %>, <%= login %>!  </a>
+                 aria-haspopup="true" aria-expanded="false"><%= strings.main_menu_hello %>, <%= login %>!  </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="nav-item dropdown-item" href="<%= config.root %>/logout" id="authorization"><%= config.exit_btn_text %></a>
-                  <div class="dropdown-divider"></div>
+                  <a class="nav-item dropdown-item" href="<%= config.root %>/logout" id="authorization"><%= strings.main_menu_exit %></a>
               </div>
               <% } %>
           </div>
@@ -24,18 +23,21 @@
 
 <% if (path == "/") {%> active<% } %>
 
-          " href="<%= config.root %>/" id="begin"><%= config.home_btn_text %></a>
-          <a class="nav-item nav-link
-
-<% if (path == "/learn") {%> active<% } %>
-
-          " href="<%= config.root %>/learn" id="begin"><%= config.start_btn_text %></a>
+          " href="<%= config.root %>/" id="begin"><%= strings.main_menu_main %></a>
+          
           <a class="nav-item nav-link
 
 <% if (path == "/dictionary") {%> active<% } %>
 
-          " href="<%= config.root %>/dictionary" id="dictionary"><%= config.dictionary_btn_text %></a>
-
+          " href="<%= config.root %>/dictionary" id="dictionary"><%= strings.main_menu_learning %></a>
+          
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= strings.main_menu_language %> </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" onclick="setLanguage('en')" href="#"><%= strings.main_menu_en_lang %></a>
+              <a class="dropdown-item" onclick="setLanguage('ru')" href="#"><%= strings.main_menu_ru_lang %></a>
+            </div>
+          </div>
 
         </div>
       </div>

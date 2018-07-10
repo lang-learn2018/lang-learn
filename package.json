@@ -17,12 +17,18 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "fibers": "^2.0.2",
+    "google-translate": "^2.2.0",
+    "google-translate-api": "^2.3.0",
+    "google-translate-api-nodejs-client": "^1.5.11",
     "mysql": "^2.15.0",
     "nodemailer": "^4.6.5",
     "nodemon": "^1.17.5",
     "npm": "^6.1.0",
     "path": "^0.12.7",
     "string-multiline": "^0.1.1",
+    "sync": "^0.2.5",
+    "translate": "^1.0.2",
     "url": "^0.11.0"
   }
 }

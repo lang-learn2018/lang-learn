@@ -36,16 +36,41 @@ exports.getCurrentTimeFormatted = function () {
  * @return strigified array of dates with max length == MAX_ARR_CAPACITY
  */
 exports.addCurrentDate = function (dates) {
+    // console.log(typeof dates);
     const MAX_ARR_CAPACITY = 7;
     var currentDate = new Date();
-    var dates = JSON.parse(dates);
     if (dates.length > MAX_ARR_CAPACITY) {
         dates.shift();
     }
     dates.push(currentDate);
-    dates = JSON.stringify(dates);
     return dates;
 };
+/**
+ * Evaluates data of hits and misses array into number of rating of word;
+ * @param hits - array of JS Data objects of last hits of word;
+ * @param misses - array of JS Data objects of last misses of word;
+ * @returns number of word rating;
+ */
+exports.getRating = function (hits, misses) {
+    var rating;
+    //TODO сделать нормальный подсчёт рейтинга
+    rating = hits.length - misses.length;
+    return rating;
+};
+
+exports.getUserLangStrings = function(JSONArrayAll, userLang){
+    var JSONArrayCurLang = "{";
+    var l = JSONArrayAll.length;
+    for(var i = 0; i < l; i++){
+        var coma = "";
+        if(i < l-1) coma = ",";
+        JSONArrayCurLang+=`"${JSONArrayAll[i].id}": "${JSONArrayAll[i][userLang]}"${coma}`;
+    }
+    JSONArrayCurLang+="}";
+    JSONArrayCurLang = JSON.parse(JSONArrayCurLang);
+    return JSONArrayCurLang;
+};
+
 
 
 

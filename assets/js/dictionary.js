@@ -1,5 +1,8 @@
 var JSdataCurrentDictionary;
 var JSdataCurrentPlay;
+var gameType;
+/*var strings;
+getStrings();*/
 
 function saveWord() {
     var wordHb = $("#wordHb").val();
@@ -8,32 +11,28 @@ function saveWord() {
     var wordType = $("#wordType option:selected").val();
     var wordInf = $("#wordInf").val();
     fieldCheck("wordInf", wordInf);
-
     if(fieldCheck("wordHb", wordHb) & fieldCheck("wordEn", wordEn) & fieldCheck("wordType", wordType) & (wordType == "verb" ^ wordInf == "")){
         var parameters = {word_he: wordHb, word_inf: wordInf, word_en: wordEn, word_tr: wordTr, word_type: wordType};
         $.post( '/saveword', parameters, function(data) {
-            console.log(data);
             $("#wordHb").val("");
             $("#wordEn").val("");
             $("#wordTr").val("");
             $("#wordInf").val("");
             $("#wordType option:first").attr('selected','selected');
-
             if (data == 'success') {
                 $('#modal-alert').val("");
                 $('#addWordModal').hide();
                 $('.modal-backdrop').remove();
-                // $('body').removeClass("modal-open");
-
             }
-            if (data == 'exists') {
-                $('#modal-alert').html("Word already exists!");
+            else if (data == 'exists') {
+                $('#modal-alert').html("Word exists!");
+            }
+            else if (data == 'adding_denied') {
+                $('#modal-alert').html("Access denied!");
             }
         });
-
     }
 }
-
 function fieldCheck(fieldId, value){
     if(isFieldEmpty(value)) {
         if (!$("#"+fieldId).hasClass("is-invalid")){
@@ -48,18 +47,15 @@ function fieldCheck(fieldId, value){
     }
 
 }
-
 function isFieldEmpty(value) {
     value = value.replace(/\s/g,'');
     if (value == "") return true;
     return false;
 }
-
 function fillModalHb(value) {
     $("#wordHb").val(value);
     fillDictionaryTable("", "", "", "", value);
 }
-
 function infinitiveToggle() {
     var wordType = $("#wordType option:selected").val();
     if (wordType == "verb") {
@@ -70,57 +66,47 @@ function infinitiveToggle() {
     }
 
 }
-
 function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null){
     if(word == null) word = $('#searchWord').val();
     $.post( '/getdictionarytable', {rating: rating, checked: checked, wordType: wordType, rowsCount: rowsCount, word: word}, function(data) {
         JSdataCurrentDictionary = JSON.parse(data);
+        var html = fillTableHead()
+                   .then(response => document.getElementById("dictionary-table").innerHTML = response+fillTableBody()+"</tbody></table></div>");
 
-        var html = fillTableHead();
-
-        html+= fillTableBody();
-
-    html+='</tbody></table></div>';
-
-    if (JSdataCurrentDictionary == "") {
-        html = '<div class="row" style="margin-top:25px;">\n' +
-            '  <div class="col-sm-4"></div>\n' +
-            '  <div class="col-sm-4"><div class="card" style="max-width: 500px;">\n' +
-            '  <h5 class="card-header">Warning</h5>\n' +
-            '  <div class="card-body">\n' +
-            '    <h5 class="card-title">There is no such word in dictionary</h5>\n' +
-            '    <p class="card-text">There is no word <span class="badge badge-warning">' +word +'</span> in' +
-            ' dictionary.' +
-            ' You' +
-            ' can' +
-            ' add' +
-            ' it!</p>\n' +
-            '    <button id="addbtn" class="btn btn-outline-primary" type="button" data-toggle="modal"\n' +
-            '                    data-target="#addWordModal">Add</button>' +
-            '  </div>\n' +
-            '</div></div>\n' +
-            '  <div class="col-sm-4"></div>\n' +
-            '</div>';
+        if (JSdataCurrentDictionary == "") {
+            html = '<div class="row" style="margin-top:25px;">\n' +
+                '  <div class="col-sm-4"></div>\n' +
+                '  <div class="col-sm-4"><div class="card" style="max-width: 500px;">\n' +
+                '  <h5 class="card-header">Warning</h5>\n' +
+                '  <div class="card-body">\n' +
+                '    <h5 class="card-title">There is no such word in dictionary</h5>\n' +
+                '    <p class="card-text">There is no word <span class="badge badge-warning">' +word +'</span> in' +
+                ' dictionary.' +
+                ' You' +
+                ' can' +
+                ' add' +
+                ' it!</p>\n' +
+                '    <button id="addbtn" class="btn btn-outline-primary" type="button" data-toggle="modal"\n' +
+                '                    data-target="#addWordModal">Add</button>' +
+                '  </div>\n' +
+                '</div></div>\n' +
+                '  <div class="col-sm-4"></div>\n' +
+                '</div>';
     }
-    $("#dictionary-table").html(html);
     getFilterSettings();
 });
 }
-
 function getFilterSettings(){
     $.post( '/getfiltersettings', {}, function(data) {
         $('#filterSetting').html(data);
     });
 }
-
 fillDictionaryTable("", "", "", 100);
-
 function checkWord(wordID, checked) {
     $.post( '/checkWord', { wordID, checked }, function(data) {
         console.log(data);
     });
 }
-
 function setWordType(typeCode) {
     if(typeCode == "verb") return "Verb";
     if(typeCode == "noun") return "Noun";
@@ -128,7 +114,6 @@ function setWordType(typeCode) {
     if(typeCode == "frss") return "Frase";
     if(typeCode == "other") return "Other";
 }
-
 function startLearn() {
     if($("#startStop").hasClass("btn-success")){
         $("#startStop").removeClass("btn-success");
@@ -153,12 +138,11 @@ function startLearn() {
         $("#wordtype").attr("disabled", false);
         $("#wordcheck").attr("disabled", false);
         $("#wordstatus").attr("disabled", false);
-        var htmlTable = fillTableHead();
-        htmlTable += fillTableBody();
+        var htmlTable = fillTableHead()
+                   .then(response => document.getElementById("dictionary-table").innerHTML = response+fillTableBody()+"</tbody></table></div>");
         $("#dictionary-table").html(htmlTable);
     }
 }
-
 function sortBy(field, order, elem){
     $( ".arrows" ).each(function(  ) {
         $(this).removeClass("text-success")
@@ -176,7 +160,6 @@ function sortBy(field, order, elem){
     var html = fillTableBody();
     $("#dictionary-table tbody").html(html);
 }
-
 function fillTableBody() {
     var rowsLength = JSdataCurrentDictionary.length;
     var row, html = "";
@@ -213,14 +196,21 @@ function fillTableBody() {
     }
     return html;
 }
-
 function fillTableHead() {
-    var ratingTh = "";
-    if (JSdataCurrentDictionary[0].raiting_sum != "null") {
+
+    return new Promise(function(resolve, reject) {
+    
+        $.post( '/gettablehead', {}, function(data) {
+            resolve(data);
+        });
+
+    });
+    /*var ratingTh = "";
+    if (getCookie("userid") != "" && getCookie("userid") != "null") {
         ratingTh = `<th scope="col"  style="white-space:nowrap;" class="text-center">Rating
-								<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows"><strong>&#8593;</strong></span>
-					      		<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)"  class="arrows"><strong>&#8595;<strong></span>
-							</th>`;
+						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows"><strong>&#8593;</strong></span>
+						<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)"  class="arrows"><strong>&#8595;<strong></span>
+					</th>`;
     }
 
     var html = `<div class="col-sm-12"><table id="dictionary-table" class="table table-striped"> 
@@ -253,9 +243,8 @@ function fillTableHead() {
 					  </thead>
 					<tbody>`;
 
-    return html;
+    return html;*/
 }
-
 function getCardPlayType(cardType=null) {
 	var htmlCard = `
 		<div id="play-stat" class="col-sm-4 text-center"></div>
@@ -263,6 +252,26 @@ function getCardPlayType(cardType=null) {
         	<div class="card border-success mb-3" style="max-width: 25rem;">
                 <div class="card-header">Choose play type</div>
                 <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>Order of the game.</strong></p>
+                            <div class="form-check">
+                              <input id="radio-straight-game" class="form-check-input" type="radio" name="radio-game-type" value="straight-game" checked>
+                              <label class="form-check-label" for="radio-straight-game">
+                                Straight
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input id="radio-random-game" class="form-check-input" type="radio" 
+                              name="radio-game-type" 
+                              value="random-game">
+                              <label class="form-check-label" for="radio-random-game">
+                                Random
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
                     <button style="width:100%;" onclick="cardPlayStart()" type="button" class="btn btn-outline-success">Cards</button>
                 </div>
             </div>
@@ -270,18 +279,19 @@ function getCardPlayType(cardType=null) {
 		<div class="col-sm-4"></div>`;
 	return htmlCard;
 }
-
 function cardPlayStart(){
-    var html = `
-        <div class="card-header">Choose language witch will show first</div>
-        <div class="card-body">
-            <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" class="btn btn-block btn-outline-success">Hebrew</button>
-            <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" class="btn btn-block btn-outline-success">English</button>
-        </div>`;
-    $("#dictionary-table .card").html(html);
+    gameType = $("input[name=radio-game-type]:checked").val();
+        var html = `
+            <div class="card-header">Choose language witch will show first</div>
+            <div class="card-body">
+                <button style="width:100%;" onclick="getFirstWordCardPlay(true)" type="button" 
+                class="btn btn-block btn-outline-success">Hebrew</button>
+                <button style="width:100%;" onclick="getFirstWordCardPlay(false)" type="button" 
+                class="btn btn-block btn-outline-success">English</button>
+            </div>`;
+        $("#dictionary-table .card").html(html);
 }
-
-function getFirstWordCardPlay(hebrew) {
+function getFirstWordCardPlay(lang, gameType) {
     if(JSdataCurrentPlay = JSdataCurrentDictionary){
         var stat = `
             <p>
@@ -294,16 +304,13 @@ function getFirstWordCardPlay(hebrew) {
                 <span id="corr-word" class="text-success">0</span>/<span id="wrong-word" class="text-danger">0</span>
             </p>`;
         $("#play-stat").html(stat);
-        getNextCardPlay(hebrew);
+        getNextCardPlay(lang);
     }
 }
-
-function getNextCardPlay(hebrew, hit = null, wordId = null) {
+function getNextCardPlay(lang, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
         $.post('/setwordstat', {hit:hit, wordId:wordId}, function (data) {});
     }
-
-
     var current = $("#cur-word").html();
     current = parseInt(current);
     $("#cur-word").html(++current);
@@ -320,9 +327,14 @@ function getNextCardPlay(hebrew, hit = null, wordId = null) {
     }
 
     if (JSdataCurrentPlay.length > 0) {
-        var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
+        if (gameType == 'straight-game') {
+            var index = 0;
+        }
+        if (gameType == 'random-game') {
+            var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
+        }
         var currentCard = JSdataCurrentPlay[index];
-        if (hebrew) {
+        if (lang) {
             var firstWord = currentCard.dictionary_word_he;
             if (currentCard.dictionary_word_inf != "")
                 firstWord = currentCard.dictionary_word_inf + ") " + currentCard.dictionary_word_he + ")";
@@ -336,17 +348,17 @@ function getNextCardPlay(hebrew, hit = null, wordId = null) {
             if (currentCard.dictionary_word_inf != "")
                 secondWord = currentCard.dictionary_word_inf + ") " + secondWord + ")";
             if (currentCard.dictionary_word_tr != "")
-                secondWord = `${firstWord}<small class="text-muted">${currentCard.dictionary_word_tr}</small>`;
+                secondWord = `${secondWord} ${currentCard.dictionary_word_tr}`;
         }
         var html = `
             <div class="card-body text-center">
                 ${firstWord}<br><br>
                 <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">See translate</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${hebrew}, false, '${currentCard.dictionary_id}')" 
+                <button onclick="getNextCardPlay(${lang}, false, '${currentCard.dictionary_id}')" 
                 type="button" 
                 class="btn btn-outline-danger">Wrong</button>
-                <button onclick="getNextCardPlay(${hebrew}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">Correct</button>
+                <button onclick="getNextCardPlay(${lang}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">Correct</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {
@@ -355,10 +367,23 @@ function getNextCardPlay(hebrew, hit = null, wordId = null) {
     $("#dictionary-table .card").html(html);
 
 }
-
 function changeContent(t, content) {
     $(t).html(content);
 }
-
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 

@@ -1,0 +1,55 @@
+<div class="col-sm-12">
+	<table id="dictionary-table" class="table table-striped"> 
+	 	<thead> 
+			<tr> 
+			    <th scope="col"></th> 
+			    <th  style="white-space:nowrap;" scope="col"><%= strings.learning_he %> 
+			      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_he', true, this)" 
+				      	class="arrows">
+				      	<strong>&#8593;</strong>
+				    </span>
+			      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_he', false, this)"  class="arrows">
+			      		<strong>&#8595;<strong>
+			      	</span>
+				</th> 
+				<th style="white-space:nowrap;" scope="col"><%= strings.learning_native_lang %> 
+					<span style="cursor: pointer;" onclick="sortBy('dictionary_word_en', true, this)" 
+						class="arrows">
+						<strong>&#8593;</strong>
+					</span>
+				  	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_en', false, this)"  class="arrows">
+				  		<strong>&#8595;<strong>
+				  	</span>
+				</th> 
+				<th style="white-space:nowrap;" scope="col"><%= strings.learning_transctiption %> 
+					<span style="cursor: pointer;" onclick="sortBy('dictionary_word_tr', true, this)" 
+						class="arrows">
+						<strong>&#8593;</strong>
+					</span>
+				    <span style="cursor: pointer;" onclick="sortBy('dictionary_word_tr', false, this)" 
+				      	class="arrows">
+				      	<strong>&#8595;<strong>
+				     </span>
+				</th> 
+				<th style="white-space:nowrap;" scope="col" style="white-space:nowrap;"><%= strings.learning_filter_types %>
+					<span style="cursor: pointer;" onclick="sortBy('dictionary_word_type', true, this)" 
+						class="arrows">
+						<strong>&#8593;</strong>
+					</span>
+				    <span style="cursor: pointer;" onclick="sortBy('dictionary_word_type', false, this)" class="arrows">
+					    <strong>&#8595;<strong>
+					</span>
+				</th> 
+				<% if (userid != null) { %>
+				<th scope="col"  style="white-space:nowrap;" class="text-center"><%= strings.learning_filter_rating %>
+					<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows">
+						<strong>&#8593;</strong>
+					</span>
+					<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)"  class="arrows">
+						<strong>&#8595;<strong>
+					</span>
+				</th>
+				<% } %>
+			</tr> 
+		</thead>
+	<tbody>
