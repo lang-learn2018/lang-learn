@@ -179,7 +179,7 @@ exports.setCheckWord = function(req, word_id, user_check) {
   db.query(sql, function (err, result) {
     if (err) throw err;
     if (result[0].n == 1) {
-      var sql = `SELECT COUNT(*) AS n FROM raiting WHERE raiting_word_id = ${mysql.escape(word_id)} AND raiting_user_id = ${req.session.user.id}`;
+      var sql = `SELECT COUNT(*) AS n FROM raiting WHERE raiting_word_id = ${mysql.escape(word_id)} AND raiting_user_id = '${req.session.user.id}'`;
       db.query(sql, function (err, result) {
         if (err) throw err;
         if (result[0].n == 0) {
@@ -189,13 +189,13 @@ exports.setCheckWord = function(req, word_id, user_check) {
                         raiting_user_check)
                       VALUES (
                         ${mysql.escape(word_id)},
-                        ${req.session.user.id} ,
+                        '${req.session.user.id}' ,
                         ${mysql.escape(user_check)})`;
         } else {
           var sql = ` UPDATE raiting
                       SET raiting_user_check = ${mysql.escape(user_check)}
                       WHERE raiting_word_id = ${mysql.escape(word_id)} AND
-                        raiting_user_id = ${req.session.user.id}`;
+                        raiting_user_id = '${req.session.user.id}'`;
         }
         db.query(sql, function (err, result) {
           if (err) throw err;
