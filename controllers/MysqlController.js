@@ -8,6 +8,7 @@ var Support = require('./Support');
 const translate = require('translate');
 translate.engine = 'yandex';
 translate.key = config.YANDEX_API_KEY;
+var passwordHash = require('password-hash');
 var Sync = require('sync');
 
 createConnection = function() {
@@ -31,8 +32,8 @@ createConnection = function() {
  */
  exports.authenticate = function(req, res) {
   var db = createConnection();
-  var sql = `SELECT * FROM users WHERE users_login = '${req.body.login}'
-  AND users_password = '${req.body.password}'`;
+
+  var sql = `SELECT * FROM users WHERE users_login = '${req.body.login}'`;
   db.query(sql, function (err, rows) {
     if (err) throw err;
     if (rows == 0) {
@@ -41,18 +42,25 @@ createConnection = function() {
       res.end();
       req.session = {};
     } else {
-      var user = {
-        "login" : rows[0].users_login,
-        "name" : rows[0].users_name,
-        "id" : rows[0].users_id
+      if(passwordHash.verify(req.body.password, rows[0].users_password)){
+        var user = {
+          "login" : rows[0].users_login,
+          "name" : rows[0].users_name,
+          "id" : rows[0].users_id
+        }
+        console.log(`User:${user.login}, id:${user.id} authorized`);
+        SessionController.createUserSession(req, user);
+        res.cookie('login', user.login);
+        res.cookie('userid', user.id);
+        res.cookie('username', user.name);
+        res.redirect("/login");
+      } else {
+        res.writeHead(200, {'Content-Type' : 'text/html'});
+        res.write("Error! Incorrect login and/or password. <a href='auth'>Try again</a>");
+        res.end();
+        req.session = {};
       }
-      req.session.user = user;
-      req.session.expires = new Date(Date.now() + 36000000*5);
-      res.cookie('login', user.login);
-      res.cookie('userid', user.id);
-      res.cookie('username', user.name);
-      res.redirect("/login");
-
+      
     }
   });
   db.end();
@@ -87,18 +95,20 @@ exports.getDictionaryTable = function(req, res, word) {
                             dictionary.dictionary_word_type,
                             tRating.raiting_id,
                             IFNULL(tRating.raiting_word_id, '0') AS raiting_word_id,
-                            IFNULL(tRating.raiting_user_id, ${user.id})  AS raiting_user_id,
+                            IFNULL(tRating.raiting_user_id, '${user.id}')  AS raiting_user_id,
                             ${sqlCheckWord},
                             ${sqlRatingSum},
                             IFNULL(tRating.raiting_hit, '0') AS raiting_hit,
                             IFNULL(tRating.raiting_miss, '0') AS raiting_miss,
-                            IFNULL(tRating.raiting_hit, '0') - IFNULL(tRating.raiting_miss, '0') AS raiting_diff
+                            IFNULL(tRating.raiting_hit, '0') - IFNULL(tRating.raiting_miss, '0') AS raiting_diff,
+                            dictionary.dictionary_user_id
                     FROM  dictionary
                       LEFT JOIN ( SELECT *
                                   FROM  raiting
-                                  WHERE raiting_user_id = ${user.id}) AS tRating
+                                  WHERE raiting_user_id = '${user.id}') AS tRating
                       ON dictionary.dictionary_id = tRating.raiting_word_id) AS dictionary
-              WHERE 1=1 ${req.session.wordtypesfilter.where} ${req.session.ratingsfilter.where} ${req.session.wordcheckfilter.where} ${wordfilter}`;
+              WHERE 1=1 ${req.session.wordtypesfilter.where} ${req.session.ratingsfilter.where} ${req.session.wordcheckfilter.where} ${wordfilter} ${req.session.dictfilter.where}`;
+  console.log(sql);
   db.query(sql, function (err, result) {
     if (err) throw err;
     if(lg != "en") {
@@ -118,47 +128,50 @@ exports.getDictionaryTable = function(req, res, word) {
   });
 }
 exports.createUser = function (req, res) {
-  var db = createConnection();
-  var result = `<div class="alert alert-danger" role="alert">
-                  ${res.locals.strings.reg_result_bad}
-                </div>`;
-  var sql = ` SELECT * FROM users
-              WHERE users_login = '${req.body.login}' AND users_password = '${req.body.password}'`;
-  db.query(sql, function (err, rows) {
-    if (err) throw err;
-    if (rows.length == 0) {
-      var dbadd = createConnection();
-      var status  = Support.generateRamdomCharacters(8);
-      var sql = `INSERT INTO users
-                    (users_name,
-                    users_login,
-                    users_email,
-                    users_password,
-                    users_status)
-                VALUES
-                    (${mysql.escape(req.body.name)},
-                    ${mysql.escape(req.body.login)},
-                    ${mysql.escape(req.body.email)},
-                    ${mysql.escape(req.body.password)},
-                    ${mysql.escape(status)})`;
-      dbadd.query(sql, function (err, result) {
-        if (err) throw err;
-        var linkForActivate = `${res.locals.config.host}:${res.locals.config.port}/activate&id=${status}`;
-        Support.sendEmail(res, req.body.email, res.locals.strings.email_registration_sbj, res.locals.strings.email_registration_txt+`<a href='${linkForActivate}'>${linkForActivate}</a>`);
-        result = `<div class="alert alert-success" role="alert">
-                    ${res.locals.strings.reg_result_good}
+  return new Promise(function(resolve, reject) {
+    var db = createConnection();
+    var result = `<div class="alert alert-danger" role="alert">
+                    ${res.locals.strings.reg_result_bad}
                   </div>`;
-        return result;
-      });
-      dbadd.end();
-    } else {
-      result = `<div class="alert alert-warning" role="alert">
-                  ${res.locals.strings.reg_result_exist}
-                </div>`;
-      return result;
-    }
+    var sql = ` SELECT * FROM users
+                WHERE users_login = '${req.body.login}' AND users_password = '${req.body.password}'`;
+    db.query(sql, function (err, rows) {
+      if (err) throw err;
+      if (rows.length == 0) {
+        var dbadd = createConnection();
+        var status  = Support.generateRamdomCharacters(8);
+        var hashedPassword = passwordHash.generate(req.body.password);
+        var sql = `INSERT INTO users
+                      (users_name,
+                      users_login,
+                      users_email,
+                      users_password,
+                      users_status)
+                  VALUES
+                      (${mysql.escape(req.body.name)},
+                      ${mysql.escape(req.body.login)},
+                      ${mysql.escape(req.body.email)},
+                      '${hashedPassword}',
+                      ${mysql.escape(status)})`;
+        dbadd.query(sql, function (err, result) {
+          if (err) throw err;
+          var linkForActivate = `${res.locals.config.host}:${res.locals.config.port}/activate&id=${status}`;
+          Support.sendEmail(res, req.body.email, res.locals.strings.email_registration_sbj, `${res.locals.strings.email_registration_txt}<a href="${linkForActivate}">${linkForActivate}</a>`);
+          result = `<div class="alert alert-success" role="alert">
+                      ${res.locals.strings.reg_result_good}
+                    </div>`;
+          resolve(result);
+        });
+        dbadd.end();
+      } else {
+        result = `<div class="alert alert-warning" role="alert">
+                    ${res.locals.strings.reg_result_exist}
+                  </div>`;
+        resolve(result);
+      }
+    });
+    db.end();
   });
-  db.end();
 };
 exports.setCheckWord = function(req, word_id, user_check) {
   var sql = `SELECT COUNT(*) AS n FROM dictionary WHERE dictionary_id = ${mysql.escape(word_id)}`;
@@ -205,10 +218,23 @@ var isWordNotInDb = (word) => {
     });
   });
 }
-var setWordToDb = (word_he, word_inf, word_en, word_tr, word_type, user_id) => {
+var setWordToDb = (word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id) => {
   return new Promise((resolve, reject) => {
     var db = createConnection();
-    sql = `INSERT INTO dictionary (dictionary_word_he, dictionary_word_inf, dictionary_word_en, dictionary_word_tr, dictionary_word_type, dictionary_user_id) VALUES (${mysql.escape(word_he)}, ${mysql.escape(word_inf)}, ${mysql.escape(word_en)}, ${mysql.escape(word_tr)}, ${mysql.escape(word_type)}, ${mysql.escape(user_id)})`;
+    sql = `INSERT INTO dictionary (
+              dictionary_word_he, 
+              dictionary_word_inf, 
+              dictionary_word_${word_lang}, 
+              dictionary_word_tr, 
+              dictionary_word_type, 
+              dictionary_user_id) 
+          VALUES (
+              ${mysql.escape(word_he)}, 
+              ${mysql.escape(word_inf)}, 
+              ${mysql.escape(word_translate)}, 
+              ${mysql.escape(word_tr)}, 
+              ${mysql.escape(word_type)}, 
+              ${mysql.escape(user_id)})`;
     db.query(sql, function (err, result) {
       if (err) throw err;
       db.end();
@@ -216,7 +242,7 @@ var setWordToDb = (word_he, word_inf, word_en, word_tr, word_type, user_id) => {
     resolve(true);
   });
 }
-exports.setWordDictionaryTable = function(word_he, word_inf, word_en, word_tr, word_type, user_id) {
+exports.setWordDictionaryTable = function(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id) {
   return new Promise((resolve, reject) => {
     var msg = "error";
       if (user_id == null) {
@@ -226,7 +252,7 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_en, word_tr, w
         isWordNotInDb(word_he).then(res => {
           if (!res) {
             msg = "success";
-            setWordToDb(word_he, word_inf, word_en, word_tr, word_type, user_id);
+            setWordToDb(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id);
           } else {
             msg = "exists";
           }

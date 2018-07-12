@@ -10,7 +10,7 @@ function saveWord() {
     var wordInf = $("#wordInf").val();
     fieldCheck("wordInf", wordInf);
     if(fieldCheck("wordHb", wordHb) & fieldCheck("wordEn", wordEn) & fieldCheck("wordType", wordType) & (wordType == "verb" ^ wordInf == "")){
-        var parameters = {word_he: wordHb, word_inf: wordInf, word_en: wordEn, word_tr: wordTr, word_type: wordType};
+        var parameters = {word_he: wordHb, word_inf: wordInf, word_translate: wordTr, word_lang: "en", word_tr: wordTr, word_type: wordType};
         $.post( '/saveword', parameters, function(data) {
             $("#wordHb").val("");
             $("#wordEn").val("");
@@ -91,9 +91,9 @@ function fillDictionaryTable(rating, checked, wordType, rowsCount=100, word=null
                 '</div></div>\n' +
                 '  <div class="col-sm-4"></div>\n' +
                 '</div>';
-    }
-    getFilterSettings();
-});
+        }
+        getFilterSettings();
+    });
 }
 function getFilterSettings(){
     $.post( '/getfiltersettings', {}, function(data) {
@@ -101,18 +101,7 @@ function getFilterSettings(){
     });
 }
 fillDictionaryTable("", "", "", 100);
-function checkWord(wordID, checked) {
-    $.post( '/checkWord', { wordID, checked }, function(data) {
-        console.log(data);
-    });
-}
-function setWordType(typeCode) {
-    if(typeCode == "verb") return "Verb";
-    if(typeCode == "noun") return "Noun";
-    if(typeCode == "adj") return "Adjective";
-    if(typeCode == "frss") return "Frase";
-    if(typeCode == "other") return "Other";
-}
+
 function startLearn() {
     if($("#startStop").hasClass("btn-success")){
         $("#startStop").removeClass("btn-success");
@@ -143,23 +132,7 @@ function startLearn() {
         $("#dictionary-table").html(htmlTable);
     }
 }
-function sortBy(field, order, elem){
-    $( ".arrows" ).each(function(  ) {
-        $(this).removeClass("text-success")
-    });
-    $(elem).addClass("text-success");
-    if (order) {
-        JSdataCurrentDictionary.sort(function (a, b) {
-            return b[field] > a[field] ? -1 : 1;
-        });
-    } else {
-        JSdataCurrentDictionary.sort(function (a, b) {
-            return b[field] < a[field] ? -1 : 1;
-        });
-    }
-    var html = fillTableBody();
-    $("#dictionary-table tbody").html(html);
-}
+
 function fillTableBody() {
     var rowsLength = JSdataCurrentDictionary.length;
     var row, html = "";
@@ -196,6 +169,7 @@ function fillTableBody() {
     }
     return html;
 }
+
 function fillTableHead() {
 
     return new Promise(function(resolve, reject) {
@@ -308,18 +282,4 @@ function getNextCardPlay(lang, strings, hit = null, wordId = null) {
 function changeContent(t, content) {
     $(t).html(content);
 }
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
+

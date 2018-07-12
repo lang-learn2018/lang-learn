@@ -79,6 +79,11 @@
 	{"id":"play_first_lang","en":"Choose language witch will show first","ru":"Выберите язык лицевой стороны карточки"},
 
 	{"id":"filter_setting",			"en":"Words Filter Settings","ru":"Настройки фильтра слов"},
+	{"id":"filter_common",			"en":"Common dictionary",	"ru":"Общий словарь"},
+	{"id":"filter_custom",			"en":"Customs dictionary",	"ru":"Пользовательские словари"},
+	{"id":"filter_dictionaries",	"en":"Dictionaries",		"ru":"Словари"},
+
+	{"id":"user_id",				"en":"ID",				"ru":"ID"},
 
 	{"id": "perm_word_guest_add",   "en": "You don't have permission to add words!", "ru": "У вас нет прав на добавление слов!"},
 	{"id": "word_exists", 			"en": "This word already exists!", "ru": "Такое слово уже существует!"}

@@ -30,6 +30,7 @@ app.use(function(req, res, next) {
     res.locals.path = req.path;
     res.locals.config = config;
     res.locals.strings = userLangStrings;
+    SessionController.getUserLang(req, res);
     next();
 });
 router(app);

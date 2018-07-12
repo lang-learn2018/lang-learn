@@ -40,7 +40,7 @@
 					    <strong>&#8595;<strong>
 					</span>
 				</th> 
-				<% if (userid != null) { %>
+				<% if (userid != null && userid != "admin") { %>
 				<th scope="col"  style="white-space:nowrap;" class="text-center"><%= strings.learning_filter_rating %>
 					<span style="cursor: pointer;" onclick="sortBy('raiting_sum', false, this)" class="arrows">
 						<strong>&#8593;</strong>
@@ -49,6 +49,21 @@
 						<strong>&#8595;<strong>
 					</span>
 				</th>
+				<% } %>
+				<% if (userid == "admin") { %>
+					<th scope="col"  style="white-space:nowrap;" class="text-center"><%= strings.user_id %>
+						<span style="cursor: pointer;" onclick="sortBy('user_id', false, this)" class="arrows">
+							<strong>&#8593;</strong>
+						</span>
+						<span style="cursor: pointer;" onclick="sortBy('user_id', false, this)"  class="arrows">
+							<strong>&#8595;<strong>
+						</span>
+					</th>
+					<th>
+						<button type="button" class="btn btn-outline-success btn-sm">
+							New word
+						</button>
+					</th>
 				<% } %>
 			</tr> 
 		</thead>

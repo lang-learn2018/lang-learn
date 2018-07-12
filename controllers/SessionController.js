@@ -58,6 +58,7 @@ exports.getUserLang = function (req, res) {
     return req.session.language;
 }
 
+exports.createUserSession = createUserSession;
 exports.setUserLang = setUserLang;
 exports.getUser = getUser;
 // {

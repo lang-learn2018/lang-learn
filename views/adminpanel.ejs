@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script defer src="assets/js/main.js"></script>
+    <% include headers/header %>
+    <% include headers/styles %>
+    <% include headers/scripts %>
+    <title>Admin Panel</title>
+  </head>
+  <body>
+    <% if (userid == "admin") { %>
+      <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= strings.main_menu_language %> </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="setLanguage('en')" href="#"><%= strings.main_menu_en_lang %></a>
+            <a class="dropdown-item" onclick="setLanguage('ru')" href="#"><%= strings.main_menu_ru_lang %></a>
+          </div>
+        </div>
+
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= strings.learning_filter_types %> </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', 'all', '')" href="#">  <%= strings.learning_all %>
+            </a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', 'verb', '')" href="#">  <%= strings.learning_verbs %>
+            </a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', 'noun', '')" href="#">  <%= strings.learning_nouns %>
+            </a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', 'adj', '')" href="#">
+              <%= strings.dropdown %>
+            </a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', 'frss', '')" href="#">
+              <%= strings.learning_frases %>
+            </a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', 'other', '')" href="#">
+              <%= strings.learning_other %>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= strings.filter_dictionaries %> </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', '', 'all')" href="#"><%= strings.learning_all %></a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', '', 'common')" href="#"><%= strings.filter_common %></a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', '', '', 'custom')" href="#"><%= strings.filter_custom %></a>
+          </div>
+        </div>
+
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= strings.learning_checked %> </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="fillDictionaryTable('', 'all', '', '')" href="#"><%= strings.learning_all %></a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', 'checked', '', '')" href="#"><%= strings.learning_checked %></a>
+            <a class="dropdown-item" onclick="fillDictionaryTable('', 'not checked', '', '')" href="#"><%= strings.learning_not_checked %></a>
+          </div>
+        </div>
+
+        <div class="form-inline">
+          <input class="form-control mr-sm-2 input-sm" id="searchWord" type="search" placeholder="<%= strings.learning_search_input %>" aria-label="Search" onkeyup="fillDictionaryTable('','','','',this.value)">
+        </div>
+      </nav>
+
+      <div id="filterSetting" class="alert-light"></div>
+      
+      <div class="row" id="dictionary-table" style="margin-top:25px;"></div>
+
+      <script defer src="assets/js/dictionary-admin.js"></script>
+    <% } else { %>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <form method="post" action="#">
+          <div class="form-group">
+            <label for="login">Login</label>
+            <input type="text" class="form-control" id="login" name="login">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+    <% } %>
+  </body>
+</html>

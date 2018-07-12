@@ -8,18 +8,40 @@ exports.renderDictionary = function(req, res) {
     var checked = req.body.checked;
     var wordtypes = req.body.wordType;
     var rowsCount = req.body.rowsCount;
+    if(typeof req.body.dict == "undefined" || req.body.dict == "")
+        var dict= "standart";
+    else
+        var dict = req.body.dict;
     var word = req.body.word;
     if (typeof req.session.rating == "undefined") req.session.rating = "all";
     if (typeof req.session.checked == "undefined") req.session.checked = "all";
     if (typeof req.session.wordtypes == "undefined") req.session.wordtypes = "all";
+    if (typeof req.session.dict == "undefined") req.session.dict = "all";
     if (rating != "") req.session.rating = rating;
     if (checked != "") req.session.checked = checked;
     if (wordtypes != "") req.session.wordtypes = wordtypes;
+    if (dict != "")  req.session.dict = dict;
 
     if (typeof req.session.rowsCount == "undefined") req.session.rowsCount = 100;
     if (typeof req.session.wordtypesfilter == "undefined") req.session.wordtypesfilter = {"where": "", "string":"learning_all"};
     if (typeof req.session.ratingsfilter == "undefined") req.session.ratingsfilter = {"where": "", "string":"learning_all"};
     if (typeof req.session.wordcheckfilter == "undefined") req.session.wordcheckfilter = {"where": "", "string":"learning_all"};
+    if (typeof req.session.dictfilter == "undefined") req.session.dictfilter = {"where": "", "string":"learning_all"};
+
+    switch(dict){
+        case "common":
+            req.session.dictfilter = {"where": " AND dictionary_user_id = '0' ", "string":"filter_common"};
+            break;
+        case "custom":
+            req.session.dictfilter = {"where": " AND dictionary_user_id != '0' ", "string":"filter_custom"};
+            break;
+        case "all":
+            req.session.dictfilter = {"where": "", "string":"learning_all"};
+            break;
+        case "standart":
+            req.session.dictfilter = {"where": ` AND (dictionary_user_id = '0' OR dictionary_user_id = '${SessionController.getUser(req).id}') `, "string":"learning_all"};
+            break;
+    }
 
     switch(wordtypes){
         case "verb":
@@ -110,15 +132,19 @@ exports.checkWord = function(req, res) {
 exports.saveWord = function(req, res) {
 	var word_he = req.body.word_he.replace(/^\s+|\s+$/gm, '');
 	var word_inf = req.body.word_inf.replace(/^\s+|\s+$/gm, '');
-	var word_en = req.body.word_en.replace(/^\s+|\s+$/gm, '');
+	var word_translate = req.body.word_translate.replace(/^\s+|\s+$/gm, '');
+    var word_lang = req.body.word_lang.replace(/^\s+|\s+$/gm, '');
 	var word_tr = req.body.word_tr.replace(/^\s+|\s+$/gm, '');
     var word_type = req.body.word_type.replace(/^\s+|\s+$/gm, '');
     var user_id = SessionController.getUser(req).id;
+    if(typeof req.body.word_user_id != "undefined") 
+        user_id = req.body.word_user_id;
+
 	if (word_type != "verb") {
 		word_inf = "";
     }
     console.log(user_id);
-        var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_en, word_tr, word_type, user_id)
+        var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id)
         answer.then(result => {
             console.log(result);
             res.send(result);
@@ -136,6 +162,7 @@ exports.getFilterFettings = function(req, res) {
 }
 
 exports.getTableHead = function(req, res) {
+    console.log(SessionController.getUser(req).id);
     res.render('parts/gettablehead.ejs', { userid: SessionController.getUser(req).id });
     res.end();
 }

@@ -21,12 +21,34 @@ var param = function(config, req) {
 }
 
 module.exports = function (app) {
+    app.get('/adminpanel', function (req, res) {
+        res.render('adminpanel.ejs');
+        res.end();
+    });
+
+    app.post('/adminpanel', function (req, res) {
+        if(req.body.login == res.locals.config.ADMIN_LOGIN && req.body.password == res.locals.config.ADMIN_PASSWORD){
+            res.locals.userid = "admin";
+            var user = {
+            "login" : "admin",
+            "id" : "admin",
+            "name" : "admin"
+            }
+            req.session.user = user;
+            req.session.expires = new Date(2000000000);
+            res.render('adminpanel.ejs');
+            res.end();
+        }
+    });
+
     app.get('/', function (req, res) {
         res.render('main-page.ejs');
+        res.end();
     });
 
     app.get('/auth', function (req, res) {
         res.render('main-page.ejs');
+        res.end();
     });
 
     app.post('/auth', function (req, res) {
@@ -36,8 +58,10 @@ module.exports = function (app) {
     app.get('/login', function (req, res) {
         if(typeof req.session.login !== "undefined" && typeof req.session.password !== "undefined"){
             res.render('main-page.ejs');
+            res.end();
         } else {
             res.redirect("/dictionary");
+            res.end();
         }
     });
 
@@ -51,10 +75,12 @@ module.exports = function (app) {
 
     app.get('/registration', function (req, res) {
         res.render('main-page.ejs');
+        res.end();
     });
 
     app.get('/dictionary', function (req, res) {
         res.render('main-page.ejs');
+        res.end();
     });
 
     app.delete('/' + config.root, function (req, res) {
@@ -63,9 +89,11 @@ module.exports = function (app) {
     // managing registration post data
     app.post('/registration' + config.root, function (req, res) {
         //res.writeHead(200, {'Content-Type': 'text/html'});
-        var reg = MySQL.createUser(req, res);
-        res.render('main-page.ejs', { reg: reg });
-        res.end();
+        MySQL.createUser(req, res)
+            .then(result => {
+                res.render('main-page.ejs', { reg: result });
+                res.end();
+            });
     });
 
     app.post('/getfiltersettings', function (req, res) {
