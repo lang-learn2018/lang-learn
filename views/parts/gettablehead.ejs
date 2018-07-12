@@ -12,6 +12,17 @@
 			      		<strong>&#8595;<strong>
 			      	</span>
 				</th> 
+				<% if (userid == "admin") { %>
+				<th  style="white-space:nowrap;" scope="col"><%= strings.learning_inf %> 
+			      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_he', true, this)" 
+				      	class="arrows">
+				      	<strong>&#8593;</strong>
+				    </span>
+			      	<span style="cursor: pointer;" onclick="sortBy('dictionary_word_he', false, this)"  class="arrows">
+			      		<strong>&#8595;<strong>
+			      	</span>
+				</th> 
+				<% } %>
 				<th style="white-space:nowrap;" scope="col"><%= strings.learning_native_lang %> 
 					<span style="cursor: pointer;" onclick="sortBy('dictionary_word_en', true, this)" 
 						class="arrows">

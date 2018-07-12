@@ -39,6 +39,7 @@
 	{"id":"learning_other",			"en":"Other",			"ru":"Прочее"	},
 	{"id":"learning_close",			"en":"Close",			"ru":"Закрыть"	},
 	{"id":"learning_save",			"en":"Save",			"ru":"Сохранить"},
+	{"id":"learning_inf",			"en":"Infinitive",		"ru":"Инфинитив"},
 
 	{"id":"filter_setting",			"en":"Filter settings",	"ru":"Настройки фильтра"},
 
