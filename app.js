@@ -9,6 +9,7 @@ var session = require('express-session');
 var ejs = require('ejs');
 var cookieParser = require('cookie-parser');
 var SessionController = require('./controllers/SessionController');
+// var bot = require('../TelegramController.js');
 
 var app = express();
 app.set('view-engine', 'ejs');

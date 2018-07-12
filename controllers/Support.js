@@ -1,3 +1,17 @@
+var config = require('../config.json');
+
+// const TelegramBot = require("node-telegram-bot-api");
+// const bot = new TelegramBot(config.TELEGRAM_TOKEN, {polling: true});
+// exports.bot = bot;
+/*bot.on('message', function(msg){
+    console.log(JSON.strigify(msg));
+});*/
+
+// bot.on('callback_query', function(msg){
+//     console.log(JSON.stringify(msg));
+//     bot.answerCallbackQuery(msg.id, "You hit button!", false);
+// });
+
 exports.getCurrDateFormatted = function () {
     var date = new Date();
     var year = date.getFullYear();

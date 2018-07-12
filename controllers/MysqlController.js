@@ -10,6 +10,7 @@ translate.engine = 'yandex';
 translate.key = config.YANDEX_API_KEY;
 var passwordHash = require('password-hash');
 var Sync = require('sync');
+var Telegram = require('./TelegramController.js');
 
 createConnection = function() {
 	var con = mysql.createConnection({
@@ -237,6 +238,18 @@ var setWordToDb = (word_he, word_inf, word_translate, word_lang, word_tr, word_t
               ${mysql.escape(user_id)})`;
     db.query(sql, function (err, result) {
       if (err) throw err;
+      var botMessage = `User # ${user_id} added new word into dictionary:
+        hebrew: ${word_he} ${word_inf} ${word_tr} (${word_type})
+        translate: ${word_translate}
+        Do you want to accept this word (send into common dictionary) or delete this word?`;
+      Telegram.bot.sendMessage(config.TELEGRAM_ADMIN_ID_1, botMessage, {
+        "reply_markup": {
+          "inline_keyboard": [
+                        [ {text: "Accept", callback_data: `accept:${result.insertId}`} ], 
+                        [ {text: "Delete", callback_data: `delete:${result.insertId}`} ]
+                      ]
+        }
+      });
       db.end();
     });
     resolve(true);
@@ -318,6 +331,34 @@ exports.setWordStat = function (req) {
         db.end();
     });
 };
+
+exports.approveWord = (wordId) => {
+  return new Promise(function(resolve, reject) {
+    var db = createConnection();
+    var sql = ` UPDATE dictionary
+    SET dictionary_user_id = '0'
+    WHERE dictionary_id = ${mysql.escape(wordId)}`;
+    console.log(sql);
+    db.query(sql, function (err, result) {
+      if (err) throw err;
+      db.end();
+      resolve(true);
+    });
+  });
+}
+
+exports.removeWord = (wordId) => {
+  return new Promise(function(resolve, reject) {  
+    var db = createConnection();
+      var sql = ` DELETE FROM dictionary
+                  WHERE dictionary_id = ${mysql.escape(wordId)}`;
+      db.query(sql, function (err, result) {
+        if (err) throw err;
+        db.end();
+        resolve(true);
+    });
+  });  
+}
 
 setTranslateWord = async function(word_id, word_en, lg) {
     const text = await translate(word_en, {to: lg} )
