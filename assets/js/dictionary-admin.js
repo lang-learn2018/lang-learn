@@ -24,7 +24,40 @@ function fillTableHead() {
 
 function fillTableBody() {
     var rowsLength = JSdataCurrentDictionary.length;
-    var row, html = "";
+    var row;
+    var html = `<tr id="new-word" style="display: none;">
+                    <td>
+                        
+                    </td>
+                    <td>
+                        <input class="word_he" value="">
+                    </td>
+                    <td>
+                        <input class="word_inf" value="">
+                    </td>
+                    <td>
+                        <input class="word_${getCookie("language")}" value="">
+                    </td>
+                    <td>
+                        <input class="word_tr" value="">
+                    </td>
+                    <td>
+                        <input class="word_type" value="">
+                    </td>
+                    <td>
+                        <input class="user_id" value="">
+                    </td>
+                    <td>
+                        <div class="btn-group" data-toggle="buttons">
+                        <button disable class="btn btn-danger btn-sm" onclick="deleteWord('new_word')">
+                            Delete
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="saveWord('new_word')">
+                            Save
+                        </button>
+                        </div>
+                    </td>
+                </tr>`;
 
     for (var i = 0; i < rowsLength; i++) {
         row = JSdataCurrentDictionary[i];
@@ -90,18 +123,17 @@ function deleteWord(id){
     }
 }
 
-function saveWord(id){
-    var word_he = $("#"+id+" .word_he").val();
-    var word_inf = $("#"+id+" .word_inf").val();
-    var word_translate = $("#"+id+" .word_"+getCookie('language')).val();
+function saveWord(){
+    var word_he = $("#new-word .word_he").val();
+    var word_inf = $("#new-word .word_inf").val();
+    var word_translate = $("#new-word .word_"+getCookie('language')).val();
     var word_lang = getCookie('language');
-    var word_transcription = $("#"+id+" .word_tr").val();
-    var word_type = $("#"+id+" .word_type").val();
-    var word_user_id = $("#"+id+" .user_id").val();
+    var word_transcription = $("#new-word .word_tr").val();
+    var word_type = $("#new-word .word_type").val();
+    var word_user_id = $("#new-word .user_id").val();
     var parameters = {word_he: word_he, word_inf: word_inf, word_translate: word_translate, word_lang: word_lang, word_tr: word_transcription, word_type: word_type, word_user_id: word_user_id};
-    
-    alert(JSON.stringify(parameters));
     $.post( '/saveword', parameters, function(data) {
+        alert("Dwdew");
         alert(data);
     });
 }
@@ -121,4 +153,8 @@ function updateWord(id){
         alert(data);
     });
 
+}
+
+function addWord(){
+    $("#new-word").css("display", "");
 }

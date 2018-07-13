@@ -144,12 +144,12 @@ exports.saveWord = function(req, res) {
 		word_inf = "";
     }
     console.log(user_id);
-        var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id)
-        answer.then(result => {
-            console.log(result);
-            res.send(result);
-            res.end();
-        });
+    var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id)
+    answer.then(result => {
+        console.log("Added new word id#: "+result);
+        res.send(result);
+        res.end();
+    });
 }
 
 exports.getFilterFettings = function(req, res) {

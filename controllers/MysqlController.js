@@ -237,6 +237,7 @@ var setWordToDb = (word_he, word_inf, word_translate, word_lang, word_tr, word_t
               ${mysql.escape(user_id)})`;
     db.query(sql, function (err, result) {
       if (err) throw err;
+      resolve(result.insertId);
       var botMessage = `User # ${user_id} added new word into dictionary:
         hebrew: ${word_he} ${word_inf} ${word_tr} (${word_type})
         translate: ${word_translate}
@@ -251,7 +252,6 @@ var setWordToDb = (word_he, word_inf, word_translate, word_lang, word_tr, word_t
       });
       db.end();
     });
-    resolve(true);
   });
 }
 exports.setWordDictionaryTable = function(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id) {
@@ -263,8 +263,7 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_translate, wor
       } else {
         isWordNotInDb(word_he).then(res => {
           if (!res) {
-            msg = "success";
-            setWordToDb(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id);
+            msg = setWordToDb(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id);
           } else {
             msg = "exists";
           }
