@@ -8,7 +8,7 @@ exports.renderDictionary = function(req, res) {
     var checked = req.body.checked;
     var wordtypes = req.body.wordType;
     var rowsCount = req.body.rowsCount;
-    if(typeof req.body.dict == "undefined" || req.body.dict == "")
+    if(typeof req.body.dict == "undefined" || SessionController.getUser(req).id != "admin")
         var dict= "standart";
     else
         var dict = req.body.dict;
@@ -157,7 +157,7 @@ exports.getFilterFettings = function(req, res) {
     if (typeof req.session.checked == "undefined") req.session.checked = "all";
     if (typeof req.session.wordtypes == "undefined") req.session.wordtypes = "all";
     
-	res.render('parts/filtersettings.ejs', { check: req.session.wordcheckfilter.string, rating: req.session.ratingsfilter.string, type: req.session.wordtypesfilter.string});
+	res.render('parts/filtersettings.ejs', { check: req.session.wordcheckfilter.string, rating: req.session.ratingsfilter.string, type: req.session.wordtypesfilter.string, dictionary: req.session.dictfilter.string});
     res.end();
 }
 

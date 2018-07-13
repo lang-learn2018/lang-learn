@@ -51,7 +51,7 @@ function fillTableBody() {
                         <input class="word_tr" value="${JSdataCurrentDictionary[i].dictionary_word_tr}">
                     </td>
 					<td>
-                        <input class="word_type" value="${setWordType(JSdataCurrentDictionary[i].dictionary_word_type)}">
+                        <input class="word_type" value="${JSdataCurrentDictionary[i].dictionary_word_type}">
                     </td>
 					<td>
                         <input class="user_id" value="${JSdataCurrentDictionary[i].dictionary_user_id}">
@@ -61,7 +61,7 @@ function fillTableBody() {
                           <button class="btn btn-danger btn-sm" onclick="deleteWord(${JSdataCurrentDictionary[i].dictionary_id})">
                             Delete
                           </button>
-                          <button class="btn btn-success btn-sm" onclick="saveWord(${JSdataCurrentDictionary[i].dictionary_id})">
+                          <button class="btn btn-success btn-sm" onclick="updateWord(${JSdataCurrentDictionary[i].dictionary_id})">
                             Save
                           </button>
                         </div>
@@ -78,13 +78,14 @@ function getFilterSettings(){
     });
 }
 
-fillDictionaryTable("", "", "");
+fillDictionaryTable("", "", "", "");
 
 function deleteWord(id){
     var conf = confirm("Are you realy wont to delete this word?");
     if (conf){
-        $.post( '/setdeleteword', { id: id }, function(data) {
+        $.post( '/deleteword', { word_id: id }, function(data) {
             alert(data);
+            location.reload();
         });
     }
 }
@@ -97,11 +98,26 @@ function saveWord(id){
     var word_transcription = $("#"+id+" .word_tr").val();
     var word_type = $("#"+id+" .word_type").val();
     var word_user_id = $("#"+id+" .user_id").val();
-    
     var parameters = {word_he: word_he, word_inf: word_inf, word_translate: word_translate, word_lang: word_lang, word_tr: word_transcription, word_type: word_type, word_user_id: word_user_id};
     
     alert(JSON.stringify(parameters));
     $.post( '/saveword', parameters, function(data) {
+        alert(data);
+    });
+}
+
+function updateWord(id){
+    var word_he = $("#"+id+" .word_he").val();
+    var word_inf = $("#"+id+" .word_inf").val();
+    var word_translate = $("#"+id+" .word_"+getCookie('language')).val();
+    var word_lang = getCookie('language');
+    var word_transcription = $("#"+id+" .word_tr").val();
+    var word_type = $("#"+id+" .word_type").val();
+    var word_user_id = $("#"+id+" .user_id").val();
+    
+    var parameters = {word_id: id, word_he: word_he, word_inf: word_inf, word_translate: word_translate, word_lang: word_lang, word_tr: word_transcription, word_type: word_type, word_user_id: word_user_id};
+    
+    $.post( '/updateword', parameters, function(data) {
         alert(data);
     });
 

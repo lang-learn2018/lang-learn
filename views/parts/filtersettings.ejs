@@ -6,4 +6,8 @@
     <u><%= strings[check] %></u>; 
     <%= strings.learning_filter_types %> 
     <u><%= strings[type] %></u>
+    <% if(userid == "admin"){ %>
+        <%= strings.filter_dictionaries %> 
+        <u><%= strings[dictionary] %></u>
+    <% } %>
 </div>

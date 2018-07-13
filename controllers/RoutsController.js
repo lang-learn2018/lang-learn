@@ -108,6 +108,18 @@ module.exports = function (app) {
         View.saveWord(req, res);
     });
 
+    app.post('/updateword', function (req, res) {
+        if(Session.getUser(req).id == "admin")
+            if(MySQL.updateWord(req))
+                res.send("Word is updated!");
+    });
+
+    app.post('/deleteword', function (req, res) {
+        if(Session.getUser(req).id == "admin")
+            if(MySQL.removeWord(req.body.word_id))
+                res.send("Word deleted");
+    });
+
     app.post('/checkWord', function (req, res) {
         View.checkWord(req, res);
     })

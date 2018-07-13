@@ -109,7 +109,6 @@ exports.getDictionaryTable = function(req, res, word) {
                                   WHERE raiting_user_id = '${user.id}') AS tRating
                       ON dictionary.dictionary_id = tRating.raiting_word_id) AS dictionary
               WHERE 1=1 ${req.session.wordtypesfilter.where} ${req.session.ratingsfilter.where} ${req.session.wordcheckfilter.where} ${wordfilter} ${req.session.dictfilter.where}`;
-  console.log(sql);
   db.query(sql, function (err, result) {
     if (err) throw err;
     if(lg != "en") {
@@ -274,6 +273,38 @@ exports.setWordDictionaryTable = function(word_he, word_inf, word_translate, wor
       }
     });
 }
+exports.updateWord = function(req) {
+  return new Promise((resolve, reject) => {
+    db = createConnection();
+    let sql = ` UPDATE dictionary
+                SET dictionary_word_he = ${mysql.escape(req.body.word_he)},
+                    dictionary_word_inf = ${mysql.escape(req.body.word_inf)},
+                    dictionary_word_${req.body.word_lang} = ${mysql.escape(req.body.word_translate)},
+                    dictionary_word_tr = ${mysql.escape(req.body.word_tr)},
+                    dictionary_word_type = ${mysql.escape(req.body.word_type)},
+                    dictionary_user_id = ${mysql.escape(req.body.word_user_id)}
+                WHERE dictionary_id = ${mysql.escape(req.body.word_id)}`;
+    console.log(sql);
+    db.query(sql, function (err, result) {
+      if (err) throw err;
+      resolve(true);
+    });
+  });
+}
+
+exports.deleteWord = function(req) {
+  return new Promise((resolve, reject) => {
+    db = createConnection();
+    let sql = ` DELETE FROM dictionary
+                WHERE dictionary_id = ${mysql.escape(req.body.word_id)}`;
+    console.log(sql);
+    db.query(sql, function (err, result) {
+      if (err) throw err;
+      resolve("success");
+    });
+  });
+}
+
 exports.setWordStat = function (req) {
     var hit = (req.body.hit == 'true');
     var wordId = req.body.wordId;
