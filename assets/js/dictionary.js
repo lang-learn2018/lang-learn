@@ -1,6 +1,7 @@
 var JSdataCurrentDictionary;
 var JSdataCurrentPlay;
 var gameType;
+var gameStrings;
 
 function saveWord() {
     var wordHb = $("#wordHb").val();
@@ -201,6 +202,7 @@ function cardPlayStart(){
 function getFirstWordCardPlay(lang, gameType) {
     $.post( '/getfirstcardres', {}, function(data) {
         var dataArray = data.split(",");
+        gameStrings = [dataArray[4],dataArray[5],dataArray[6]];
         if(JSdataCurrentPlay = JSdataCurrentDictionary){
             var stat = `
                 <p>
@@ -213,13 +215,13 @@ function getFirstWordCardPlay(lang, gameType) {
                     <span id="corr-word" class="text-success">0</span>/<span id="wrong-word" class="text-danger">0</span>
                 </p>`;
             $("#play-stat").html(stat);
-            getNextCardPlay(getCookie("language"), [dataArray[4],dataArray[5],dataArray[6]]);
+            getNextCardPlay(getCookie("language"));
         }
     });
    }
 
 
-function getNextCardPlay(lang, strings, hit = null, wordId = null) {
+function getNextCardPlay(lang, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
         $.post('/setwordstat', { hit:hit, wordId:wordId }, function (data) {});
     }
@@ -264,13 +266,13 @@ function getNextCardPlay(lang, strings, hit = null, wordId = null) {
         var html = `
             <div class="card-body text-center">
                 ${firstWord}<br><br>
-                <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">${strings[0]}</strong>
+                <strong class="text-info" style="cursor:pointer;" onclick="changeContent(this, '${secondWord}')">${gameStrings[0]}</strong>
                 <br><br>
-                <button onclick="getNextCardPlay(${lang}, false, '${currentCard.dictionary_id}')"
+                <button onclick="getNextCardPlay('${lang}', false, '${currentCard.dictionary_id}')"
                 type="button"
-                class="btn btn-outline-danger">${strings[1]}</button>
+                class="btn btn-outline-danger">${gameStrings[1]}</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button onclick="getNextCardPlay(${lang}, true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">${strings[2]}</button>
+                <button onclick="getNextCardPlay('${lang}', true, '${currentCard.dictionary_id}')" type="button" class="btn btn-outline-success">${gameStrings[2]}</button>
             </div>`;
         JSdataCurrentPlay.splice(index, 1);
     } else {

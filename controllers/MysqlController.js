@@ -117,7 +117,7 @@ exports.getDictionaryTable = function(req, res, word) {
           var word_id = result[i].dictionary_id;
           var word_en = result[i].dictionary_word_en;
 
-          setTranslateWord(word_id, word_en, lg)
+          result[i][`dictionary_word_${lg}`] = setTranslateWord(word_id, word_en, lg)
 
         }
       }
@@ -402,6 +402,7 @@ setTranslateWord = async function(word_id, word_en, lg) {
       console.log(err);
     });
     db.end();
+    return text;
 }
 
 
