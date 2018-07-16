@@ -154,8 +154,7 @@ function fillTableBody() {
         var raiting = "";
 
         if (JSdataCurrentDictionary[i].raiting_sum != "null") {
-            raiting = `<td class="text-center">${JSdataCurrentDictionary[i].raiting_sum}</td>`;
-
+            raiting = JSdataCurrentDictionary[i].raiting_sum == "-1" ? `<td class="text-center"> - </td>` : `<td class="text-center">${JSdataCurrentDictionary[i].raiting_sum}</td>`;
         }
 
         html+=`<tr>
@@ -284,4 +283,3 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
 function changeContent(t, content) {
     $(t).html(content);
 }
-

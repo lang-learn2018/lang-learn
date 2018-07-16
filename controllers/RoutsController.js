@@ -158,7 +158,8 @@ module.exports = function (app) {
     });
 
     app.post('/setlanguage', function (req, res) {
-        Session.setUserLang(req, res);
+        console.log("routControler: post/setlanguage: "+req.body.language);
+        setUserLang(req, res);
         var userLangStrings = support.getUserLangStrings(strings, Session.getUserLang(req, res));
         res.locals.strings = userLangStrings;
         res.send("success");

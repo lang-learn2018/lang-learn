@@ -24,9 +24,11 @@ var createUserSession = function(req, user) {
 }
 
 setUserLang = function (req, res) {
+    console.log("session setUserLang: "+req.body.language);
     if(typeof req.body.language == "undefined"){
         if(typeof req.session.language == "undefined")
             req.session.language = typeof req.cookies.language != "undefined" ? req.cookies.language : "en";
+            res.cookie('language', req.session.language);
     } else {
         req.session.language = req.body.language;
         res.cookie('language', req.session.language);
@@ -43,8 +45,7 @@ exports.getUserLang = function (req, res) {
 
 setUserLang = function (req, res) {
     if(typeof req.body.language == "undefined"){
-        if(typeof req.session.language == "undefined")
-            req.session.language = typeof req.cookies.language != "undefined" ? req.cookies.language : "en";
+        req.session.language = typeof req.cookies.language != "undefined" ? req.cookies.language : "en";
     } else {
         req.session.language = req.body.language;
         res.cookie('language', req.session.language);
@@ -55,6 +56,7 @@ exports.getUserLang = function (req, res) {
     if(typeof req.session.language == "undefined"){
         setUserLang(req, res);
     }
+    console.log("session getUserLang: "+req.body.language)
     return req.session.language;
 }
 
