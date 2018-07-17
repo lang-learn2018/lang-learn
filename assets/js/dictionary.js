@@ -128,17 +128,56 @@ function startLearn() {
         $("#wordtype").attr("disabled", false);
         $("#wordcheck").attr("disabled", false);
         $("#wordstatus").attr("disabled", false);
-        var htmlTable = fillTableHead()
-                   .then(response => document.getElementById("dictionary-table").innerHTML = response+fillTableBody()+"</tbody></table></div>");
-        $("#dictionary-table").html(htmlTable);
+        fillTableHead()
+            .then(response => document.getElementById("dictionary-table").innerHTML = response+fillTableBody()+"</tbody></table></div>");
+        //$("#dictionary-table").html(htmlTable);
     }
 }
 
 function fillTableBody() {
-    var rowsLength = JSdataCurrentDictionary.length;
-    var row, html = "";
+    var res = isMobileDevice() ? getContentTableMobile(JSdataCurrentDictionary) : getContentTable(JSdataCurrentDictionary);
+    return res;
+}
 
-    for (var i = 0; i < rowsLength; i++) {
+function getContentTableMobile(JSdataCurrentDictionary){
+    var row, html = "";
+    for (var i = 0; i < JSdataCurrentDictionary.length; i++) {
+        row = JSdataCurrentDictionary[i];
+        if (JSdataCurrentDictionary[i].dictionary_word_inf != "") {
+            var heb = JSdataCurrentDictionary[i].dictionary_word_inf + ") " + JSdataCurrentDictionary[i].dictionary_word_he+")";
+        } else {
+            var heb = JSdataCurrentDictionary[i].dictionary_word_he;
+        }
+        var checked = "";
+        if (JSdataCurrentDictionary[i].raiting_user_check == 1)
+            checked = `<input type="checkbox" checked onchange="checkWord(${JSdataCurrentDictionary[i].dictionary_id}, this.checked)">`;
+        if (JSdataCurrentDictionary[i].raiting_user_check == 0)
+            checked = `<input type="checkbox" onchange="checkWord(${JSdataCurrentDictionary[i].dictionary_id}, this.checked)">`;
+
+        var raiting = "";
+
+        if (JSdataCurrentDictionary[i].raiting_sum != "null") {
+            raiting = JSdataCurrentDictionary[i].raiting_sum == "-1" ? `-` : `${JSdataCurrentDictionary[i].raiting_sum}`;
+        }
+        html += `<br><br>
+                <div class="card text-center w-100">
+                    <div class="card-body">
+                        ${checked} 
+                        ${heb} - 
+                        ${JSdataCurrentDictionary[i]["dictionary_word_"+getCookie("language")]}
+                        <br>
+                        ${JSdataCurrentDictionary[i].dictionary_word_tr},
+                        ${setWordType(JSdataCurrentDictionary[i].dictionary_word_type)}
+                        (${raiting})
+                    </div>
+                </div>`;
+    }
+    return html;
+}
+
+function getContentTable(JSdataCurrentDictionary){
+    var row, html = "";
+    for (var i = 0; i < JSdataCurrentDictionary.length; i++) {
         row = JSdataCurrentDictionary[i];
         if (JSdataCurrentDictionary[i].dictionary_word_inf != "") {
             var heb = JSdataCurrentDictionary[i].dictionary_word_inf + ") " + JSdataCurrentDictionary[i].dictionary_word_he+")";
@@ -173,10 +212,13 @@ function fillTableBody() {
 function fillTableHead() {
 
     return new Promise(function(resolve, reject) {
-
-        $.post( '/gettablehead', {}, function(data) {
-            resolve(data);
-        });
+        if(!isMobileDevice()) {
+            $.post( '/gettablehead', {}, function(data) {
+                resolve(data);
+            });
+        } else {
+            resolve("");
+        }
 
     });
 }
@@ -226,7 +268,6 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
     }
     var current = $("#cur-word").html();
     current = parseInt(current);
-    $("#cur-word").html(++current);
     if (hit == true) {
         var correct = $("#corr-word").html();
         correct = parseInt(correct);
@@ -240,6 +281,7 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
     }
 
     if (JSdataCurrentPlay.length > 0) {
+        $("#cur-word").html(++current);
         if (gameType)
             var index = Math.floor(Math.random() * JSdataCurrentPlay.length);
         else
@@ -283,3 +325,7 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
 function changeContent(t, content) {
     $(t).html(content);
 }
+
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};

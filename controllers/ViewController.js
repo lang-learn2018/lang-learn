@@ -143,10 +143,8 @@ exports.saveWord = function(req, res) {
 	if (word_type != "verb") {
 		word_inf = "";
     }
-    console.log(user_id);
     var answer = MySQL.setWordDictionaryTable(word_he, word_inf, word_translate, word_lang, word_tr, word_type, user_id)
     answer.then(result => {
-        console.log("Added new word id#: "+result);
         res.send(result);
         res.end();
     });
@@ -162,7 +160,6 @@ exports.getFilterFettings = function(req, res) {
 }
 
 exports.getTableHead = function(req, res) {
-    console.log(SessionController.getUser(req).id);
     res.render('parts/gettablehead.ejs', { userid: SessionController.getUser(req).id });
     res.end();
 }

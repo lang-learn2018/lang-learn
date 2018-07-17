@@ -32,8 +32,8 @@ createConnection = function() {
  * @return: true - if user exists in db / false - if not
  */
  exports.authenticate = function(req, res) {
+   
   var db = createConnection();
-
   var sql = `SELECT * FROM users WHERE users_login = '${req.body.login}'`;
   db.query(sql, function (err, rows) {
     if (err) throw err;
@@ -49,12 +49,18 @@ createConnection = function() {
           "name" : rows[0].users_name,
           "id" : rows[0].users_id
         }
-        console.log(`User:${user.login}, id:${user.id} authorized`);
-        SessionController.createUserSession(req, user);
-        res.cookie('login', user.login);
-        res.cookie('userid', user.id);
-        res.cookie('username', user.name);
-        res.redirect("/login");
+        if(rows[0].users_status == "" || rows[0].users_status == null) {
+          SessionController.createUserSession(req, user);
+          res.cookie('login', user.login);
+          res.cookie('userid', user.id);
+          res.cookie('username', user.name);
+          res.redirect("/login");
+        } else {
+          res.writeHead(200, {'Content-Type' : 'text/html'});
+          res.write("Error! Please activate your account!");
+          res.end();
+          req.session = {};  
+        }
       } else {
         res.writeHead(200, {'Content-Type' : 'text/html'});
         res.write("Error! Incorrect login and/or password. <a href='auth'>Try again</a>");
@@ -283,7 +289,6 @@ exports.updateWord = function(req) {
                     dictionary_word_type = ${mysql.escape(req.body.word_type)},
                     dictionary_user_id = ${mysql.escape(req.body.word_user_id)}
                 WHERE dictionary_id = ${mysql.escape(req.body.word_id)}`;
-    console.log(sql);
     db.query(sql, function (err, result) {
       if (err) throw err;
       resolve(true);
@@ -296,7 +301,6 @@ exports.deleteWord = function(req) {
     db = createConnection();
     let sql = ` DELETE FROM dictionary
                 WHERE dictionary_id = ${mysql.escape(req.body.word_id)}`;
-    console.log(sql);
     db.query(sql, function (err, result) {
       if (err) throw err;
       resolve("success");
@@ -368,7 +372,6 @@ exports.approveWord = (wordId) => {
     var sql = ` UPDATE dictionary
     SET dictionary_user_id = '0'
     WHERE dictionary_id = ${mysql.escape(wordId)}`;
-    console.log(sql);
     db.query(sql, function (err, result) {
       if (err) throw err;
       db.end();
@@ -399,7 +402,6 @@ setTranslateWord = async function(word_id, word_en, lg) {
           WHERE   dictionary_id = '${mysql.escape(word_id)}'`;
     db.query(sql, function (err, result) {
       if (err) throw err;
-      console.log(err);
     });
     db.end();
     return text;

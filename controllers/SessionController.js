@@ -1,6 +1,5 @@
 // var db = require('mysqlController.js');
 var isUserSessionExists = function(req) {
-    console.log(req.session);
     if (typeof req.session.user == "undefined"){
         return false;
     }
@@ -24,7 +23,6 @@ var createUserSession = function(req, user) {
 }
 
 setUserLang = function (req, res) {
-    console.log("session setUserLang: "+req.body.language);
     if(typeof req.body.language == "undefined"){
         if(typeof req.session.language == "undefined")
             req.session.language = typeof req.cookies.language != "undefined" ? req.cookies.language : "en";
@@ -39,7 +37,6 @@ exports.getUserLang = function (req, res) {
     if(typeof req.session.language == "undefined"){
         setUserLang(req, res);
     }
-    console.log(req.session.language);
     return req.session.language;
 }
 
@@ -56,7 +53,6 @@ exports.getUserLang = function (req, res) {
     if(typeof req.session.language == "undefined"){
         setUserLang(req, res);
     }
-    console.log("session getUserLang: "+req.body.language)
     return req.session.language;
 }
 
