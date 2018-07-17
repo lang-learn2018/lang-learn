@@ -400,13 +400,11 @@ exports.activateAccount = async function (id, code) {
     UPDATE users
     SET users_status = ""
     WHERE users_id = ${mysql.escape(id)} AND users_status = ${mysql.escape(code)}`;
-  console.log(sql);
   db.query(sql, function (err, result) {
     if (err) throw err;
     if (result.affectedRows > 0) res = true;
   });
   db.end();
-  console.log(res);
   return res;
 }
 
