@@ -161,7 +161,7 @@ exports.createUser = function (req, res) {
                       ${mysql.escape(status)})`;
         dbadd.query(sql, function (err, result) {
           if (err) throw err;
-          var linkForActivate = `${res.locals.config.host}:${res.locals.config.port}/activate&id=${status}`;
+          var linkForActivate = `${res.locals.config.host}:${res.locals.config.port}/activate?id=${result.insertId}&code=${status}`;
           Support.sendEmail(res, req.body.email, res.locals.strings.email_registration_sbj, `${res.locals.strings.email_registration_txt}<a href="${linkForActivate}">${linkForActivate}</a>`);
           result = `<div class="alert alert-success" role="alert">
                       ${res.locals.strings.reg_result_good}
@@ -391,6 +391,23 @@ exports.removeWord = (wordId) => {
         resolve(true);
     });
   });  
+}
+
+exports.activateAccount = async function (id, code) {
+  db = createConnection();
+  var res = false;
+  var sql = `
+    UPDATE users
+    SET users_status = ""
+    WHERE users_id = ${mysql.escape(id)} AND users_status = ${mysql.escape(code)}`;
+  console.log(sql);
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    if (result.affectedRows > 0) res = true;
+  });
+  db.end();
+  console.log(res);
+  return res;
 }
 
 setTranslateWord = async function(word_id, word_en, lg) {

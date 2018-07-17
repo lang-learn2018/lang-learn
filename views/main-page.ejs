@@ -14,6 +14,7 @@
   <% if(path == "/registration" && typeof reg == "undefined") {%> <%- include('parts/registration')%> <% }  %>
   <% if(path == "/login") {%> <%- include('parts/login')%> <% }  %>
   <% if(path == "/dictionary") {%> <%- include('parts/dictionary')%> <% }  %>
+  <% if(path == "/activate") {%> <%- message %> <% }  %>
   <% if(typeof error != "undefined" && error == "404") {%> <%- include('parts/404')%> <% }  %>
   
 </body>

@@ -51,6 +51,26 @@ module.exports = function (app) {
         res.end();
     });
 
+    app.get('/activate', function (req, res) {
+        if (MySQL.activateAccount(req.query.id, req.query.code) == true){
+            var message = `
+                    <div class="alert alert-success" role="alert">
+                        Your account activated! Click <a href= "./auth">here</a> to login
+                    </div>`;
+            res.render('main-page.ejs', {message: message});
+            res.end();
+        } else {
+            var message = `
+                    <div class="alert alert-danger" role="alert">
+                        There is not any accounts by spesified id!
+                    </div>`;
+            res.render('main-page.ejs', {message: message});
+            // res.writeHead(200, {'Content-Type' : 'text/html'});
+            // res.write("Activation: "+req.query.id);
+            res.end();
+        }
+    });
+
     app.post('/auth', function (req, res) {
         MySQL.authenticate(req, res);
     });
