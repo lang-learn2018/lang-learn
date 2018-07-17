@@ -1,5 +1,5 @@
 const config = require('../config.json');
-const MySQLController = require('./MySQLController.js');
+const MySQLController = require('./MysqlController.js');
 const TelegramBot = require('node-telegram-bot-api');
 
 const bot = new TelegramBot(config.TELEGRAM_TOKEN, {polling: true});
