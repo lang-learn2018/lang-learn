@@ -10,6 +10,7 @@ var ejs = require('ejs');
 var cookieParser = require('cookie-parser');
 var SessionController = require('./controllers/SessionController');
 // var bot = require('../TelegramController.js');
+const PORT = process.env.PORT || config.port;
 
 var app = express();
 app.set('view-engine', 'ejs');
@@ -35,4 +36,4 @@ app.use(function(req, res, next) {
     next();
 });
 router(app);
-app.listen(config.port, () => console.log('Listening on port ' + config.port + '!'));
+app.listen(PORT, () => console.log('Listening on port ' + PORT + '!'));
