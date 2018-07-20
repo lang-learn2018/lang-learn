@@ -1,7 +1,7 @@
 {
   "root" : "",
   "appName" : "Language Learning",
-  "port" : 3000,
+  "port" : 5000,
   "sessionSecret" : "secret",
 
   "host"	: "localhost",
