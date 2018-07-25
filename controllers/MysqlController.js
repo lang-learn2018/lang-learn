@@ -355,10 +355,10 @@ exports.setWordStat = function (req) {
                 VALUES (
                     ${mysql.escape(wordId)},
                     ${mysql.escape(userId)},
-                    ${rating}
+                    '${rating}'
                 )`;
             db.query(sql, function (err, result) {
-                if (err) throw err;
+              if (err) throw err;
             });
         }
         db.end();

@@ -102,7 +102,6 @@ function getFilterSettings(){
     });
 }
 fillDictionaryTable("", "", "", 100);
-
 function startLearn() {
     if($("#startStop").hasClass("btn-success")){
         $("#startStop").removeClass("btn-success");
@@ -133,12 +132,10 @@ function startLearn() {
         //$("#dictionary-table").html(htmlTable);
     }
 }
-
 function fillTableBody() {
     var res = isMobileDevice() ? getContentTableMobile(JSdataCurrentDictionary) : getContentTable(JSdataCurrentDictionary);
     return res;
 }
-
 function getContentTableMobile(JSdataCurrentDictionary){
     var row, html = "";
     for (var i = 0; i < JSdataCurrentDictionary.length; i++) {
@@ -174,7 +171,6 @@ function getContentTableMobile(JSdataCurrentDictionary){
     }
     return html;
 }
-
 function getContentTable(JSdataCurrentDictionary){
     var row, html = "";
     for (var i = 0; i < JSdataCurrentDictionary.length; i++) {
@@ -208,7 +204,6 @@ function getContentTable(JSdataCurrentDictionary){
     }
     return html;
 }
-
 function fillTableHead() {
 
     return new Promise(function(resolve, reject) {
@@ -222,7 +217,6 @@ function fillTableHead() {
 
     });
 }
-
 function getCardPlayType() {
     return new Promise(function(resolve, reject) {
 
@@ -239,7 +233,6 @@ function cardPlayStart(){
         $("#dictionary-table .card").html(data);
     });
 }
-
 function getFirstWordCardPlay(lang, gameType) {
     $.post( '/getfirstcardres', {}, function(data) {
         var dataArray = data.split(",");
@@ -259,9 +252,7 @@ function getFirstWordCardPlay(lang, gameType) {
             getNextCardPlay(getCookie("language"));
         }
     });
-   }
-
-
+}
 function getNextCardPlay(lang, hit = null, wordId = null) {
     if (hit != null && wordId != null) {
         $.post('/setwordstat', { hit:hit, wordId:wordId }, function (data) {});
@@ -325,7 +316,6 @@ function getNextCardPlay(lang, hit = null, wordId = null) {
 function changeContent(t, content) {
     $(t).html(content);
 }
-
 function isMobileDevice() {
     return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
